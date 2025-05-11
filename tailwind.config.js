@@ -10,10 +10,28 @@ export default {
         './resources/js/**/*.jsx',
     ],
 
+   
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                primary: {
+                  25: 'rgba(1, 81, 150, 0.25)',
+                  50: 'rgba(1, 81, 150, 0.5)',
+                  75: 'rgba(1, 81, 150, 0.75)',
+                  100: '#015196', 
+                },
+                secondary: '#f19636',
+                tertiary:'#F0F8FF',
+                foreground: '#555555',
+                background: '#ffffff',
+
+              },
+            boxShadow: {
+                primary: '0px 4px 160px 0px #01519680',
+                fourth: '0px 4px 70px 0px #01519680',
             },
         },
     },

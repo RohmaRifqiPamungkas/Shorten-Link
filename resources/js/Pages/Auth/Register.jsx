@@ -4,6 +4,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import ApplicationLogo from "@/Components/ApplicationLogo";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -25,6 +26,12 @@ export default function Register() {
         <GuestLayout>
             <Head title="Register" />
 
+            <div className="flex justify-center">
+                            <Link href="/">
+                                <ApplicationLogo className="h-20 w-20 " />
+                            </Link>
+                        </div>
+
             <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="name" value="Name" />
@@ -35,6 +42,7 @@ export default function Register() {
                         value={data.name}
                         className="mt-1 block w-full"
                         autoComplete="name"
+                             placeholder="Enter your name"
                         isFocused={true}
                         onChange={(e) => setData('name', e.target.value)}
                         required
@@ -53,6 +61,7 @@ export default function Register() {
                         value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
+                             placeholder="Enter your username"
                         onChange={(e) => setData('email', e.target.value)}
                         required
                     />
@@ -102,18 +111,22 @@ export default function Register() {
                     />
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    <Link
-                        href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
-                    >
-                        Already registered?
-                    </Link>
+                <div className="mt-4 flex items-center ">
+                 
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                    <PrimaryButton  disabled={processing}>
                         Register
                     </PrimaryButton>
                 </div>
+                <p className="text-center text-sm text-gray-600 mt-6">
+                Already have an account? {" "}
+                    <Link
+                          href={route('login')}
+                        className="font-semibold text-primary-100 underline hover:text-secondary"
+                    >
+                        Sign In
+                    </Link>
+                </p>
             </form>
         </GuestLayout>
     );
