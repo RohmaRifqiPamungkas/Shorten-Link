@@ -28,7 +28,7 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
     const menuItems = [
         {
             name: "Management Link",
-            href: "/managementLink",
+            href: "/dashboard",
             icon: <RiFolderSettingsLine />,
         },
         {
@@ -41,10 +41,10 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
     return (
         <aside
             className={`
-      fixed top-0 left-0 z-40 min-h-screen bg-white border-r  shadow-fourth
+      fixed top-0 left-0 z-40 min-h-screen h-screen bg-white border-r  shadow-fourth
       flex flex-col
       transition-all duration-300 ease-in-out
-      ${isExpanded ? "w-64" : "w-20"}
+      ${isExpanded ? "w-72" : "w-20"}
       ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
       md:translate-x-0 md:static
     `}
@@ -62,7 +62,7 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
             {/* ini header bang */}
             <div className="relative flex items-center p-4 border-b h-16">
                 {isExpanded ? (
-                    <div className="flex justify-left w-full">
+                    <div className="flex justify-center w-full">
                         <img
                             src="/images/Logo.png"
                             alt="Logo"
@@ -76,7 +76,7 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                     className={`
       md:block hidden text-gray-600 hover:text-primary transition
-      ${isExpanded ? "absolute right-4" : "mx-auto"}
+      ${isExpanded ? "absolute right-6" : "mx-auto"}
     `}
                 >
                     <FaBars />
@@ -85,10 +85,10 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
 
             {/* menu nih */}
             <nav className="flex-grow mt-4">
-                <div className="mb-4 px-4">
-                    {!isExpanded && <hr className="my-1 border-transparent" />}
+                <div className={`mb-4 flex-col items-center ${isExpanded ? "px-6" : " justify-center px-3"}`}>
+                    {!isExpanded && <hr className="my-1 border-transparent " />}
                     {isExpanded && (
-                        <h2 className="text-sm font-semibold text-gray-600 mb-2 px-3">
+                        <h2 className="text-sm md:text-lg font-semibold text-gray-600 mb-2 px-6">
                             MENU
                         </h2>
                     )}
@@ -99,18 +99,18 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
                                 key={item.name}
                                 href={item.href}
                                 className={`
-                  relative group flex items-center gap-4 py-2 px-3 my-1 rounded-lg transition-all
+                  relative group flex items-center gap-4 py-2  ${isExpanded ? "px-6" : "justify-center"} my-1 rounded-lg transition-all
                   overflow-hidden
                   ${
                       isActive
                           ? "bg-primary-25 text-foreground"
-                          : "text-gray-600 hover:bg-primary-25 hover:text-primary-100"
+                          : "text-foreground hover:bg-primary-25 hover:text-primary-100"
                   }
                 `}
                             >
                                 <span
                                     className={`
-                    absolute right-0 top-0 bottom-0 w-2 bg-primary-100 rounded-r-full transition-transform transform
+                    absolute right-0 top-0 bottom-0 w-1 bg-primary-100 rounded-r-full transition-transform transform
                     ${
                         isActive
                             ? "scale-y-100"
@@ -118,11 +118,11 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
                     }
                   `}
                                 />
-                                <span className="text-lg z-10 relative">
+                                <span className="text-xl z-10 relative ">
                                     {item.icon}
                                 </span>
                                 {isExpanded && (
-                                    <span className="z-10 relative text-sm font-medium">
+                                    <span className="z-10 relative text-sm md:text-[16px] font-medium">
                                         {item.name}
                                     </span>
                                 )}
@@ -142,7 +142,7 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
             >
                 {isExpanded ? (
                     <>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 px-6">
                             <img
                                 src="/user.jpg"
                                 width={36}
@@ -151,10 +151,10 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
                                 className="rounded-full object-cover"
                             />
                             <div className="leading-tight">
-                                <p className="text-sm font-medium">
+                                <p className="text-sm md:text-[16px] font-medium">
                                     {auth?.user?.name}
                                 </p>
-                                <p className="text-xs text-orange-600">Admin</p>
+                                <p className="text-xs text-orange-600">User</p>
                             </div>
                         </div>
 
@@ -167,7 +167,7 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
                         >
                             <span
                                 className={`
-            absolute right-0 top-0 bottom-0 w-2 bg-primary-100 hover:text-primary-100 rounded-r-full transition-transform transform
+            absolute right-0 top-0 bottom-0 w-1 bg-primary-100 hover:text-primary-100 rounded-r-full transition-transform transform
             scale-y-0 group-hover:scale-y-100
           `}
                             />
@@ -180,17 +180,17 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
                     <button
                         onClick={handleLogout}
                         className={`
-        relative group flex items-center justify-center py-2 px-3 rounded-lg transition-all
+        relative group flex items-center justify-center py-2 px-6 rounded-lg transition-all
         overflow-hidden text-foreground hover:text-primary-100 hover:bg-primary-25 hover:text-primary
       `}
                     >
                         <span
                             className={`
-          absolute right-0 top-0 bottom-0 w-2 bg-primary-100 rounded-r-full transition-transform transform
+          absolute right-0 top-0 bottom-0 w-1 bg-primary-100 rounded-r-full transition-transform transform
           scale-y-0 group-hover:scale-y-100
         `}
                         />
-                        <span className="text-lg z-10 relative hover:text-primary-100">
+                        <span className="text-lg z-10 relative hover:text-primary-100 px-6">
                             <FiLogOut />
                         </span>
                     </button>

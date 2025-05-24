@@ -27,6 +27,7 @@ export default {
                 tertiary:'#F0F8FF',
                 foreground: '#555555',
                 background: '#ffffff',
+                brfourth:'#DDDDDD',
 
               },
             boxShadow: {

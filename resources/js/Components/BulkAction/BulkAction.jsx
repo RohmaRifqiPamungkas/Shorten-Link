@@ -104,20 +104,20 @@ export default function BulkActions({ onDelete, isActive, toggleBulkMode }) {
         <div className="relative">
           <button
             onClick={handleToggle}
-            className={`border px-3 py-2 rounded flex items-center gap-2 ${isActive ? 'bg-blue-500 text-white' : 'bg-white'} transition-all duration-300 ease-in-out`}
+            className={`border px-3 py-2 rounded-lg flex items-center gap-2 ${isActive ? 'bg-primary-100 text-white' : 'bg-white'} transition-all duration-300 ease-in-out`}
           >
             Bulk Action <FiChevronDown />
           </button>
 
           {/* Dropdown aksi jika aktif */}
           {showDropdown && isActive && (
-            <div className="absolute right-0 mt-2 w-40 bg-white border border-purple-300 rounded shadow-lg z-10 transition-all duration-300 ease-in-out">
+            <div className="absolute right-0 mt-2 w-40 bg-white border border-primary-100 hover:border-none rounded-lg shadow-lg z-10 transition-all duration-300 ease-in-out">
               <button
                 onClick={() => {
                   setShowDropdown(false);
                   onDelete();
                 }}
-                className="flex items-center gap-2 w-full px-4 py-2 text-red-600 hover:bg-gray-100"
+                className="flex items-center gap-2 w-full px-4 py-2 text-primary-100 hover:bg-primary-100 hover:text-white hover:rounded-lg"
               >
                 <FiTrash2 size={16} />
                 Delete 
