@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Inertia } from "@inertiajs/inertia";
-import { Link, usePage } from "@inertiajs/react";
+import { Link, usePage, router } from "@inertiajs/react";
 import { FiLogOut } from "react-icons/fi";
 import { RiFolderSettingsLine } from "react-icons/ri";
 import { MdOutlineLink } from "react-icons/md";
@@ -10,20 +9,12 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
     const [isExpanded, setIsExpanded] = useState(true);
     const { url } = usePage();
     const { auth } = usePage().props;
-    const handleLogout = () => {
-        Inertia.post(
-            "/logout",
-            {},
-            {
-                onSuccess: () => {
-                    Inertia.visit("/login");
-                },
-                onError: (error) => {
-                    console.error("Logout failed:", error);
-                },
-            }
-        );
-    };
+const handleLogout = () => {
+  router.post('/logout', {}, {
+    onSuccess: () => router.visit('/login'),
+    onError: (err) => console.error('Logout failed:', err),
+  });
+};
 
     const menuItems = [
         {
@@ -135,8 +126,8 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
             {/* footer logout*/}
             <div
                 className={`
-    mt-auto flex items-center gap-3 px-6 py-3.5
-    ${isExpanded ? "justify-between" : "justify-center"}
+    mt-auto flex items-center gap-3 px-6 
+    ${isExpanded ? "justify-between py-3.5" : "justify-center py-4"}
     bg-tertiary
   `}
             >
@@ -180,7 +171,7 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
                     <button
                         onClick={handleLogout}
                         className={`
-        relative group flex items-center justify-center py-2 px-6 rounded-lg transition-all
+        relative group flex items-center justify-center py-2.5 px-6 rounded-lg transition-all
         overflow-hidden text-foreground hover:text-primary-100 hover:bg-primary-25 hover:text-primary
       `}
                     >
