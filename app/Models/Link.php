@@ -23,7 +23,7 @@ class Link extends Model
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
-
+    
     public function children()
     {
         return $this->hasMany(Link::class, 'parent_id');
@@ -38,4 +38,5 @@ class Link extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
 }

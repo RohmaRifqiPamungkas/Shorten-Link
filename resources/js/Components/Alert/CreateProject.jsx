@@ -1,40 +1,39 @@
-
 import React, { useState } from "react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Notification from "../Notification/Notification";
+import { useForm } from "@inertiajs/react";
 
-export default function CreateProject({
-    show,
-    onClose,
-    data,
-    setData,
-    errors,
-    processing,
-}) {
+export default function CreateProject({ show, onClose }) {
     const [notification, setNotification] = useState(null);
+    const { data, setData, post, processing, errors, reset } = useForm({
+        project_name: "",
+        project_slug: "",
+    });
 
     if (!show) return null;
 
-   
-  const handleSubmit = (e) => {
-    e.preventDefault()
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-    post(route('shortlink.store'), {
-      onSuccess: () => {
-        setNotification({
-          type: 'success',
-          message: 'Link berhasil disingkat!',
-        })
-        reset()
-      },
-      onError: () => {
-        setNotification({
-          type: 'error',
-          message: 'Terjadi kesalahan, periksa input Anda.',
-        })
-      },
-    })
-  }
+        setNotification(null);
+
+        post("/dashboard/projects", {
+            onSuccess: () => {
+                setNotification({
+                    type: "success",
+                    message: "Proyek berhasil dibuat!",
+                });
+                reset();
+                onClose(); // Tutup modal kalau mau
+            },
+            onError: () => {
+                setNotification({
+                    type: "error",
+                    message: "Terjadi kesalahan, periksa input Anda.",
+                });
+            },
+        });
+    };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -47,7 +46,7 @@ export default function CreateProject({
                             alt="hyperlink"
                         />
                         <h2 className="text-xl ms-4 font-semibold text-primary-100 mb-4">
-                           Management Link
+                            Management Link
                         </h2>
                     </div>
                     <button
@@ -74,18 +73,19 @@ export default function CreateProject({
                                 Name Project
                             </label>
                             <input
-                                type="url"
+                                type="text"
                                 className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
                                 placeholder="example"
-                                value={data.long_url}
+                                name="project_name"
+                                value={data.project_name}
                                 onChange={(e) =>
-                                    setData("long_url", e.target.value)
+                                    setData("project_name", e.target.value)
                                 }
                                 required
                             />
-                            {errors.long_url && (
+                            {errors.project_name && (
                                 <div className="text-red-500 text-sm mt-1">
-                                    {errors.long_url}
+                                    {errors.project_name}
                                 </div>
                             )}
                         </div>
@@ -110,23 +110,24 @@ export default function CreateProject({
                                     type="text"
                                     className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
                                     placeholder="custom-alias"
-                                    value={data.alias}
+                                    id="project_slug"
+                                    name="project_slug"
+                                    value={data.project_slug}
                                     onChange={(e) =>
-                                        setData("alias", e.target.value)
+                                        setData("project_slug", e.target.value)
                                     }
                                     required
                                 />
-                                {errors.alias && (
+                                {errors.project_slug && (
                                     <div className="text-red-500 text-sm mt-1">
-                                        {errors.alias}
+                                        {errors.project_slug}
                                     </div>
                                 )}
                             </div>
                         </div>
 
-
                         <PrimaryButton type="submit" disabled={processing}>
-                              {processing ? 'Add Project...' : 'Add Project'}
+                            {processing ? "Add Project..." : "Add Project"}
                         </PrimaryButton>
                     </form>
                 </div>

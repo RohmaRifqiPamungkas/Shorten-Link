@@ -5,12 +5,11 @@ import SearchBar from "@/Components/Searchbar/Search";
 import Pagination from "@/Components/Pagination/Pagination";
 import BulkActions from "@/Components/BulkAction/BulkAction";
 import ShortenButton from "@/Components/Button/ButtonShort";
-import CreateProject from "@/Components/Alert/CreateProject";
+import CreateShortlink from "@/Components/Alert/CreateShortlink";
 import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
 import ToastAlert from "@/Components/Notification/ToastAlert";
 import { Icon } from "@iconify/react";
-import { FiPlus } from "react-icons/fi";
 
 export default function ShortenedLinkPage({ links }) {
     const [searchTerm, setSearchTerm] = useState("");
@@ -32,7 +31,6 @@ export default function ShortenedLinkPage({ links }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         post("/links", {
-
             onSuccess: () => {
                 setShowPopup(false);
                 reset();
@@ -124,6 +122,7 @@ export default function ShortenedLinkPage({ links }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(10);
 
+  
     const filteredLinks = dummyLinks.data.filter(
         (link) =>
             link.original_url
@@ -132,11 +131,13 @@ export default function ShortenedLinkPage({ links }) {
             link.short_url.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+   
     const paginatedLinks = filteredLinks.slice(
         (currentPage - 1) * perPage,
         currentPage * perPage
     );
 
+  
     const pagination = {
         current_page: currentPage,
         last_page: Math.ceil(filteredLinks.length / perPage),
@@ -151,23 +152,19 @@ export default function ShortenedLinkPage({ links }) {
 
             <div className="py-5">
                 <h1 className="text-2xl font-semibold text-primary-100">
-                    Management Link
+                    Shortened Link
                 </h1>
                 <div className="flex justify-between items-center flex-wrap gap-5 my-3">
                     {/* Kiri */}
                     <p className="text-gray-700 text-lg font-medium">
-                        List Management Link
+                        List Shortened Link
                     </p>
 
                     {/* Kanan */}
                     <div className="flex items-center gap-3 transition-all duration-300 ease-in-out flex-wrap">
                         {/* Shorten button */}
                         <div className="transition-all duration-300">
-                            <ShortenButton
-                                onClick={() => setShowPopup(true)}
-                                label="Add Project"
-                                icon={<FiPlus size={18} />}
-                            />
+                            <ShortenButton onClick={() => setShowPopup(true)} />
                         </div>
 
                         {/* Search bar */}
@@ -241,7 +238,7 @@ export default function ShortenedLinkPage({ links }) {
                                         </td>
                                     )}
                                     {/* whitespace-nowrap */}
-                                    <td className="px-4 py-4 ">
+                                    <td className="px-4 py-4 "> 
                                         <a
                                             href={link.short_url}
                                             className="text-primary underline break-all"
@@ -317,6 +314,7 @@ export default function ShortenedLinkPage({ links }) {
                         </tbody>
                     </table>
                 </div>
+       
 
                 {/* Pagination */}
                 <div className="my-4">
@@ -347,7 +345,7 @@ export default function ShortenedLinkPage({ links }) {
                     />
                 )}
 
-                <CreateProject
+                <CreateShortlink
                     show={showPopup}
                     onClose={() => setShowPopup(false)}
                     onSubmit={handleSubmit}
