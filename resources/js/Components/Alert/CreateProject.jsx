@@ -12,6 +12,8 @@ export default function CreateProject({ show, onClose }) {
 
     if (!show) return null;
 
+    
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -21,16 +23,18 @@ export default function CreateProject({ show, onClose }) {
             onSuccess: () => {
                 setNotification({
                     type: "success",
-                    message: "Proyek berhasil dibuat!",
+                    message: "Created Successfully.",
                 });
                 reset();
-                onClose(); // Tutup modal kalau mau
+          
+         
             },
             onError: () => {
                 setNotification({
                     type: "error",
                     message: "Terjadi kesalahan, periksa input Anda.",
                 });
+                 reset();
             },
         });
     };
@@ -41,7 +45,7 @@ export default function CreateProject({ show, onClose }) {
                 <div className="flex justify-between">
                     <div className="flex flex-row">
                         <img
-                            src="images/Hyperlink.png"
+                            src="/images/Hyperlink.png"
                             style={{ width: "24px", height: "24px" }}
                             alt="hyperlink"
                         />

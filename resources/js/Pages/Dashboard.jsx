@@ -15,8 +15,8 @@ import { FiPlus } from "react-icons/fi";
 export default function ShortenedLinkPage({ links }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
-    const [selectedIds, setSelectedIds] = useState([]);
-    const [showPopup, setShowPopup] = useState(false);
+    const [selectedIds, setSelectedIds] = useState([]);   const [showPopup, setShowPopup] = useState(false);
+ 
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
     const [selectedLinkToDelete, setSelectedLinkToDelete] = useState(null);
     const [isShareModalOpen, setShareModalOpen] = useState(false);
@@ -147,7 +147,7 @@ export default function ShortenedLinkPage({ links }) {
 
     return (
         <DashboardLayout>
-            <Head title="Shortened Links" />
+            <Head title="Management Links" />
 
             <div className="py-5">
                 <h1 className="text-2xl font-semibold text-primary-100">
@@ -209,16 +209,13 @@ export default function ShortenedLinkPage({ links }) {
                                         <input type="checkbox" disabled />
                                     </th>
                                 )}
-                                <th className="px-4 py-6 font-semibold">URL</th>
+                                <th className="px-4 py-6 font-semibold">Project Name</th>
                                 <th className="px-4 py-6 font-semibold">
-                                    Date Created
+                                   URL
                                 </th>
                                 <th className="px-4 py-6 font-semibold">
-                                    Expiration Date
-                                </th>
-                                <th className="px-4 py-6 font-semibold">
-                                    Status
-                                </th>
+                                     Date Created
+                                </th>                              
                                 <th className="px-4 py-6 font-semibold">
                                     Action
                                 </th>
@@ -243,24 +240,20 @@ export default function ShortenedLinkPage({ links }) {
                                     {/* whitespace-nowrap */}
                                     <td className="px-4 py-4 ">
                                         <a
-                                            href={link.short_url}
-                                            className="text-primary underline break-all"
+                                            href={link.projects}
+                                            className="text-primary hover:underline break-all"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
                                             {link.short_url}
-                                        </a>
-                                        <div className="text-sm text-foreground break-all hover:underline ">
-                                            {link.original_url}
-                                        </div>
+                                        </a>                                       
                                     </td>
                                     <td className="px-4 py-4">
                                         {link.created_at}
                                     </td>
                                     <td className="px-4 py-4">
                                         {link.expired_at}
-                                    </td>
-                                    <td className="px-4 py-4">{link.status}</td>
+                                    </td>                                  
                                     <td className="px-4 py-4 space-x-2  text-lg text-gray-700">
                                         <button
                                             title="Copy"
