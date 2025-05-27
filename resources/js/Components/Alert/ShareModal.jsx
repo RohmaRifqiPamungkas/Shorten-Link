@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
+import Notification from '@/Components/Notification/Notification'; 
 
 export default function SharePopup({ url, onClose }) {
-  const [copied, setCopied] = useState(false);
+  const [showNotif, setShowNotif] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(url);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    setShowNotif(true);
   };
 
   return (
@@ -28,25 +28,30 @@ export default function SharePopup({ url, onClose }) {
         </a>
 
         {/* Garis OR */}
-       <div className="flex w-1/2 items-center gap-4 text-gray-500 mb-4">
-  <hr className="flex-1 border-t border-foreground " />
-  <span className="text-md md:text-xl text-primary-100">OR</span>
-  <hr className="flex-1 border-t border-foreground" />
-</div>
+        <div className="flex w-1/2 items-center gap-4 text-gray-500 mb-4">
+          <hr className="flex-1 border-t border-foreground" />
+          <span className="text-md md:text-xl text-primary-100">OR</span>
+          <hr className="flex-1 border-t border-foreground" />
+        </div>
 
         <h2 className="text-lg md:text-xl font-normal text-foreground mb-4">Copy your link</h2>
 
-
         {/* Copy Area */}
-        <div className=" rounded-2xl px-6 py-4 flex items-center justify-between mb-4 space-x-2 border border-brfourth bg-white">
+        <div className="rounded-2xl px-6 py-4 flex items-center justify-between mb-4 space-x-2 border border-brfourth bg-white">
           <span className="text-sm text-gray-700 truncate">{url}</span>
           <button onClick={handleCopy}>
             <Icon icon="mdi:content-copy" className="text-lg text-gray-600 hover:text-gray-800" />
           </button>
         </div>
 
-        {/* Pesan copied */}
-        {copied && <p className="text-green-600 text-sm mb-2">Copied!</p>}
+        {/* Notifikasi muncul di atas tombol OK */}
+        {showNotif && (
+          <Notification
+            type="success"
+            message="Link copied to clipboard!"
+            onClose={() => setShowNotif(false)}
+          />
+        )}
 
         {/* Tombol OK */}
         <button

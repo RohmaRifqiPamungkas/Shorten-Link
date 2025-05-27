@@ -28,8 +28,7 @@ const Breadcrumb = () => {
 
   return (
     <nav className="text-sm text-gray-500">
-      <Link href="/" className="text-gray-600 hover:underline">Home</Link>
-      {pathSegments.length > 0 && <span className="mx-2">{'>'}</span>}
+      {pathSegments.length > 0 && <span>{''}</span>}
       {breadcrumbs}
     </nav>
   );
