@@ -14,7 +14,7 @@ import { Icon } from "@iconify/react";
 import { FiPlus } from "react-icons/fi";
 
 export default function ProjectsDashboard({ auth }) {
-    const { projects = { data: [], links: [] }, flash } = usePage().props;
+    const { projects = { data: [], links: [] } } = usePage().props;
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
@@ -87,7 +87,6 @@ export default function ProjectsDashboard({ auth }) {
 
     setDeleteModalOpen(false);
 };
-
 
     const filteredProjects = projects.data.filter((project) =>
         project.project_name.toLowerCase().includes(searchTerm.toLowerCase())
