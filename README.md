@@ -133,9 +133,9 @@ This project is open-source and available under the [MIT license](https://openso
 
 Have questions, feedback, or ideas? Feel free to open an issue or reach out via:
 
-- 📧 Email: support@yourdomain.com
-- 🌐 Website: [yourdomain.com](https://yourdomain.com)
-- 🐙 GitHub: [@yourusername](https://github.com/yourusername)
+- 📧 Email: rohmarifqi31@gmail.com / ameliadiananda@gmail.com
+- 🌐 Linktree: https://linktr.ee/PamungkasRifqi
+- 🐙 GitHub: https://github.com/RohmaRifqiPamungkas
 
 ---
 
