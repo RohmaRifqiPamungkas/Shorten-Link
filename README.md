@@ -137,9 +137,6 @@ Have questions, feedback, or ideas? Feel free to open an issue or reach out via:
 - 🌐 Linktree: https://linktr.ee/PamungkasRifqi
 - 🐙 GitHub: https://github.com/RohmaRifqiPamungkas
 
-**Tags:**  
-#Laravel #ReactJS #InertiaJS #ShortenURL #URLShortener #LinkManagement #TailwindCSS #LaravelBreeze #Sanctum #PHP #MySQL #FullstackApp #LinkTracker #LinkAnalytics #OpenSource #WebDevelopment
-
 ---
 
 <p align="center">
