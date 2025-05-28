@@ -65,3 +65,6 @@ Main entities used in this system:
 ```bash
 git clone https://github.com/your-repo/shorten-link-app.git
 cd shorten-link-app
+
+# Install PHP dependencies
+composer install
