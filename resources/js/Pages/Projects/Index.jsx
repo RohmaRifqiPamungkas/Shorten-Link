@@ -203,7 +203,7 @@ export default function ProjectsDashboard({ auth }) {
                                         key={project.id}
                                         className="border-b border-muted hover:bg-gray-50 cursor-pointer"
                                         onClick={() =>
-                                            (window.location.href = `/dashboard/projects/${project.id}/links`)
+                                            (window.location.href = `/dashboard/projects/${project.id}/categories`)
                                         }
                                     >
                                         {bulkMode && (

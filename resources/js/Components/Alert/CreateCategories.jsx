@@ -1,41 +1,36 @@
-
-
 import React, { useState } from "react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Notification from "../Notification/Notification";
+import { useForm } from "@inertiajs/react";
 
-export default function CreateProject({
-    show,
-    onClose,
-    data,
-    setData,
-    errors,
-    processing,
-}) {
+export default function CreateProject({ show, onClose, project }) {
     const [notification, setNotification] = useState(null);
+
+    const { data, setData, post, processing, errors, reset } = useForm({
+        name: '',
+    });
 
     if (!show) return null;
 
-   
-  const handleSubmit = (e) => {
-    e.preventDefault()
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-    post(route('shortlink.store'), {
-      onSuccess: () => {
-        setNotification({
-          type: 'success',
-          message: 'Link berhasil disingkat!',
-        })
-        reset()
-      },
-      onError: () => {
-        setNotification({
-          type: 'error',
-          message: 'Terjadi kesalahan, periksa input Anda.',
-        })
-      },
-    })
-  }
+        post(`/dashboard/projects/${project.id}/categories`, {
+            onSuccess: () => {
+                setNotification({
+                    type: 'success',
+                    message: 'Kategori berhasil ditambahkan!',
+                });
+                reset();
+            },
+            onError: () => {
+                setNotification({
+                    type: 'error',
+                    message: 'Terjadi kesalahan, periksa input Anda.',
+                });
+            },
+        });
+    };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -48,7 +43,7 @@ export default function CreateProject({
                             alt="hyperlink"
                         />
                         <h2 className="text-xl ms-4 font-semibold text-primary-100 mb-4">
-                          Categories Link
+                            Categories Link
                         </h2>
                     </div>
                     <button
@@ -70,30 +65,27 @@ export default function CreateProject({
 
                 <div className="mt-4">
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        <div>
+                        <div className="space-y-2">
                             <label className="text-sm text-foreground">
-                               Name Categories
+                                Name Categories
                             </label>
                             <input
-                                type="url"
+                                type="text"
                                 className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
-                                placeholder="example"
-                                value={data.long_url}
-                                onChange={(e) =>
-                                    setData("long_url", e.target.value)
-                                }
+                                placeholder="Example"
+                                value={data.name}
+                                onChange={(e) => setData("name", e.target.value)}
                                 required
                             />
-                            {errors.long_url && (
+                            {errors.name && (
                                 <div className="text-red-500 text-sm mt-1">
-                                    {errors.long_url}
+                                    {errors.name}
                                 </div>
                             )}
                         </div>
 
-
                         <PrimaryButton type="submit" disabled={processing}>
-                              {processing ? 'Create Categories...' : 'Create Categories'}
+                            {processing ? 'Create Categories...' : 'Create Categories'}
                         </PrimaryButton>
                     </form>
                 </div>

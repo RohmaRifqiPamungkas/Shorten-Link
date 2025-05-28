@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
@@ -9,7 +8,7 @@ import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
 import Notification from "@/Components/Notification/Notification";
 
-const CreateLink = ({ project, selectedCategoryId }) => {
+const EditLink = ({ project, selectedCategoryId }) => {
     const { data, setData, post, processing, errors } = useForm({
         category_id: selectedCategoryId ?? "",
         links: [{ title: "", url: "" }],
@@ -101,11 +100,11 @@ const CreateLink = ({ project, selectedCategoryId }) => {
 
     return (
         <DashboardLayout>
-            <Head title="Add Link" />
+            <Head title="Edit Link" />
 
             <Breadcrumb />
             <h2 className="text-xl font-semibold text-blue-900 mt-4 mb-4">
-                Add URL
+                Edit URL
             </h2>
 
             {/* URL & Icons Row */}
@@ -259,7 +258,7 @@ const CreateLink = ({ project, selectedCategoryId }) => {
                             disabled={processing}
                             className="w-full bg-primary-100 hover:bg-secondary text-white py-2 rounded-md font-semibold"
                         >
-                            Submit
+                         Update
                         </PrimaryButton>
                     </form>
 
@@ -283,4 +282,4 @@ const CreateLink = ({ project, selectedCategoryId }) => {
     );
 };
 
-export default CreateLink;
+export default EditLink;
