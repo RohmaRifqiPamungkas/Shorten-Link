@@ -63,8 +63,8 @@ Main entities used in this system:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-repo/shorten-link-app.git
-cd shorten-link-app
+git clone https://github.com/RohmaRifqiPamungkas/Shorten-Link.git
+cd shorten-link
 ```
 ### 2. Set Up Laravel Backend
 ```bash
