@@ -23,6 +23,31 @@ export default function Links({ auth, project = {}, category = {}, links = { dat
     const [notification, setNotification] = useState(null);
     const [perPage, setPerPage] = useState(10);
 
+    const getCustomFavicon = (url) => {
+        try {
+            const hostname = new URL(url).hostname.replace(/^www\./, "");
+
+            const customIcons = {
+                "github.com": "/icons/github.svg",
+                "facebook.com": "/icons/facebook.svg",
+                "twitter.com": "/icons/twitter.svg",
+                "linkedin.com": "/icons/linkedin.svg",
+                "youtube.com": "/icons/youtube.svg",
+                "figma.com": "/icons/figma.svg",
+            };
+
+            const matchedDomain = Object.keys(customIcons).find(domain =>
+                hostname.includes(domain)
+            );
+
+            return matchedDomain
+                ? customIcons[matchedDomain]
+                : `https://www.google.com/s2/favicons?domain=${hostname}`;
+        } catch (error) {
+            return "https://www.google.com/s2/favicons?domain=default";
+        }
+    };
+
     const toggleSelect = (id) => {
         setSelectedIds((prev) =>
             prev.includes(id)
@@ -200,27 +225,26 @@ export default function Links({ auth, project = {}, category = {}, links = { dat
                                                 />
                                             </td>
                                         )}
-                                        <td className="px-4 py-4 whitespace-nowrap">
-                                            <a
-                                                href={link.original_url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-sm text-foreground hover:underline"
-                                            >
-                                                {link.original_url}
-                                            </a>
-                                            <div className=" text-foreground">
-                                                {link.title}
+                                        <td className="px-4 py-4 whitespace-nowrap flex items-center gap-2">
+                                            {/* Logo/Favicon */}
+                                            <img
+                                                src={getCustomFavicon(link.original_url)}
+                                                alt="favicon"
+                                                className="w-8 h-8 rounded-full bg-gray-100 object-contain"
+                                                style={{ flexShrink: 0 }}
+                                                onError={e => { e.target.onerror = null; e.target.src = "https://www.google.com/s2/favicons?domain=" + (new URL(link.original_url).hostname); }}
+                                            />
+                                            <div>
+                                                <a
+                                                    href={link.original_url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-sm text-foreground hover:underline"
+                                                >
+                                                    {link.original_url}
+                                                </a>
+                                                <div className="text-foreground">{link.title}</div>
                                             </div>
-                                        </td>
-                                        <td className="px-4 py-4 whitespace-nowrap">
-                                            {link.category?.name ? (
-                                                <span className="inline-block bg-secondary text-white text-sm font-medium px-4 py-1 rounded-lg">
-                                                    {link.category.name}
-                                                </span>
-                                            ) : (
-                                                "-"
-                                            )}
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
                                             {new Date(
@@ -230,6 +254,15 @@ export default function Links({ auth, project = {}, category = {}, links = { dat
                                                 month: "2-digit",
                                                 year: "numeric",
                                             })}
+                                        </td>
+                                        <td className="px-4 py-4 whitespace-nowrap">
+                                            {link.category?.name ? (
+                                                <span className="inline-block bg-secondary text-white text-sm font-medium px-4 py-1 rounded-lg">
+                                                    {link.category.name}
+                                                </span>
+                                            ) : (
+                                                "-"
+                                            )}
                                         </td>
                                         <td className="px-4 py-4 space-x-2 flex">
                                             <Link
