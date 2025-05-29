@@ -63,30 +63,30 @@ export default function ProjectsDashboard({ auth }) {
         setDeleteModalOpen(true);
     };
 
-  const handleConfirmDelete = () => {
-    if (selectedProjectToDelete) {
-        Inertia.post(`/dashboard/projects/${selectedProjectToDelete.id}`, {
-            _method: "DELETE",
-        }, {
-            onSuccess: () => {
-                
-                setNotification({
-                    type: "success",
-                    message: "Project deleted successfully.",
-                });
-               
-            },
-            onError: () => {
-                setNotification({
-                    type: "error",
-                    message: "Failed to delete project. Please try again.",
-                });
-            },
-        });
-    }
+    const handleConfirmDelete = () => {
+        if (selectedProjectToDelete) {
+            Inertia.post(`/dashboard/projects/${selectedProjectToDelete.id}`, {
+                _method: "DELETE",
+            }, {
+                onSuccess: () => {
 
-    setDeleteModalOpen(false);
-};
+                    setNotification({
+                        type: "success",
+                        message: "Project deleted successfully.",
+                    });
+
+                },
+                onError: () => {
+                    setNotification({
+                        type: "error",
+                        message: "Failed to delete project. Please try again.",
+                    });
+                },
+            });
+        }
+
+        setDeleteModalOpen(false);
+    };
 
     const filteredProjects = projects.data.filter((project) =>
         project.project_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -94,40 +94,40 @@ export default function ProjectsDashboard({ auth }) {
 
     const [perPage, setPerPage] = useState(10);
 
-   const handlePageChange = (newPage) => {
-    Inertia.get(
-        `/dashboard/projects`,
-        {
-            page: newPage,
-            perPage,
-            search: searchTerm,
-        },
-        {
-            preserveState: true,
-            replace: true,
-        }
-    );
-};
+    const handlePageChange = (newPage) => {
+        Inertia.get(
+            `/dashboard/projects`,
+            {
+                page: newPage,
+                perPage,
+                search: searchTerm,
+            },
+            {
+                preserveState: true,
+                replace: true,
+            }
+        );
+    };
 
-  const handlePerPageChange = (newPerPage) => {
-    setPerPage(newPerPage);
-    Inertia.get(
-        `/dashboard/projects`, 
-        {
-            page: 1,
-            perPage: newPerPage,
-            search: searchTerm,
-        },
-        {
-            preserveState: true,
-            replace: true,
-        }
-    );
-};
+    const handlePerPageChange = (newPerPage) => {
+        setPerPage(newPerPage);
+        Inertia.get(
+            `/dashboard/projects`,
+            {
+                page: 1,
+                perPage: newPerPage,
+                search: searchTerm,
+            },
+            {
+                preserveState: true,
+                replace: true,
+            }
+        );
+    };
 
     return (
         <DashboardLayout user={auth.user}>
-            <Head title="   Management Link" />
+            <Head title="Management Link" />
 
             <div className="py-5">
                 <h1 className="text-2xl font-semibold text-primary-100">
@@ -141,11 +141,11 @@ export default function ProjectsDashboard({ auth }) {
 
                     <div className="flex items-center gap-3 transition-all duration-300 ease-in-out flex-wrap">
                         <div className="transition-all duration-300">
-                             <ShortenButton
-                                                           onClick={() => setShowPopup(true)}
-                                                           label="Add Project"
-                                                           icon={<FiPlus size={18} />}
-                                                       />
+                            <ShortenButton
+                                onClick={() => setShowPopup(true)}
+                                label="Add Project"
+                                icon={<FiPlus size={18} />}
+                            />
                         </div>
                         <div className="transition-all duration-300">
                             <SearchBar onSearch={setSearchTerm} />
@@ -343,14 +343,14 @@ export default function ProjectsDashboard({ auth }) {
                         url={selectedShareUrl}
                         onClose={() => setShareModalOpen(false)}
                     />
-                )} 
+                )}
 
-                  <CreateProject
-  show={showPopup}
-  onClose={() => setShowPopup(false)}
-   onSuccess={() => Inertia.reload()}
-/>
-                        
+                <CreateProject
+                    show={showPopup}
+                    onClose={() => setShowPopup(false)}
+                    onSuccess={() => Inertia.reload()}
+                />
+
             </div>
         </DashboardLayout>
     );

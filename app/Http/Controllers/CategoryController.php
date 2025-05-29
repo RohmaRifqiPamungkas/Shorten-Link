@@ -17,17 +17,18 @@ class CategoryController extends Controller
     {
         $user = $request->user();
 
-        $project = Project::find($projectId);
-
-        if (!$project) {
-            return response()->json(['error' => 'Project not found'], 404);
-        }
+        $project = Project::where('id', $projectId)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
 
         $categories = Category::where('user_id', $user->id)
             ->where('project_id', $projectId)
-            ->get();
+            ->paginate(10);
 
-        return response()->json($categories);
+        return Inertia::render('Projects/Categories/Index', [
+            'project' => $project,
+            'categories' => $categories,
+        ]);
     }
 
     /**
