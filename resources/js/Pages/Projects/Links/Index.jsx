@@ -224,44 +224,48 @@ export default function Links({ auth, project = {}, category = {}, links = { dat
                                                 />
                                             </td>
                                         )}
-                                        <td className="px-4 py-4 whitespace-nowrap flex items-center gap-2">
-                                            {/* Logo/Favicon */}
-                                            <img
-                                                src={getCustomFavicon(link.original_url)}
-                                                alt="favicon"
-                                                className="w-8 h-8 rounded-full bg-gray-100 object-contain"
-                                                style={{ flexShrink: 0 }}
-                                                onError={e => { e.target.onerror = null; e.target.src = "https://www.google.com/s2/favicons?domain=" + (new URL(link.original_url).hostname); }}
-                                            />
-                                            <div>
-                                                <a
-                                                    href={link.original_url}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="text-sm text-foreground hover:underline"
-                                                >
-                                                    {link.original_url}
-                                                </a>
-                                                <div className="text-foreground">{link.title}</div>
-                                            </div>
-                                        </td>
+                                     <td className="px-4 py-4 whitespace-nowrap flex items-center gap-2  w-full max-w-full md:max-w-[560px] overflow-hidden">
+    {/* Logo/Favicon */}
+    <img
+        src={getCustomFavicon(link.original_url)}
+        alt="favicon"
+        className="w-8 h-8 rounded-full bg-gray-100 object-contain"
+        style={{ flexShrink: 0 }}
+        onError={e => {
+            e.target.onerror = null;
+            e.target.src = "https://www.google.com/s2/favicons?domain=" + (new URL(link.original_url).hostname);
+        }}
+    />
+    <div className="min-w-0"> {/* supaya teks bisa terpotong */}
+        <a
+            href={link.original_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-foreground hover:underline block overflow-hidden text-ellipsis whitespace-nowrap"
+        >
+            {link.original_url}
+        </a>
+        <div className="text-foreground">{link.title}</div>
+    </div>
+</td>
+
                                         <td className="px-4 py-4 whitespace-nowrap">
                                           {new Date(link.created_at).toISOString().slice(2, 10)}
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
                                             {link.category?.name ? (
-                                                <span className="inline-block bg-secondary text-white text-sm font-medium px-4 py-1 rounded-lg">
+                                                <span className="inline-block bg-secondary text-white text-sm font-medium px-6 py-2 rounded-lg">
                                                     {link.category.name}
                                                 </span>
                                             ) : (
                                                 "-"
                                             )}
                                         </td>
-                                        <td className="px-4 py-4 space-x-2 flex">
+                                        <td className="px-4 py-4 space-x-4 flex">
                                             <Link
                                                 href={`/projects/${project.id}/categories/${link.category_id}/link/${link.link_id}/edit`}
                                                 title="Edit"
-                                                className="hover:text-primary-100"
+                                                className="hover:text-primary-100 "
                                             >
                                                 <Icon
                                                     icon="iconamoon:edit-light"

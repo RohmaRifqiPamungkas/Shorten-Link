@@ -23,14 +23,14 @@ export default function CreateShortlink({
       onSuccess: () => {
         setNotification({
           type: 'success',
-          message: 'Link berhasil disingkat!',
+          message: 'Create Successfully',
         })
         reset()
       },
       onError: () => {
         setNotification({
           type: 'error',
-          message: 'Terjadi kesalahan, periksa input Anda.',
+          message: 'An error occurred, please check your input',
         })
       },
     })

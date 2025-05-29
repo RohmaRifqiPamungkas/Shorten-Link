@@ -19,14 +19,14 @@ export default function CreateProject({ show, onClose, project }) {
             onSuccess: () => {
                 setNotification({
                     type: 'success',
-                    message: 'Kategori berhasil ditambahkan!',
+                    message: 'Created Succesfully',
                 });
                 reset();
             },
             onError: () => {
                 setNotification({
                     type: 'error',
-                    message: 'Terjadi kesalahan, periksa input Anda.',
+                    message: 'An error occurred, please check your input.',
                 });
             },
         });

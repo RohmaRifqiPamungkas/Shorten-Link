@@ -30,7 +30,7 @@ export default function CreateProject({ show, onClose }) {
             onError: () => {
                 setNotification({
                     type: "error",
-                    message: "Terjadi kesalahan, periksa input Anda.",
+                    message: "An error occurred, please check your input.",
                 });
                  reset();
             },
@@ -93,13 +93,13 @@ export default function CreateProject({ show, onClose }) {
                         </div>
 
                         <div className="flex flex-row">
-                            <div className="basis-2/4">
+                            <div className="basis-1/3">
                                 <label className="text-sm text-foreground">
                                     URL
                                 </label>
                                 <input
                                     type="text"
-                                    className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
+                                    className="w-full border border-brfourth rounded-lg px-2.5 py-2 mt-1 bg-white text-foreground"
                                     value={`sevenpion.com/m/`}
                                     readOnly
                                 />
@@ -110,7 +110,7 @@ export default function CreateProject({ show, onClose }) {
                                 </label>
                                 <input
                                     type="text"
-                                    className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
+                                    className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-foreground"
                                     placeholder="custom-alias"
                                     id="project_slug"
                                     name="project_slug"

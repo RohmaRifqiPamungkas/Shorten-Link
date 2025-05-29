@@ -242,7 +242,7 @@ export default function ProjectsDashboard({ auth }) {
                                             {new Date(project.created_at).toISOString().slice(2, 10)}
                                         </td>
                                         <td
-                                            className="px-4 py-4 space-x-2 text-lg text-gray-700 flex"
+                                            className="px-4 py-4 space-x-4 text-lg text-gray-700 flex"
                                             onClick={(e) => e.stopPropagation()}
                                         >
                                             <button
