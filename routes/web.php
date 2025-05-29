@@ -11,8 +11,6 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ShortenLinkController;
 
 // Halaman Awal
-
-
 Route::get('/', function () {
     return Inertia::render('Auth/Login');
 });
