@@ -118,7 +118,7 @@ export default function Categories({ auth, project = {} }) {
 
                 <div className="flex justify-between items-center flex-wrap gap-5 my-3">
                     <span className="text-foreground text-lg font-medium">
-                       Categories for :{" "}
+                        Categories for :{" "}
                         <a
                             className="underline"
                             href={`/m/${project.project_slug}`}
@@ -225,14 +225,14 @@ export default function Categories({ auth, project = {} }) {
                                                 year: "numeric",
                                             })}
                                         </td>
-                                          <td className="px-4 py-4 whitespace-nowrap hover:underline">
+                                        <td className="px-4 py-4 whitespace-nowrap hover:underline">
                                             total linksss?
                                         </td>
                                         <td
                                             className="px-4 py-4 space-x-2 text-lg text-gray-700 flex"
                                             onClick={(e) => e.stopPropagation()}
                                         >
-                                              <button
+                                            <button
                                                 onClick={() => setShowPopupUpdate(true)}
                                                 title="Update"
                                                 className="hover:text-primary-100"
@@ -255,7 +255,7 @@ export default function Categories({ auth, project = {} }) {
                                                 />
                                             </Link>
 
-                                          
+
 
                                             <button
                                                 onClick={() =>
