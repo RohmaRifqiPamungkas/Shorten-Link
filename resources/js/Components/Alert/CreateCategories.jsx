@@ -38,7 +38,7 @@ export default function CreateProject({ show, onClose, project }) {
                 <div className="flex justify-between">
                     <div className="flex flex-row">
                         <img
-                            src="images/Hyperlink.png"
+                            src="/images/Hyperlink.png"
                             style={{ width: "24px", height: "24px" }}
                             alt="hyperlink"
                         />

@@ -68,8 +68,8 @@ export default function Categories({ auth, project = {} }) {
         setDeleteModalOpen(false);
     };
 
-    const filteredCategories = categories.data.filter((categories) =>
-        categories.project_name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredCategories = categories.data.filter((category) =>
+        category.name && category.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const [perPage, setPerPage] = useState(10);
@@ -191,35 +191,28 @@ export default function Categories({ auth, project = {} }) {
                         </thead>
                         <tbody>
                             {filteredCategories.length > 0 ? (
-                                filteredCategories.map((project) => (
+                                filteredCategories.map((category) => (
                                     <tr
-                                        key={project.id}
+                                        key={category.id}
                                         className="border-b border-muted hover:bg-gray-50 cursor-pointer"
                                         onClick={() =>
-                                            (window.location.href = `/dashboard/projects/${project.id}/categories/${categories.id}/link`)
+                                            (window.location.href = `/dashboard/projects/${project.id}/categories/${category.id}/links`)
                                         }
                                     >
                                         {bulkMode && (
                                             <td className="px-4 py-4">
                                                 <input
                                                     type="checkbox"
-                                                    checked={selectedIds.includes(
-                                                        project.id
-                                                    )}
-                                                    onChange={() =>
-                                                        toggleSelect(project.id)
-                                                    }
+                                                    checked={selectedIds.includes(category.id)}
+                                                    onChange={() => toggleSelect(category.id)}
                                                 />
                                             </td>
                                         )}
                                         <td className="px-4 py-4 whitespace-nowrap hover:underline">
-                                            {categories.name}
+                                            {category.name}
                                         </td>
-
                                         <td className="px-4 py-4 whitespace-nowrap">
-                                            {new Date(
-                                                categories.created_at
-                                            ).toLocaleDateString("id-ID", {
+                                            {new Date(category.created_at).toLocaleDateString("id-ID", {
                                                 day: "2-digit",
                                                 month: "2-digit",
                                                 year: "numeric",
@@ -238,29 +231,24 @@ export default function Categories({ auth, project = {} }) {
                                                 className="hover:text-primary-100"
                                             >
                                                 <Icon
-                                                    icon=" material-symbols:link-rounded"
+                                                    icon="material-symbols:link-rounded"
                                                     width={20}
                                                     height={20}
                                                 />
                                             </button>
                                             <Link
-                                                href={`/dashboard/projects/${project.id}/categories/${categories.id}/link`}
+                                                href={`/dashboard/projects/${project.id}/categories/${category.id}/link`}
                                                 title="Edit"
                                                 className="hover:text-primary-100"
                                             >
                                                 <Icon
-                                                    icon="iconamoon:edit-light "
+                                                    icon="iconamoon:edit-light"
                                                     width={20}
                                                     height={20}
                                                 />
                                             </Link>
-
-
-
                                             <button
-                                                onClick={() =>
-                                                    handleDeleteClick(project)
-                                                }
+                                                onClick={() => handleDeleteClick(category)}
                                                 title="Delete"
                                                 className="hover:text-primary-100"
                                             >
@@ -313,6 +301,7 @@ export default function Categories({ auth, project = {} }) {
                 <CreateCategories
                     show={showPopup}
                     onClose={() => setShowPopup(false)}
+                    project={project}
                     onSuccess={() => Inertia.reload()}
                 />
 
