@@ -20,8 +20,11 @@ class ProjectController extends Controller
             ->latest()
             ->paginate(10);
 
+        $success = session('success');
+
         return Inertia::render('Projects/Index', [
             'projects' => $projects,
+            'success' => $success,
         ]);
     }
 
@@ -109,7 +112,7 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
         $project->delete();
 
-        return redirect()->route('projects.index')->with('success', 'Project berhasil dihapus.');
+        return redirect()->route('projects.index')->with('success', 'Project deleted successfully.');
     }
 
     /**

@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Application;
 use Inertia\Inertia;
 
 use App\Http\Controllers\ProfileController;
@@ -10,16 +9,12 @@ use App\Http\Controllers\LinkController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ShortenLinkController;
 
-// Halaman Awal
+// Halaman Awal (Login)
 Route::get('/', function () {
     return Inertia::render('Auth/Login');
 });
 
-// Dashboard
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+// Redirect Shorten Link Publik
 Route::get('/s/{code}', [ShortenLinkController::class, 'redirect'])->name('shorten.redirect');
 
 // Route yang memerlukan autentikasi
@@ -36,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/m/{slug}', [ProjectController::class, 'showBySlug'])->name('projects.showBySlug');
 
     // Projects (CRUD)
-    Route::prefix('dashboard/projects')->name('projects.')->group(function () {
+    Route::prefix('projects')->name('projects.')->group(function () {
         Route::get('/', [ProjectController::class, 'index'])->name('index');
         Route::get('/create', [ProjectController::class, 'create'])->name('create');
         Route::post('/', [ProjectController::class, 'store'])->name('store');
@@ -44,21 +39,20 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/{id}', [ProjectController::class, 'update'])->name('update');
         Route::delete('/{id}', [ProjectController::class, 'destroy'])->name('destroy');
 
-        // Route link dalam project (nested)
-        Route::prefix('/{project}/links')->name('links.')->group(function () {
+        // Link dalam project (nested)
+        Route::prefix('{project}/links')->name('links.')->group(function () {
             Route::get('/', [LinkController::class, 'index'])->name('index');
             Route::get('/create', [LinkController::class, 'create'])->name('create');
             Route::post('/', [LinkController::class, 'store'])->name('store');
         });
 
-        // Route kategori berdasarkan project (GET)
-        Route::get('/{project}/categories', [CategoryController::class, 'index'])->name('categories.index');
+        // Kategori dalam project
+        Route::get('{project}/categories', [CategoryController::class, 'index'])->name('categories.index');
+        Route::get('{project}/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+        Route::post('{project}/categories', [CategoryController::class, 'store'])->name('categories.store'); 
 
-        Route::get('/{project}/categories/create', [CategoryController::class, 'create'])->name('categories.create');
-        
-        Route::get('/{project}/categories', [CategoryController::class, 'index'])->name('categories.index');
-
-        Route::get('/{project}/categories/{category}/links', [LinkController::class, 'indexByCategory'])->name('categories.links.index');
+        // Link berdasarkan kategori
+        Route::get('{project}/categories/{category}/links', [LinkController::class, 'indexByCategory'])->name('categories.links.index');
     });
 
     // Shorten Link (CRUD)
@@ -71,11 +65,8 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}', [ShortenLinkController::class, 'destroy'])->name('destroy');
     });
 
-    // Simpan kategori baru (POST)
-    Route::post('/dashboard/projects/{project}/categories', [CategoryController::class, 'store'])->name('categories.store');
-
-    // Hapus link (terpisah karena tidak perlu ID project)
-    Route::delete('/dashboard/projects/links/{link}', [LinkController::class, 'destroy'])->name('projects.links.destroy');
+    // Hapus link (jika ingin, bisa tambahkan route delete khusus di sini)
+    // Route::delete('/projects/links/{link}', [LinkController::class, 'destroy'])->name('projects.links.destroy');
 });
 
 require __DIR__ . '/auth.php';

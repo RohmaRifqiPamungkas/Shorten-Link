@@ -32,7 +32,7 @@ const CreateLink = ({ project, selectedCategoryId }) => {
 
     const submit = (e) => {
         e.preventDefault();
-        post(`/dashboard/projects/${project.id}/links`);
+        post(`/projects/${project.id}/links`);
     };
 
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -74,7 +74,7 @@ const CreateLink = ({ project, selectedCategoryId }) => {
     const handleConfirmDelete = () => {
         if (selectedProjectToDelete) {
             Inertia.post(
-                `/dashboard/projects/${selectedProjectToDelete.id}`,
+                `/projects/${selectedProjectToDelete.id}`,
                 {
                     _method: "DELETE",
                 },
@@ -110,9 +110,16 @@ const CreateLink = ({ project, selectedCategoryId }) => {
 
             {/* URL & Icons Row */}
             <div className="mb-4 flex items-center justify-between text-sm text-foreground">
-                <span className="text-foreground font-medium">
-                    Your Link Is :{" "}
-                    <a className="underline">sevenpion.com/s/example-alias</a>
+                <span className="text-foreground text-lg font-medium">
+                    List link in :{" "}
+                    <a
+                        className="underline"
+                        href={`/m/${project.project_slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        sevenpion.com/m/{project.project_slug}
+                    </a>
                 </span>
                 <div className="flex gap-2 ml-4">
                     <button
@@ -174,6 +181,11 @@ const CreateLink = ({ project, selectedCategoryId }) => {
                             name="category_id"
                         />
 
+                        {/* Error untuk category_id */}
+                        {errors.category_id && (
+                            <p className="text-red-500">{errors.category_id}</p>
+                        )}
+
                         {data.links.map((link, index) => (
                             <div
                                 key={index}
@@ -185,6 +197,7 @@ const CreateLink = ({ project, selectedCategoryId }) => {
                                     </label>
                                     <input
                                         type="text"
+                                        name={`links[${index}][title]`}
                                         placeholder="Example"
                                         value={link.title}
                                         onChange={(e) =>
@@ -204,6 +217,7 @@ const CreateLink = ({ project, selectedCategoryId }) => {
                                     </label>
                                     <input
                                         type="url"
+                                        name={`links[${index}][url]`}
                                         placeholder="Example"
                                         value={link.url}
                                         onChange={(e) =>

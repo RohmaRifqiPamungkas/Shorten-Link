@@ -13,8 +13,8 @@ import Notification from "@/Components/Notification/Notification";
 import { Icon } from "@iconify/react";
 import { FiPlus } from "react-icons/fi";
 
-export default function Links({ auth, project = {} }) {
-    const { links = { data: [] } } = usePage().props;
+export default function Links({ auth, project = {}, category = {}, links = { data: [] }, categories = [] }) {
+    // const { links = { data: [] } } = usePage().props;
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
@@ -39,7 +39,7 @@ export default function Links({ auth, project = {} }) {
     const handleConfirmDelete = () => {
         if (selectedLinkToDelete) {
             Inertia.post(
-                `/dashboard/links/${selectedLinkToDelete.id}`,
+                `/links/${selectedLinkToDelete.id}`,
                 { _method: "DELETE" },
                 {
                     onSuccess: () =>
@@ -64,7 +64,7 @@ export default function Links({ auth, project = {} }) {
 
     const handlePageChange = (newPage) => {
         Inertia.get(
-            `/dashboard/projects`,
+            `/projects`,
             {
                 page: newPage,
                 perPage,
@@ -80,7 +80,7 @@ export default function Links({ auth, project = {} }) {
     const handlePerPageChange = (newPerPage) => {
         setPerPage(newPerPage);
         Inertia.get(
-            `/dashboard/projects`,
+            `/projects`,
             {
                 page: 1,
                 perPage: newPerPage,
@@ -120,7 +120,11 @@ export default function Links({ auth, project = {} }) {
                     <div className="flex items-center gap-3 transition-all duration-300 ease-in-out flex-wrap">
                         <div className="transition-all duration-300">
                             <ShortenButton
-                                onClick={() => setShowPopup(true)}
+                                onClick={() =>
+                                    Inertia.get(
+                                        `/projects/${project.id}/links/create?category_id=${data.category_id}`
+                                    )
+                                }
                                 label="Add URL"
                                 icon={<FiPlus size={18} />}
                             />
@@ -229,7 +233,7 @@ export default function Links({ auth, project = {} }) {
                                         </td>
                                         <td className="px-4 py-4 space-x-2 flex">
                                             <Link
-                                                href={`/dashboard/projects/${project.id}/categories/${link.category_id}/link/${link.link_id}/edit`}
+                                                href={`/projects/${project.id}/categories/${link.category_id}/link/${link.link_id}/edit`}
                                                 title="Edit"
                                                 className="hover:text-primary-100"
                                             >
