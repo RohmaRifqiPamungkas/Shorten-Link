@@ -239,13 +239,7 @@ export default function ProjectsDashboard({ auth }) {
                                             </a>
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
-                                            {new Date(
-                                                project.created_at
-                                            ).toLocaleDateString("id-ID", {
-                                                day: "2-digit",
-                                                month: "2-digit",
-                                                year: "numeric",
-                                            })}
+                                            {new Date(project.created_at).toISOString().slice(2, 10)}
                                         </td>
                                         <td
                                             className="px-4 py-4 space-x-2 text-lg text-gray-700 flex"
