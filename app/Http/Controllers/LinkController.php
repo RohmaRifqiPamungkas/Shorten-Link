@@ -13,27 +13,30 @@ use Illuminate\Http\RedirectResponse;
 
 class LinkController extends Controller
 {
-    public function index($project_id, Request $request)
+    public function indexByCategory(Request $request, $projectId, $categoryId)
     {
-        $project = Project::findOrFail($project_id);
+        $project = Project::findOrFail($projectId);
+        $category = Category::findOrFail($categoryId);
 
         $perPage = $request->query('perPage', 10);
 
         $links = Link::with('category')
-            ->where('project_id', $project_id)
+            ->where('project_id', $projectId)
+            ->where('category_id', $categoryId)
             ->latest()
             ->paginate($perPage)
             ->appends(['perPage' => $perPage]);
 
-        $categories = Category::where('project_id', $project_id)->get(); 
+        $categories = Category::where('project_id', $projectId)->get();
 
         return Inertia::render('Projects/Links/Index', [
             'auth' => [
                 'user' => Auth::user()
             ],
             'project' => $project,
-            'paginatedLinks' => $links,
-            'categories' => $categories, 
+            'category' => $category,
+            'links' => $links,
+            'categories' => $categories,
         ]);
     }
 

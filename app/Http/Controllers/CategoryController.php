@@ -71,12 +71,10 @@ class CategoryController extends Controller
 
         foreach ($existingCategories as $existingName) {
             $distance = levenshtein($newName, strtolower($existingName));
-
-            // Batas kemiripan yang ditoleransi (misalnya <= 2)
             if ($distance <= 2) {
-                return response()->json([
-                    'error' => "Nama kategori mirip dengan yang sudah ada: '{$existingName}' (selisih $distance karakter)."
-                ], 422);
+                return back()->withErrors([
+                    'name' => "Nama kategori mirip dengan yang sudah ada: '{$existingName}' (selisih $distance karakter)."
+                ]);
             }
         }
 
@@ -86,9 +84,8 @@ class CategoryController extends Controller
             'name' => $request->name,
         ]);
 
-        return response()->json([
-            'message' => 'Kategori berhasil dibuat',
-            'category' => $category,
-        ]);
+        // Redirect ke halaman kategori project terkait
+        return redirect()->route('projects.categories.index', $project->id)
+            ->with('success', 'Kategori berhasil dibuat');
     }
 }
