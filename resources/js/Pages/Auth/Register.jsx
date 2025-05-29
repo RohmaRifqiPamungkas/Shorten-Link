@@ -112,8 +112,6 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4 flex items-center ">
-                 
-
                     <PrimaryButton  disabled={processing}>
                         Register
                     </PrimaryButton>
@@ -121,7 +119,7 @@ export default function Register() {
                 <p className="text-center text-sm text-gray-600 mt-6">
                 Already have an account? {" "}
                     <Link
-                          href={route('login')}
+                        href={route('login')}
                         className="font-semibold text-primary-100 underline hover:text-secondary"
                     >
                         Sign In

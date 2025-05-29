@@ -53,7 +53,7 @@ const EditUrlPage = ({ auth, project }) => {
     const handleConfirmDelete = () => {
         if (selectedProjectToDelete) {
             Inertia.post(
-                `/dashboard/projects/${selectedProjectToDelete.id}`,
+                `/projects/${selectedProjectToDelete.id}`,
                 {
                     _method: "DELETE",
                 },
@@ -80,7 +80,7 @@ const EditUrlPage = ({ auth, project }) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        patch(`/dashboard/projects/${project.id}`);
+        patch(`/projects/${project.id}`);
     };
 
     return (

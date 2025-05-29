@@ -12,14 +12,12 @@ export default function CreateProject({ show, onClose }) {
 
     if (!show) return null;
 
-    
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
         setNotification(null);
 
-        post("/dashboard/projects", {
+        post("/projects", {
             onSuccess: () => {
                 setNotification({
                     type: "success",

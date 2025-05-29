@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
 import { Head, usePage, Link } from "@inertiajs/react";
@@ -23,8 +22,7 @@ export default function Categories({ auth, project = {} }) {
     const [showPopup, setShowPopup] = useState(false);
     const [showPopupUpdate, setShowPopupUpdate] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [selectedProjectToDelete, setSelectedProjectToDelete] =
-        useState(null);
+    const [selectedProjectToDelete, setSelectedProjectToDelete] = useState(null);
     const [notification, setNotification] = useState(null);
 
     const toggleSelect = (id) => {
@@ -43,7 +41,7 @@ export default function Categories({ auth, project = {} }) {
     const handleConfirmDelete = () => {
         if (selectedProjectToDelete) {
             Inertia.post(
-                `/dashboard/projects/${selectedProjectToDelete.id}`,
+                `/projects/${selectedProjectToDelete.id}`,
                 {
                     _method: "DELETE",
                 },
@@ -76,7 +74,7 @@ export default function Categories({ auth, project = {} }) {
 
     const handlePageChange = (newPage) => {
         Inertia.get(
-            `/dashboard/projects`,
+            `/projects`,
             {
                 page: newPage,
                 perPage,
@@ -92,7 +90,7 @@ export default function Categories({ auth, project = {} }) {
     const handlePerPageChange = (newPerPage) => {
         setPerPage(newPerPage);
         Inertia.get(
-            `/dashboard/projects`,
+            `/projects`,
             {
                 page: 1,
                 perPage: newPerPage,
@@ -196,7 +194,7 @@ export default function Categories({ auth, project = {} }) {
                                         key={category.id}
                                         className="border-b border-muted hover:bg-gray-50 cursor-pointer"
                                         onClick={() =>
-                                            (window.location.href = `/dashboard/projects/${project.id}/categories/${category.id}/links`)
+                                            (window.location.href = `/projects/${project.id}/categories/${category.id}/links`)
                                         }
                                     >
                                         {bulkMode && (
@@ -237,7 +235,7 @@ export default function Categories({ auth, project = {} }) {
                                                 />
                                             </button>
                                             <Link
-                                                href={`/dashboard/projects/${project.id}/categories/${category.id}/link`}
+                                                href={`/projects/${project.id}/categories/${category.id}/link`}
                                                 title="Edit"
                                                 className="hover:text-primary-100"
                                             >

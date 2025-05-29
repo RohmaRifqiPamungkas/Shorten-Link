@@ -14,14 +14,13 @@ import { Icon } from "@iconify/react";
 import { FiPlus } from "react-icons/fi";
 
 export default function ProjectsDashboard({ auth }) {
-    const { projects = { data: [], links: [] } } = usePage().props;
+    const { projects = { data: [], links: [] }, success } = usePage().props;
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [selectedProjectToDelete, setSelectedProjectToDelete] =
-        useState(null);
+    const [selectedProjectToDelete, setSelectedProjectToDelete] = useState(null);
     const [isShareModalOpen, setShareModalOpen] = useState(false);
     const [selectedShareUrl, setSelectedShareUrl] = useState("");
     const [notification, setNotification] = useState(null);
@@ -65,7 +64,7 @@ export default function ProjectsDashboard({ auth }) {
 
     const handleConfirmDelete = () => {
         if (selectedProjectToDelete) {
-            Inertia.post(`/dashboard/projects/${selectedProjectToDelete.id}`, {
+            Inertia.post(`/projects/${selectedProjectToDelete.id}`, {
                 _method: "DELETE",
             }, {
                 onSuccess: () => {
@@ -96,7 +95,7 @@ export default function ProjectsDashboard({ auth }) {
 
     const handlePageChange = (newPage) => {
         Inertia.get(
-            `/dashboard/projects`,
+            `/projects`,
             {
                 page: newPage,
                 perPage,
@@ -112,7 +111,7 @@ export default function ProjectsDashboard({ auth }) {
     const handlePerPageChange = (newPerPage) => {
         setPerPage(newPerPage);
         Inertia.get(
-            `/dashboard/projects`,
+            `/projects`,
             {
                 page: 1,
                 perPage: newPerPage,
@@ -203,7 +202,7 @@ export default function ProjectsDashboard({ auth }) {
                                         key={project.id}
                                         className="border-b border-muted hover:bg-gray-50 cursor-pointer"
                                         onClick={() =>
-                                            (window.location.href = `/dashboard/projects/${project.id}/categories`)
+                                            (window.location.href = `/projects/${project.id}/categories`)
                                         }
                                     >
                                         {bulkMode && (
@@ -260,7 +259,7 @@ export default function ProjectsDashboard({ auth }) {
                                             </button>
 
                                             <Link
-                                                href={`/dashboard/projects/${project.id}/edit`}
+                                                href={`/projects/${project.id}/edit`}
                                                 title="Edit"
                                                 className="hover:text-primary-100"
                                             >

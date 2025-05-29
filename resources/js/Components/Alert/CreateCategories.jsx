@@ -15,7 +15,7 @@ export default function CreateProject({ show, onClose, project }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        post(`/dashboard/projects/${project.id}/categories`, {
+        post(`/projects/${project.id}/categories`, {
             onSuccess: () => {
                 setNotification({
                     type: 'success',
