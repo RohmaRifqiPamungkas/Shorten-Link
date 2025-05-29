@@ -218,7 +218,14 @@ export default function ProjectsDashboard({ auth }) {
                                                 />
                                             </td>
                                         )}
-                                        <td className="px-4 py-4 whitespace-nowrap hover:underline">
+                                        <td className="px-4 py-4 whitespace-nowrap hover:underline flex items-center gap-2">
+                                            {/* Avatar lingkaran dengan huruf awal */}
+                                            <span
+                                                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-white font-bold text-lg"
+                                                style={{ flexShrink: 0 }}
+                                            >
+                                                {project.project_name.charAt(0).toUpperCase()}
+                                            </span>
                                             {project.project_name}
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
