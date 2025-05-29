@@ -14,7 +14,6 @@ import { Icon } from "@iconify/react";
 import { FiPlus } from "react-icons/fi";
 
 export default function Links({ auth, project = {}, category = {}, links = { data: [] }, categories = [] }) {
-    // const { links = { data: [] } } = usePage().props;
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
@@ -247,13 +246,7 @@ export default function Links({ auth, project = {}, category = {}, links = { dat
                                             </div>
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
-                                            {new Date(
-                                                link.created_at
-                                            ).toLocaleDateString("id-ID", {
-                                                day: "2-digit",
-                                                month: "2-digit",
-                                                year: "numeric",
-                                            })}
+                                          {new Date(link.created_at).toISOString().slice(2, 10)}
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
                                             {link.category?.name ? (
