@@ -216,7 +216,7 @@ export default function Categories({ auth, project = {} }) {
                                             {category.links_count}
                                         </td>
                                         <td
-                                            className="px-4 py-4 space-x-2 text-lg text-gray-700 flex"
+                                            className="px-4 py-4 space-x-4 text-lg text-gray-700 flex"
                                             onClick={(e) => e.stopPropagation()}
                                         >
                                             <button
