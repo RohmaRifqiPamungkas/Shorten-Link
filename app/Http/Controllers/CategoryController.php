@@ -21,7 +21,8 @@ class CategoryController extends Controller
             ->where('user_id', $user->id)
             ->firstOrFail();
 
-        $categories = Category::where('user_id', $user->id)
+        $categories = Category::withCount('links')
+            ->where('user_id', $user->id)
             ->where('project_id', $projectId)
             ->paginate(10);
 
