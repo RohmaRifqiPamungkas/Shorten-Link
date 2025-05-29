@@ -219,7 +219,7 @@ export default function Categories({ auth, project = {} }) {
                                             })}
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap hover:underline">
-                                            total linksss?
+                                            {category.links_count}
                                         </td>
                                         <td
                                             className="px-4 py-4 space-x-2 text-lg text-gray-700 flex"
