@@ -29,7 +29,7 @@ const DashboardLayout = ({ children }) => {
           <div className="font-bold text-lg">Sevenpion</div>
         </div>
 
-        <main className="flex-1 px-6 py-6 bg-tertiary min-w-0">{children}</main>
+        <main className="flex-1 px-6 py-6 bg-tertiary min-w-0 overflow-auto">{children}</main>
 
         <Footer />
       </div>

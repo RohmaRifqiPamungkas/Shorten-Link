@@ -9,12 +9,16 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
     const [isExpanded, setIsExpanded] = useState(true);
     const { url } = usePage();
     const { auth } = usePage().props;
-const handleLogout = () => {
-  router.post('/logout', {}, {
-    onSuccess: () => router.visit('/login'),
-    onError: (err) => console.error('Logout failed:', err),
-  });
-};
+    const handleLogout = () => {
+        router.post(
+            "/logout",
+            {},
+            {
+                onSuccess: () => router.visit("/login"),
+                onError: (err) => console.error("Logout failed:", err),
+            }
+        );
+    };
 
     const menuItems = [
         {
@@ -32,13 +36,13 @@ const handleLogout = () => {
     return (
         <aside
             className={`
-      fixed top-0 left-0 z-40 min-h-screen h-screen bg-white border-r  shadow-fourth
-      flex flex-col
-      transition-all duration-300 ease-in-out
-      ${isExpanded ? "w-72" : "w-20"}
-      ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
-      md:translate-x-0 md:static
-    `}
+    fixed top-0 left-0 z-40 h-screen bg-white border-r shadow-fourth
+    flex flex-col
+    transition-all duration-300 ease-in-out
+    ${isExpanded ? "w-72" : "w-20"}
+    ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+    md:sticky
+  `}
         >
             {/* close hp*/}
             {isMobileOpen && (
@@ -76,7 +80,11 @@ const handleLogout = () => {
 
             {/* menu nih */}
             <nav className="flex-grow mt-4">
-                <div className={`mb-4 flex-col items-center ${isExpanded ? "px-6" : " justify-center px-3"}`}>
+                <div
+                    className={`mb-4 flex-col items-center ${
+                        isExpanded ? "px-6" : " justify-center px-3"
+                    }`}
+                >
                     {!isExpanded && <hr className="my-1 border-transparent " />}
                     {isExpanded && (
                         <h2 className="text-sm md:text-lg font-semibold text-gray-600 mb-2 px-6">
@@ -90,7 +98,9 @@ const handleLogout = () => {
                                 key={item.name}
                                 href={item.href}
                                 className={`
-                  relative group flex items-center gap-4 py-2  ${isExpanded ? "px-6" : "justify-center"} my-1 rounded-lg transition-all
+                  relative group flex items-center gap-4 py-2  ${
+                      isExpanded ? "px-6" : "justify-center"
+                  } my-1 rounded-lg transition-all
                   overflow-hidden
                   ${
                       isActive
@@ -134,13 +144,9 @@ const handleLogout = () => {
                 {isExpanded ? (
                     <>
                         <div className="flex items-center gap-3 px-6">
-                            <img
-                                src="/user.jpg"
-                                width={36}
-                                height={36}
-                                alt="User"
-                                className="rounded-full object-cover"
-                            />
+                            <div className="w-9 h-9 rounded-full bg-primary-100 text-white flex items-center justify-center font-semibold text-sm uppercase">
+                                {auth?.user?.name?.charAt(0)}
+                            </div>
                             <div className="leading-tight">
                                 <p className="text-sm md:text-[16px] font-medium">
                                     {auth?.user?.name}

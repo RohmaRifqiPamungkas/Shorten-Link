@@ -239,7 +239,7 @@ export default function ProjectsDashboard({ auth }) {
                                             </a>
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
-                                            {new Date(project.created_at).toISOString().slice(2, 10)}
+                                {category.created_at.slice(0, 10)}
                                         </td>
                                         <td
                                             className="px-4 py-4 space-x-4 text-lg text-gray-700 flex"
