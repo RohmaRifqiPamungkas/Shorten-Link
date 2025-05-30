@@ -25,7 +25,7 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
         },
         {
             name: "Shortened Link",
-            href: "/shortenedLink",
+            href: "/shorten",
             icon: <MdOutlineLink />,
         },
     ];

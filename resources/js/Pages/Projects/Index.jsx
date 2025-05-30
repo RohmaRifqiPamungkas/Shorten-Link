@@ -230,12 +230,12 @@ export default function ProjectsDashboard({ auth }) {
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
                                             <a
-                                                href={`/m/${project.project_slug}`}
+                                                href={`http://localhost:8000/m/${project.project_slug}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="text-blue-600 hover:underline"
                                             >
-                                                {project.project_slug}
+                                                {`http://localhost:8000/m/${project.project_slug}`}
                                             </a>
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">

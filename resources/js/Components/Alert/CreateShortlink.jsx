@@ -10,31 +10,33 @@ export default function CreateShortlink({
     setData,
     errors,
     processing,
+    post,      
+    reset,
 }) {
     const [notification, setNotification] = useState(null);
 
     if (!show) return null;
 
-   
-  const handleSubmit = (e) => {
-    e.preventDefault()
 
-    post(route('shortlink.store'), {
-      onSuccess: () => {
-        setNotification({
-          type: 'success',
-          message: 'Create Successfully',
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        post(route('shorten.store'), {
+            onSuccess: () => {
+                setNotification({
+                    type: 'success',
+                    message: 'Create Successfully',
+                })
+                reset()
+            },
+            onError: () => {
+                setNotification({
+                    type: 'error',
+                    message: 'An error occurred, please check your input',
+                })
+            },
         })
-        reset()
-      },
-      onError: () => {
-        setNotification({
-          type: 'error',
-          message: 'An error occurred, please check your input',
-        })
-      },
-    })
-  }
+    }
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -77,28 +79,28 @@ export default function CreateShortlink({
                                 type="url"
                                 className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
                                 placeholder="https://example.com/"
-                                value={data.long_url}
+                                value={data.original_url}
                                 onChange={(e) =>
-                                    setData("long_url", e.target.value)
+                                    setData("original_url", e.target.value)
                                 }
                                 required
                             />
-                            {errors.long_url && (
+                            {errors.original_url && (
                                 <div className="text-red-500 text-sm mt-1">
-                                    {errors.long_url}
+                                    {errors.original_url}
                                 </div>
                             )}
                         </div>
 
                         <div className="flex flex-row">
-                            <div className="basis-2/4">
+                            <div className="basis-1/3">
                                 <label className="text-sm text-foreground">
                                     Short URL
                                 </label>
                                 <input
                                     type="text"
                                     className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
-                                    value={`sevenpion.com/s/figma`}
+                                    value={`sevenpion.com/s/`}
                                     readOnly
                                 />
                             </div>
@@ -110,15 +112,15 @@ export default function CreateShortlink({
                                     type="text"
                                     className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
                                     placeholder="custom-alias"
-                                    value={data.alias}
+                                    value={data.custom_alias}
                                     onChange={(e) =>
-                                        setData("alias", e.target.value)
+                                        setData("custom_alias", e.target.value)
                                     }
                                     required
                                 />
-                                {errors.alias && (
+                                {errors.custom_alias && (
                                     <div className="text-red-500 text-sm mt-1">
-                                        {errors.alias}
+                                        {errors.custom_alias}
                                     </div>
                                 )}
                             </div>
@@ -131,21 +133,21 @@ export default function CreateShortlink({
                             <input
                                 type="date"
                                 className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
-                                value={data.expiration_date}
+                                value={data.expires_at}
                                 onChange={(e) =>
-                                    setData("expiration_date", e.target.value)
+                                    setData("expires_at", e.target.value)
                                 }
                                 required
                             />
-                            {errors.expiration_date && (
+                            {errors.expires_at && (
                                 <div className="text-red-500 text-sm mt-1">
-                                    {errors.expiration_date}
+                                    {errors.expires_at}
                                 </div>
                             )}
                         </div>
 
                         <PrimaryButton type="submit" disabled={processing}>
-                              {processing ? 'Shortened Link...' : 'Shortened Link'}
+                            {processing ? 'Shortened Link...' : 'Shortened Link'}
                         </PrimaryButton>
                     </form>
                 </div>
