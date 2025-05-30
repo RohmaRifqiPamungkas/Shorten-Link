@@ -8,7 +8,7 @@ import ShortenButton from "@/Components/Button/ButtonShort";
 import CreateShortlink from "@/Components/Alert/CreateShortlink";
 import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
-import ToastAlert from "@/Components/Notification/ToastAlert";
+import Notifications from "@/Components/Notification/Notification";
 import { Icon } from "@iconify/react";
 
 export default function ShortenedLinkPage({ shortends }) {
@@ -20,14 +20,21 @@ export default function ShortenedLinkPage({ shortends }) {
     const [selectedLinkToDelete, setSelectedLinkToDelete] = useState(null);
     const [isShareModalOpen, setShareModalOpen] = useState(false);
     const [selectedShareUrl, setSelectedShareUrl] = useState("");
-    const [toastMessage, setToastMessage] = useState("");
-    const [toastType, setToastType] = useState("success");
+    const [notification, setNotification] = useState(null);
 
     const { data, setData, post, processing, errors, reset } = useForm({
         original_url: "",
         custom_alias: "",
         expires_at: "",
     });
+
+    const getStatus = (expires_at) => {
+        if (!expires_at) return "Active"; 
+
+        const now = new Date();
+        const expiresDate = new Date(expires_at);
+        return expiresDate < now ? "Expired" : "Active";
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -63,18 +70,21 @@ export default function ShortenedLinkPage({ shortends }) {
         }
     };
 
-    const handleCopy = (text) => {
+    const handleCopy = (link) => {
+        const fullUrl = `${window.location.origin}/s/${link.short_url}`;
         navigator.clipboard
-            .writeText(text)
+            .writeText(fullUrl)
             .then(() => {
-                setToastMessage("Link copied to clipboard!");
-                setToastType("success");
-                setTimeout(() => setToastMessage(""), 3000);
+                setNotification({
+                    type: "success",
+                    message: "Link copied to clipboard!",
+                });
             })
             .catch(() => {
-                setToastMessage("Failed to copy the link.");
-                setToastType("error");
-                setTimeout(() => setToastMessage(""), 3000);
+                setNotification({
+                    type: "error",
+                    message: "Failed to copy the link.",
+                });
             });
     };
 
@@ -156,17 +166,15 @@ export default function ShortenedLinkPage({ shortends }) {
                     </div>
                 </div>
 
-                {/* Toast */}
-                <ToastAlert
-                    message={toastMessage}
-                    type={toastType}
-                    onClose={() => setToastMessage("")}
-                />
+                {notification && (
+                    <Notification
+                        type={notification.type}
+                        message={notification.message}
+                        onClose={() => setNotification(null)}
+                    />
+                )}
 
                 {/* Table */}
-                {/* <div className="overflow-x-auto rounded-b-2xl w-full">
-    <div className="inline-block min-w-full rounded-2xl shadow-lg p-4 bg-blue-200">
-        <table className=" text-left text-sm text-foreground bg-green-300" style={{ minWidth: "1000px" }}> */}
                 <div className="overflow-x-auto bg-white shadow rounded-2xl">
                     <table className="min-w-full text-left border-collapse">
                         <thead>
@@ -209,35 +217,56 @@ export default function ShortenedLinkPage({ shortends }) {
                                             />
                                         </td>
                                     )}
-                                    {/* whitespace-nowrap */}
-                                    <td className="px-4 py-4 "> 
-                                        <a
-                                            href={`http://localhost:8000/s/${link.short_code}`}
-                                            className="text-primary underline break-all"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            {`http://localhost:8000/s/${link.short_code}`}
-                                        </a>
-                                        <div className="text-sm text-foreground break-all hover:underline ">
-                                            {link.original_url}
+                                    <td className="px-4 py-4 whitespace-nowrap flex items-center gap-2 w-full max-w-full md:max-w-[560px] overflow-hidden">
+                                        {/* Logo/Favicon */}
+                                        <img
+                                            src={`https://www.google.com/s2/favicons?sz=64&domain=${new URL(link.original_url).hostname}`}
+                                            alt="favicon"
+                                            className="w-8 h-8 rounded-full bg-gray-100 object-contain"
+                                            style={{ flexShrink: 0 }}
+                                            onError={e => {
+                                                e.currentTarget.onerror = null;
+                                                e.currentTarget.src = 'https://cdn-icons-png.flaticon.com/512/565/565547.png';
+                                            }}
+                                        />
+                                        <div className="min-w-0">
+                                            {/* Short link */}
+                                            <a
+                                                href={`http://localhost:8000/s/${link.short_code}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-sm text-foreground hover:underline block overflow-hidden text-ellipsis whitespace-nowrap"
+                                            >
+                                                {`http://localhost:8000/s/${link.short_code}`}
+                                            </a>
+                                            {/* Original URL */}
+                                            <div className="text-sm text-foreground break-all hover:underline">
+                                                {link.original_url}
+                                            </div>
                                         </div>
-                                    </td>
-                                    <td className="px-4 py-4">
-                                        {link.created_at}
                                     </td>
                                     <td className="px-4 py-4 whitespace-nowrap">
                                         {link.created_at?.slice(0, 10)}
                                     </td>
                                     <td className="px-4 py-4">
-                                        {link.expires_at}
+                                        {link.expires_at?.slice(0, 10)}
                                     </td>
-                                    <td className="px-4 py-4">{link.status}</td>
-                                    <td className="px-4 py-4 space-x-2  text-lg text-gray-700">
+                                    <td className="px-4 py-4">
+                                        <span
+                                            className={`px-3 py-1 rounded-full text-sm font-medium ${getStatus(link.expires_at) === "Expired"
+                                                    ? "bg-red-100 text-red-800"
+                                                    : "bg-green-100 text-green-800"
+                                                }`}
+                                        >
+                                            {getStatus(link.expires_at)}
+                                        </span>
+                                    </td>
+
+                                    <td className="px-4 py-4 space-x-2 text-lg text-gray-700">
                                         <button
                                             title="Copy"
                                             onClick={() =>
-                                                handleCopy(link.short_code)
+                                                handleCopy(link)
                                             }
                                             className="hover:text-primary-100"
                                         >
@@ -327,10 +356,10 @@ export default function ShortenedLinkPage({ shortends }) {
                     setData={setData}
                     errors={errors}
                     processing={processing}
-                    post={post}          
+                    post={post}
                     reset={reset}
                 />
-                
+
             </div>
         </DashboardLayout>
     );
