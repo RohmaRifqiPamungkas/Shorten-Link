@@ -24,7 +24,7 @@ const handleLogout = () => {
         },
         {
             name: "Shortened Link",
-            href: "/shortenedLink",
+            href: "/shorten",
             icon: <MdOutlineLink />,
         },
     ];
