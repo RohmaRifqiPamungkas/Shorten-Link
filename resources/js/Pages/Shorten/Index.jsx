@@ -11,7 +11,7 @@ import SharePopup from "@/Components/Alert/ShareModal";
 import ToastAlert from "@/Components/Notification/ToastAlert";
 import { Icon } from "@iconify/react";
 
-export default function ShortenedLinkPage({ links }) {
+export default function ShortenedLinkPage({ shortends }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
@@ -24,13 +24,14 @@ export default function ShortenedLinkPage({ links }) {
     const [toastType, setToastType] = useState("success");
 
     const { data, setData, post, processing, errors, reset } = useForm({
-        long_url: "",
-        expiration_date: "",
+        original_url: "",
+        custom_alias: "",
+        expires_at: "",
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post("/links", {
+        post("/shorten.store", {
             onSuccess: () => {
                 setShowPopup(false);
                 reset();
@@ -92,52 +93,21 @@ export default function ShortenedLinkPage({ links }) {
         setShareModalOpen(true);
     };
 
-    const dummyLinks = {
-        data: [
-            {
-                id: 1,
-                original_url: "https://www.example.com/very/long/url/1",
-                short_url: "https://sho.rt/abc123",
-                created_at: "2024-05-01",
-                expired_at: "2024-12-31",
-                status: "active",
-            },
-            {
-                id: 2,
-                original_url: "https://github.com/user/project",
-                short_url: "https://sho.rt/git123",
-                created_at: "2024-04-20",
-                expired_at: "2024-10-20",
-                status: "expired",
-            },
-        ],
-        total: 3,
-        current_page: 1,
-        last_page: 1,
-        per_page: 10,
-        from: 1,
-        to: 3,
-    };
-
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(10);
 
-  
-    const filteredLinks = dummyLinks.data.filter(
+    const filteredLinks = shortends.data.filter(
         (link) =>
-            link.original_url
-                .toLowerCase()
-                .includes(searchTerm.toLowerCase()) ||
-            link.short_url.toLowerCase().includes(searchTerm.toLowerCase())
+            link.original_url.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (link.short_code && link.short_code.toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (link.custom_alias && link.custom_alias.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
-   
     const paginatedLinks = filteredLinks.slice(
         (currentPage - 1) * perPage,
         currentPage * perPage
     );
 
-  
     const pagination = {
         current_page: currentPage,
         last_page: Math.ceil(filteredLinks.length / perPage),
@@ -206,7 +176,9 @@ export default function ShortenedLinkPage({ links }) {
                                         <input type="checkbox" disabled />
                                     </th>
                                 )}
-                                <th className="px-4 py-6 font-semibold">URL</th>
+                                <th className="px-4 py-6 font-semibold">
+                                    URL
+                                </th>
                                 <th className="px-4 py-6 font-semibold">
                                     Date Created
                                 </th>
@@ -240,12 +212,12 @@ export default function ShortenedLinkPage({ links }) {
                                     {/* whitespace-nowrap */}
                                     <td className="px-4 py-4 "> 
                                         <a
-                                            href={link.short_url}
+                                            href={`http://localhost:8000/s/${link.short_code}`}
                                             className="text-primary underline break-all"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            {link.short_url}
+                                            {`http://localhost:8000/s/${link.short_code}`}
                                         </a>
                                         <div className="text-sm text-foreground break-all hover:underline ">
                                             {link.original_url}
@@ -254,15 +226,18 @@ export default function ShortenedLinkPage({ links }) {
                                     <td className="px-4 py-4">
                                         {link.created_at}
                                     </td>
+                                    <td className="px-4 py-4 whitespace-nowrap">
+                                        {link.created_at?.slice(0, 10)}
+                                    </td>
                                     <td className="px-4 py-4">
-                                        {link.expired_at}
+                                        {link.expires_at}
                                     </td>
                                     <td className="px-4 py-4">{link.status}</td>
                                     <td className="px-4 py-4 space-x-2  text-lg text-gray-700">
                                         <button
                                             title="Copy"
                                             onClick={() =>
-                                                handleCopy(link.short_url)
+                                                handleCopy(link.short_code)
                                             }
                                             className="hover:text-primary-100"
                                         >
@@ -314,7 +289,6 @@ export default function ShortenedLinkPage({ links }) {
                         </tbody>
                     </table>
                 </div>
-       
 
                 {/* Pagination */}
                 <div className="my-4">
@@ -353,7 +327,10 @@ export default function ShortenedLinkPage({ links }) {
                     setData={setData}
                     errors={errors}
                     processing={processing}
+                    post={post}          
+                    reset={reset}
                 />
+                
             </div>
         </DashboardLayout>
     );

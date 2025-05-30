@@ -56,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Shorten Link (CRUD)
-    Route::prefix('dashboard/shorten')->name('shorten.')->group(function () {
+    Route::prefix('shorten')->name('shorten.')->group(function () {
         Route::get('/', [ShortenLinkController::class, 'index'])->name('index');
         Route::get('/create', [ShortenLinkController::class, 'create'])->name('create');
         Route::get('/{id}/edit', [ShortenLinkController::class, 'edit'])->name('shorten.edit');
