@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
 import { Head, usePage, Link } from "@inertiajs/react";
@@ -13,7 +12,13 @@ import Notification from "@/Components/Notification/Notification";
 import { Icon } from "@iconify/react";
 import { FiPlus } from "react-icons/fi";
 
-export default function Links({ auth, project = {}, category = {}, links = { data: [] }, categories = [] }) {
+export default function Links({
+    auth,
+    project = {},
+    category = {},
+    links = { data: [] },
+    categories = [],
+}) {
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
@@ -35,7 +40,7 @@ export default function Links({ auth, project = {}, category = {}, links = { dat
                 "figma.com": "/icons/figma.svg",
             };
 
-            const matchedDomain = Object.keys(customIcons).find(domain =>
+            const matchedDomain = Object.keys(customIcons).find((domain) =>
                 hostname.includes(domain)
             );
 
@@ -249,7 +254,7 @@ export default function Links({ auth, project = {}, category = {}, links = { dat
                                             </div>
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
-                                          {new Date(link.created_at).toISOString().slice(2, 10)}
+                                           {link.created_at.slice(0, 10)}
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
                                             {link.category?.name ? (

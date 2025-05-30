@@ -210,7 +210,7 @@ export default function Categories({ auth, project = {} }) {
                                             {category.name}
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
-                                            {new Date(category.created_at).toISOString().slice(2, 10)}
+                                          {category.created_at.slice(0, 10)}
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap hover:underline">
                                             {category.links_count}
