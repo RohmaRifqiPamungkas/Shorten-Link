@@ -36,7 +36,7 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
     return (
         <aside
             className={`
-    fixed top-0 left-0 z-40 h-screen bg-white border-r shadow-fourth
+    fixed top-0 left-0 z-40 h-screen min-h-screen bg-white border-r shadow-fourth
     flex flex-col
     transition-all duration-300 ease-in-out
     ${isExpanded ? "w-72" : "w-20"}
