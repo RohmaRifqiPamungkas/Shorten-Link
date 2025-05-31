@@ -8,9 +8,8 @@ import ShortenButton from "@/Components/Button/ButtonShort";
 import CreateShortlink from "@/Components/Alert/CreateShortlink";
 import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
-import Notifications from "@/Components/Notification/Notification";
+import Notification from "@/Components/Notification/Notification";
 import { Icon } from "@iconify/react";
-
 export default function ShortenedLinkPage({ shortends }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
@@ -29,7 +28,7 @@ export default function ShortenedLinkPage({ shortends }) {
     });
 
     const getStatus = (expires_at) => {
-        if (!expires_at) return "Active"; 
+        if (!expires_at) return "Active";
 
         const now = new Date();
         const expiresDate = new Date(expires_at);
@@ -71,7 +70,7 @@ export default function ShortenedLinkPage({ shortends }) {
     };
 
     const handleCopy = (link) => {
-        const fullUrl = `${window.location.origin}/s/${link.short_url}`;
+        const fullUrl = `${window.location.origin}/s/${link.short_code}`;
         navigator.clipboard
             .writeText(fullUrl)
             .then(() => {
@@ -99,7 +98,8 @@ export default function ShortenedLinkPage({ shortends }) {
     };
 
     const handleShareClick = (link) => {
-        setSelectedShareUrl(link.short_url);
+        const fullUrl = `${window.location.origin}/s/${link.short_code}`;
+        setSelectedShareUrl(fullUrl);
         setShareModalOpen(true);
     };
 
@@ -108,9 +108,17 @@ export default function ShortenedLinkPage({ shortends }) {
 
     const filteredLinks = shortends.data.filter(
         (link) =>
-            link.original_url.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (link.short_code && link.short_code.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            (link.custom_alias && link.custom_alias.toLowerCase().includes(searchTerm.toLowerCase()))
+            link.original_url
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase()) ||
+            (link.short_code &&
+                link.short_code
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())) ||
+            (link.custom_alias &&
+                link.custom_alias
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()))
     );
 
     const paginatedLinks = filteredLinks.slice(
@@ -184,9 +192,7 @@ export default function ShortenedLinkPage({ shortends }) {
                                         <input type="checkbox" disabled />
                                     </th>
                                 )}
-                                <th className="px-4 py-6 font-semibold">
-                                    URL
-                                </th>
+                                <th className="px-4 py-6 font-semibold">URL</th>
                                 <th className="px-4 py-6 font-semibold">
                                     Date Created
                                 </th>
@@ -220,13 +226,17 @@ export default function ShortenedLinkPage({ shortends }) {
                                     <td className="px-4 py-4 whitespace-nowrap flex items-center gap-2 w-full max-w-full md:max-w-[560px] overflow-hidden">
                                         {/* Logo/Favicon */}
                                         <img
-                                            src={`https://www.google.com/s2/favicons?sz=64&domain=${new URL(link.original_url).hostname}`}
+                                            src={`https://www.google.com/s2/favicons?sz=64&domain=${
+                                                new URL(link.original_url)
+                                                    .hostname
+                                            }`}
                                             alt="favicon"
                                             className="w-8 h-8 rounded-full bg-gray-100 object-contain"
                                             style={{ flexShrink: 0 }}
-                                            onError={e => {
+                                            onError={(e) => {
                                                 e.currentTarget.onerror = null;
-                                                e.currentTarget.src = 'https://cdn-icons-png.flaticon.com/512/565/565547.png';
+                                                e.currentTarget.src =
+                                                    "https://cdn-icons-png.flaticon.com/512/565/565547.png";
                                             }}
                                         />
                                         <div className="min-w-0">
@@ -253,10 +263,12 @@ export default function ShortenedLinkPage({ shortends }) {
                                     </td>
                                     <td className="px-4 py-4">
                                         <span
-                                            className={`px-3 py-1 rounded-full text-sm font-medium ${getStatus(link.expires_at) === "Expired"
+                                            className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                                getStatus(link.expires_at) ===
+                                                "Expired"
                                                     ? "bg-red-100 text-red-800"
                                                     : "bg-green-100 text-green-800"
-                                                }`}
+                                            }`}
                                         >
                                             {getStatus(link.expires_at)}
                                         </span>
@@ -265,9 +277,7 @@ export default function ShortenedLinkPage({ shortends }) {
                                     <td className="px-4 py-4 space-x-2 text-lg text-gray-700">
                                         <button
                                             title="Copy"
-                                            onClick={() =>
-                                                handleCopy(link)
-                                            }
+                                            onClick={() => handleCopy(link)}
                                             className="hover:text-primary-100"
                                         >
                                             <Icon
@@ -359,7 +369,6 @@ export default function ShortenedLinkPage({ shortends }) {
                     post={post}
                     reset={reset}
                 />
-
             </div>
         </DashboardLayout>
     );
