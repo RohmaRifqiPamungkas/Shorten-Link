@@ -22,7 +22,8 @@ export default function Categories({ auth, project = {} }) {
     const [showPopup, setShowPopup] = useState(false);
     const [showPopupUpdate, setShowPopupUpdate] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [selectedProjectToDelete, setSelectedProjectToDelete] = useState(null);
+    const [selectedProjectToDelete, setSelectedProjectToDelete] =
+        useState(null);
     const [notification, setNotification] = useState(null);
 
     const toggleSelect = (id) => {
@@ -66,8 +67,10 @@ export default function Categories({ auth, project = {} }) {
         setDeleteModalOpen(false);
     };
 
-    const filteredCategories = categories.data.filter((category) =>
-        category.name && category.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredCategories = categories.data.filter(
+        (category) =>
+            category.name &&
+            category.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const [perPage, setPerPage] = useState(10);
@@ -201,16 +204,26 @@ export default function Categories({ auth, project = {} }) {
                                             <td className="px-4 py-4">
                                                 <input
                                                     type="checkbox"
-                                                    checked={selectedIds.includes(category.id)}
-                                                    onChange={() => toggleSelect(category.id)}
+                                                    checked={selectedIds.includes(
+                                                        category.id
+                                                    )}
+                                                    onChange={() =>
+                                                        toggleSelect(
+                                                            category.id
+                                                        )
+                                                    }
                                                 />
                                             </td>
                                         )}
                                         <td className="px-4 py-4 whitespace-nowrap hover:underline">
-                                            {category.name}
+                                            <a
+                                                href={`/projects/${project.id}/categories/${category.id}/links`}
+                                            >
+                                                {category.name}
+                                            </a>
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
-                                          {category.created_at.slice(0, 10)}
+                                            {category.created_at.slice(0, 10)}
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap hover:underline">
                                             {category.links_count}
@@ -219,9 +232,9 @@ export default function Categories({ auth, project = {} }) {
                                             className="px-4 py-4 space-x-4 text-lg text-gray-700 flex"
                                             onClick={(e) => e.stopPropagation()}
                                         >
-                                            <button
-                                                onClick={() => setShowPopupUpdate(true)}
-                                                title="Update"
+                                            <Link
+                                                href={`/projects/${project.id}/categories/${category.id}/links`}
+                                                title="link"
                                                 className="hover:text-primary-100"
                                             >
                                                 <Icon
@@ -229,9 +242,11 @@ export default function Categories({ auth, project = {} }) {
                                                     width={20}
                                                     height={20}
                                                 />
-                                            </button>
-                                            <Link
-                                                href={`/projects/${project.id}/categories/${category.id}/link`}
+                                            </Link>
+                                            <button
+                                                onClick={() =>
+                                                    setShowPopupUpdate(true)
+                                                }
                                                 title="Edit"
                                                 className="hover:text-primary-100"
                                             >
@@ -240,9 +255,11 @@ export default function Categories({ auth, project = {} }) {
                                                     width={20}
                                                     height={20}
                                                 />
-                                            </Link>
+                                            </button>
                                             <button
-                                                onClick={() => handleDeleteClick(category)}
+                                                onClick={() =>
+                                                    handleDeleteClick(category)
+                                                }
                                                 title="Delete"
                                                 className="hover:text-primary-100"
                                             >
@@ -261,7 +278,7 @@ export default function Categories({ auth, project = {} }) {
                                         colSpan={bulkMode ? 4 : 3}
                                         className="px-4 py-6 text-center text-gray-500"
                                     >
-                                        Belum ada kategori yang tersedia.
+                                        No categories available yet.
                                     </td>
                                 </tr>
                             )}

@@ -3,7 +3,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import Notification from "../Notification/Notification";
 import { useForm } from "@inertiajs/react";
 
-export default function CreateProject({ show, onClose, project }) {
+export default function UpdateCategories({ show, onClose, project }) {
     const [notification, setNotification] = useState(null);
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -38,7 +38,7 @@ export default function CreateProject({ show, onClose, project }) {
                 <div className="flex justify-between">
                     <div className="flex flex-row">
                         <img
-                            src="images/Hyperlink.png"
+                            src="/images/Hyperlink.png"
                             style={{ width: "24px", height: "24px" }}
                             alt="hyperlink"
                         />
