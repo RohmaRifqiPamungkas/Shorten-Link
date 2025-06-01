@@ -151,7 +151,7 @@ export default function Links({
                             <ShortenButton
                                 onClick={() =>
                                     Inertia.get(
-                                        `/projects/${project.id}/links/create?category_id=${data.category_id}`
+                                        `/projects/${project.id}/links/create?category_id=${category?.id ?? categories[0]?.id ?? ""}`
                                     )
                                 }
                                 label="Add URL"

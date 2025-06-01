@@ -40,6 +40,23 @@ class LinkController extends Controller
         ]);
     }
 
+    public function index(Project $project)
+    {
+        $perPage = request()->query('perPage', 10);
+
+        $links = $project->links()->with('category')->latest()->paginate($perPage);
+        $categories = $project->categories;
+
+        return Inertia::render('Projects/Links/Index', [
+            'auth' => [
+                'user' => Auth::user()
+            ],
+            'project' => $project,
+            'links' => $links,
+            'categories' => $categories,
+        ]);
+    }
+    
     public function create(Request $request, Project $project): Response
     {
         abort_if($project->user_id !== Auth::id(), 403);
