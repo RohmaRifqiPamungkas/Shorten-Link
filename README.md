@@ -75,7 +75,7 @@ composer install
 cp .env.example .env
 php artisan key:generate
 ```
-### 2. Edit the .env file with your local DB credentials:
+### 3. Edit the .env file with your local DB credentials:
 ```bash
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -84,16 +84,16 @@ DB_DATABASE=your_database_name
 DB_USERNAME=your_database_user
 DB_PASSWORD=your_database_password
 ```
-### 3. Run Migrations (and Seeder, Optional)
+### 4. Run Migrations (and Seeder, Optional)
 ```bash
 php artisan migrate
 php artisan migrate --seed --seeder=DatabaseSeeder 
 ```
-### 4. Run Laravel Development Server
+### 5. Run Laravel Development Server
 ```bash
 php artisan serve
 ```
-### 5. Run Laravel Development Server
+### 6. Run Laravel Development Server
 ```bash
 npm install
 npm run dev
