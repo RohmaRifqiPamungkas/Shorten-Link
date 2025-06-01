@@ -93,9 +93,12 @@ class LinkController extends Controller
                 'original_url' => $link['url'],
             ]);
         }
-
+            
         return redirect()
-            ->route('projects.links.index', $project->id)
+            ->route('projects.categories.links.index', [
+                'project' => $project->id,
+                'category' => $validated['category_id'],
+            ])
             ->with('success', 'Link berhasil ditambahkan.');
     }
 
@@ -121,16 +124,32 @@ class LinkController extends Controller
             'links.*.title' => 'required|string|max:255',
             'links.*.url' => 'required|url',
         ]);
-
+        
+        // Update link utama
         $link->update([
             'category_id' => $validated['category_id'],
             'title' => $validated['links'][0]['title'],
             'original_url' => $validated['links'][0]['url'],
         ]);
 
+        // Tambah link baru jika ada row baru di repeater
+        $userId = Auth::id();
+        foreach (array_slice($validated['links'], 1) as $newLink) {
+            $project->links()->create([
+                'user_id' => $userId,
+                'category_id' => $validated['category_id'],
+                'parent_id' => null,
+                'title' => $newLink['title'],
+                'original_url' => $newLink['url'],
+            ]);
+        }
+
         return redirect()
-            ->route('projects.categories.index', $project->id)
-            ->with('success', 'Link berhasil diupdate.');
+            ->route('projects.categories.links.index', [
+                'project' => $project->id,
+                'category' => $validated['category_id'],
+            ])
+            ->with('success', 'Link berhasil ditambahkan.');
     }
 
     public function destroy(Link $link): RedirectResponse
