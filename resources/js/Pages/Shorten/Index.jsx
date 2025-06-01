@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
-import { Head, useForm } from "@inertiajs/react";
+import { Head, useForm, Link } from "@inertiajs/react";
 import SearchBar from "@/Components/Searchbar/Search";
 import Pagination from "@/Components/Pagination/Pagination";
 import BulkActions from "@/Components/BulkAction/BulkAction";
@@ -251,7 +251,12 @@ export default function ShortenedLinkPage({ shortends }) {
                                             </a>
                                             {/* Original URL */}
                                             <div className="text-sm text-foreground break-all hover:underline">
-                                                {link.original_url}
+                                                {link.original_url.length > 50
+                                                    ? `${link.original_url.slice(
+                                                          0,
+                                                          60
+                                                      )}...`
+                                                    : link.original_url}
                                             </div>
                                         </div>
                                     </td>
@@ -274,7 +279,7 @@ export default function ShortenedLinkPage({ shortends }) {
                                         </span>
                                     </td>
 
-                                    <td className="px-4 py-4 space-x-2 text-lg text-gray-700">
+                                    <td className="px-4 py-4  flex space-x-2 text-lg text-gray-700">
                                         <button
                                             title="Copy"
                                             onClick={() => handleCopy(link)}
@@ -286,16 +291,17 @@ export default function ShortenedLinkPage({ shortends }) {
                                                 height={20}
                                             />
                                         </button>
-                                        <button
-                                            title="Edit"
-                                            className="hover:text-primary-100"
-                                        >
-                                            <Icon
-                                                icon="iconamoon:edit-light"
-                                                width={20}
-                                                height={20}
-                                            />
-                                        </button>
+                                        <Link
+                                                                                      href={`/shorten/${link.id}/edit`}
+                                                                                      title="Edit"
+                                                                                      className="hover:text-primary-100"
+                                                                                  >
+                                                                                      <Icon
+                                                                                          icon="iconamoon:edit-light"
+                                                                                          width={20}
+                                                                                          height={20}
+                                                                                      />
+                                                                                  </Link>
                                         <button
                                             title="Delete"
                                             onClick={() =>
