@@ -91,14 +91,9 @@ php artisan migrate --seed --seeder=DatabaseSeeder
 ```
 ### 4. Run Laravel Development Server
 ```bash
-php artisan migrate
-php artisan migrate --seed --seeder=DatabaseSeeder 
-```
-### 5. Run Laravel Development Server
-```bash
 php artisan serve
 ```
-### 6. Run Laravel Development Server
+### 5. Run Laravel Development Server
 ```bash
 npm install
 npm run dev
