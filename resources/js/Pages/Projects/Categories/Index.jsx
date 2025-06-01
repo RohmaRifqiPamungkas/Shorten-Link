@@ -22,8 +22,8 @@ export default function Categories({ auth, project = {} }) {
     const [showPopup, setShowPopup] = useState(false);
     const [showPopupUpdate, setShowPopupUpdate] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [selectedProjectToDelete, setSelectedProjectToDelete] =
-        useState(null);
+    const [selectedProjectToDelete, setSelectedProjectToDelete] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const [notification, setNotification] = useState(null);
 
     const toggleSelect = (id) => {
@@ -244,9 +244,10 @@ export default function Categories({ auth, project = {} }) {
                                                 />
                                             </Link>
                                             <button
-                                                onClick={() =>
-                                                    setShowPopupUpdate(true)
-                                                }
+                                                onClick={() => {
+                                                    setSelectedCategory(category);
+                                                    setShowPopupUpdate(true);
+                                                }}
                                                 title="Edit"
                                                 className="hover:text-primary-100"
                                             >
@@ -319,6 +320,8 @@ export default function Categories({ auth, project = {} }) {
                 <UpdateCategories
                     show={showPopupUpdate}
                     onClose={() => setShowPopupUpdate(false)}
+                    project={project}
+                    category={selectedCategory}
                     onSuccess={() => Inertia.reload()}
                 />
             </div>

@@ -49,7 +49,8 @@ Route::middleware(['auth'])->group(function () {
         // Kategori dalam project
         Route::get('{project}/categories', [CategoryController::class, 'index'])->name('categories.index');
         Route::get('{project}/categories/create', [CategoryController::class, 'create'])->name('categories.create');
-        Route::post('{project}/categories', [CategoryController::class, 'store'])->name('categories.store'); 
+        Route::post('{project}/categories', [CategoryController::class, 'store'])->name('categories.store');
+        Route::patch('{project}/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
 
         // Link berdasarkan kategori
         Route::get('{project}/categories/{category}/links', [LinkController::class, 'indexByCategory'])->name('categories.links.index');

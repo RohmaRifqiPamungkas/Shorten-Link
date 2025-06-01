@@ -1,21 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Notification from "../Notification/Notification";
 import { useForm } from "@inertiajs/react";
 
-export default function UpdateCategories({ show, onClose, project }) {
+export default function UpdateCategories({ show, onClose, project, category }) {
     const [notification, setNotification] = useState(null);
 
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
+    const { data, setData, patch, processing, errors, reset } = useForm({
+        name: category?.name || "",
     });
+
+    useEffect(() => {
+        setData("name", category?.name || "");
+    }, [category, setData]);
 
     if (!show) return null;
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        patch(`/dashboard/projects/${project.id}/categories`, {
+        patch(`/projects/${project.id}/categories/${category.id}`, {
             onSuccess: () => {
                 setNotification({
                     type: 'success',
