@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
 import { Head, usePage, Link } from "@inertiajs/react";
 import { Inertia } from "@inertiajs/inertia";
@@ -15,16 +15,27 @@ import { Icon } from "@iconify/react";
 import { FiPlus } from "react-icons/fi";
 
 export default function Categories({ auth, project = {} }) {
-    const { categories = { data: [], links: [] } } = usePage().props;
+    const { categories = { data: [], links: [] }, success } = usePage().props;
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
     const [showPopupUpdate, setShowPopupUpdate] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [selectedProjectToDelete, setSelectedProjectToDelete] = useState(null);
+    const [selectedCategoryToDelete, setSelectedCategoryToDelete] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [notification, setNotification] = useState(null);
+    const [perPage, setPerPage] = useState(Number(new URLSearchParams(window.location.search).get('perPage')) || 10);
+
+    // Show notification if success flash message from backend
+    useEffect(() => {
+        if (success) {
+            setNotification({
+                type: "success",
+                message: success,
+            });
+        }
+    }, [success]);
 
     const toggleSelect = (id) => {
         setSelectedIds((prev) =>
@@ -34,50 +45,44 @@ export default function Categories({ auth, project = {} }) {
         );
     };
 
-    const handleDeleteClick = (project) => {
-        setSelectedProjectToDelete(project);
+    const handleDeleteClick = (category) => {
+        setSelectedCategoryToDelete(category);
         setDeleteModalOpen(true);
     };
 
     const handleConfirmDelete = () => {
-        if (selectedProjectToDelete) {
-            Inertia.post(
-                `/projects/${selectedProjectToDelete.id}`,
-                {
-                    _method: "DELETE",
-                },
+        if (selectedCategoryToDelete) {
+            Inertia.delete(
+                `/projects/${project.id}/categories/${selectedCategoryToDelete.id}`,
                 {
                     onSuccess: () => {
                         setNotification({
                             type: "success",
-                            message: "Project deleted successfully.",
+                            message: "Category deleted successfully.",
                         });
+                        setDeleteModalOpen(false);
+                        setSelectedCategoryToDelete(null);
                     },
                     onError: () => {
                         setNotification({
                             type: "error",
-                            message:
-                                "Failed to delete project. Please try again.",
+                            message: "Failed to delete category. Please try again.",
                         });
+                        setDeleteModalOpen(false);
+                        setSelectedCategoryToDelete(null);
                     },
+                    preserveScroll: true,
                 }
             );
+        } else {
+            setDeleteModalOpen(false);
         }
-
-        setDeleteModalOpen(false);
     };
 
-    const filteredCategories = categories.data.filter(
-        (category) =>
-            category.name &&
-            category.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const [perPage, setPerPage] = useState(10);
-
+    // Pagination & Search handled by backend
     const handlePageChange = (newPage) => {
         Inertia.get(
-            `/projects`,
+            window.location.pathname,
             {
                 page: newPage,
                 perPage,
@@ -93,11 +98,27 @@ export default function Categories({ auth, project = {} }) {
     const handlePerPageChange = (newPerPage) => {
         setPerPage(newPerPage);
         Inertia.get(
-            `/projects`,
+            window.location.pathname,
             {
                 page: 1,
                 perPage: newPerPage,
                 search: searchTerm,
+            },
+            {
+                preserveState: true,
+                replace: true,
+            }
+        );
+    };
+
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+        Inertia.get(
+            window.location.pathname,
+            {
+                page: 1,
+                perPage,
+                search: term,
             },
             {
                 preserveState: true,
@@ -139,7 +160,7 @@ export default function Categories({ auth, project = {} }) {
                             />
                         </div>
                         <div className="transition-all duration-300">
-                            <SearchBar onSearch={setSearchTerm} />
+                            <SearchBar onSearch={handleSearch} />
                         </div>
                         <div className="transition-all duration-300">
                             <BulkActions
@@ -178,7 +199,6 @@ export default function Categories({ auth, project = {} }) {
                                 <th className="px-4 py-6 font-semibold">
                                     Categories
                                 </th>
-
                                 <th className="px-4 py-6 font-semibold">
                                     Date Created
                                 </th>
@@ -191,8 +211,8 @@ export default function Categories({ auth, project = {} }) {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredCategories.length > 0 ? (
-                                filteredCategories.map((category) => (
+                            {categories.data.length > 0 ? (
+                                categories.data.map((category) => (
                                     <tr
                                         key={category.id}
                                         className="border-b border-muted hover:bg-gray-50 cursor-pointer"
@@ -204,21 +224,13 @@ export default function Categories({ auth, project = {} }) {
                                             <td className="px-4 py-4">
                                                 <input
                                                     type="checkbox"
-                                                    checked={selectedIds.includes(
-                                                        category.id
-                                                    )}
-                                                    onChange={() =>
-                                                        toggleSelect(
-                                                            category.id
-                                                        )
-                                                    }
+                                                    checked={selectedIds.includes(category.id)}
+                                                    onChange={() => toggleSelect(category.id)}
                                                 />
                                             </td>
                                         )}
                                         <td className="px-4 py-4 whitespace-nowrap hover:underline">
-                                            <a
-                                                href={`/projects/${project.id}/categories/${category.id}/links`}
-                                            >
+                                            <a href={`/projects/${project.id}/categories/${category.id}/links`}>
                                                 {category.name}
                                             </a>
                                         </td>
@@ -258,9 +270,7 @@ export default function Categories({ auth, project = {} }) {
                                                 />
                                             </button>
                                             <button
-                                                onClick={() =>
-                                                    handleDeleteClick(category)
-                                                }
+                                                onClick={() => handleDeleteClick(category)}
                                                 title="Delete"
                                                 className="hover:text-primary-100"
                                             >
@@ -276,7 +286,7 @@ export default function Categories({ auth, project = {} }) {
                             ) : (
                                 <tr>
                                     <td
-                                        colSpan={bulkMode ? 4 : 3}
+                                        colSpan={bulkMode ? 5 : 4}
                                         className="px-4 py-6 text-center text-gray-500"
                                     >
                                         No categories available yet.

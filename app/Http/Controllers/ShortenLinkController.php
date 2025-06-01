@@ -16,12 +16,22 @@ class ShortenLinkController extends Controller
 
     public function index()
     {
-        $shortends = ShortenedLink::where('user_id', Auth::id())
-            ->latest()
-            ->paginate(10);
+        $perPage = request('perPage', 10);
+        $search = request('search');
+        
+        $query = ShortenedLink::where('user_id', Auth::id());
+        
+        if ($search) {
+            $query->where('short_code', 'like', "%{$search}%");
+        }
+
+        $shortends = $query->latest()
+            ->paginate($perPage)
+            ->appends(request()->query());
 
         return Inertia::render('Shorten/Index', [
             'shortends' => $shortends,
+            'success' => session('success'),
         ]);
     }
 
@@ -98,7 +108,9 @@ class ShortenLinkController extends Controller
         $link = ShortenedLink::where('user_id', Auth::id())->findOrFail($id);
         $link->delete();
 
-        return redirect()->back()->with('success', 'Link berhasil dihapus!');
+        return redirect()
+            ->route('shorten.index')
+            ->with('success', 'Shorten URL deleted successfully.');
     }
 
     public function redirect($code)

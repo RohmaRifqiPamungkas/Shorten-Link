@@ -19,13 +19,22 @@ class LinkController extends Controller
         $category = Category::findOrFail($categoryId);
 
         $perPage = $request->query('perPage', 10);
+        $search = $request->query('search');
 
-        $links = Link::with('category')
+        $linksQuery = Link::with('category')
             ->where('project_id', $projectId)
-            ->where('category_id', $categoryId)
-            ->latest()
+            ->where('category_id', $categoryId);
+
+        if ($search) {
+            $linksQuery->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('original_url', 'like', "%{$search}%");
+            });
+        }
+
+        $links = $linksQuery->latest()
             ->paginate($perPage)
-            ->appends(['perPage' => $perPage]);
+            ->appends($request->query());
 
         $categories = Category::where('project_id', $projectId)->get();
 
@@ -43,10 +52,23 @@ class LinkController extends Controller
     public function index(Project $project)
     {
         $perPage = request()->query('perPage', 10);
-
-        $links = $project->links()->with('category')->latest()->paginate($perPage);
+        $search = request()->query('search');
+    
+        $linksQuery = $project->links()->with('category');
+    
+        if ($search) {
+            $linksQuery->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('original_url', 'like', "%{$search}%");
+            });
+        }
+    
+        $links = $linksQuery->latest()
+            ->paginate($perPage)
+            ->appends(request()->query());
+    
         $categories = $project->categories;
-
+    
         return Inertia::render('Projects/Links/Index', [
             'auth' => [
                 'user' => Auth::user()
@@ -152,17 +174,18 @@ class LinkController extends Controller
             ->with('success', 'Link berhasil ditambahkan.');
     }
 
-    public function destroy(Link $link): RedirectResponse
+    public function destroy(Project $project, Link $link)
     {
         if ($link->user_id !== Auth::id()) {
             abort(403, 'Unauthorized');
         }
-
-        $project_id = $link->project_id;
+        if ($link->project_id !== $project->id) {
+            abort(404);
+        }
         $link->delete();
 
         return redirect()
-            ->route('projects.links.index', $project_id)
+            ->route('projects.links.index', $project->id)
             ->with('success', 'Link berhasil dihapus.');
     }
 }

@@ -16,9 +16,18 @@ class ProjectController extends Controller
      */
     public function index(): Response
     {
-        $projects = Project::where('user_id', Auth::id())
-            ->latest()
-            ->paginate(10);
+        $perPage = request('perPage', 10);
+        $search = request('search');
+
+        $query = Project::where('user_id', Auth::id());
+
+        if ($search) {
+            $query->where('project_name', 'like', "%{$search}%");
+        }
+
+        $projects = $query->latest()
+            ->paginate($perPage)
+            ->appends(request()->query());
 
         $success = session('success');
 
@@ -113,6 +122,17 @@ class ProjectController extends Controller
         $project->delete();
 
         return redirect()->route('projects.index')->with('success', 'Project deleted successfully.');
+    }
+
+    /**
+     * Bulk Action project.
+     */
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        Project::whereIn('id', $ids)->where('user_id', Auth::id())->delete();
+
+        return redirect()->route('projects.index')->with('success', 'Selected projects deleted successfully.');
     }
 
     /**

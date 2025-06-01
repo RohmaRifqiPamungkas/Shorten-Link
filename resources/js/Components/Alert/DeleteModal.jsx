@@ -13,10 +13,10 @@ const DeleteModal = ({ isOpen, onClose, onConfirm }) => {
         <p className="mb-6 text-sm md:text-lg text-gray-600 text-center">All data related to the link will be completely deleted. This action cannot be undone.</p>
         <div className="flex justify-end gap-6">
           <button onClick={onConfirm} className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-secondary">
-            Hapus
+            Delete
           </button>
           <button onClick={onClose} className="px-6 py-2 border border-foreground rounded-lg hover:bg-gray-400 hover:border-none hover:text-white">
-            Batal
+            Cancel
           </button>
         </div>
       </div>
