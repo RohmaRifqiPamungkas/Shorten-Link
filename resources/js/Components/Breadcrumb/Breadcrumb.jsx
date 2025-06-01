@@ -2,12 +2,12 @@ import { Link, usePage } from '@inertiajs/react';
 
 const Breadcrumb = () => {
   const { url } = usePage();
-  const pathSegments = url.split('/').filter(Boolean);
+  const cleanUrl = url.split('?')[0];
+  const pathSegments = cleanUrl.split('/').filter(Boolean);
 
   const breadcrumbs = pathSegments.map((segment, index) => {
     const path = '/' + pathSegments.slice(0, index + 1).join('/');
     const label = segment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-
     const isLast = index === pathSegments.length - 1;
 
     return (
