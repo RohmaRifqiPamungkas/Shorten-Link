@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
 import { Head, useForm, Link } from "@inertiajs/react";
-import { Inertia } from '@inertiajs/inertia';
+import { Inertia } from "@inertiajs/inertia";
 import SearchBar from "@/Components/Searchbar/Search";
 import Pagination from "@/Components/Pagination/Pagination";
 import BulkActions from "@/Components/BulkAction/BulkAction";
@@ -93,27 +93,26 @@ export default function ShortenedLinkPage({ shortends }) {
     //     setDeleteModalOpen(false);
     // };
 
-    
-const handleConfirmDelete = () => {
-  if (!selectedLinkToDelete) return;
+    const handleConfirmDelete = () => {
+        if (!selectedLinkToDelete) return;
 
-  Inertia.delete(`/shorten/${selectedLinkToDelete.id}`, {
-    onSuccess: () => {
-      setDeleteModalOpen(false);
-      setNotification({
-        type: "success",
-        message: "Link berhasil dihapus!",
-      });
-      setSelectedLinkToDelete(null);
-    },
-    onError: () => {
-      setNotification({
-        type: "error",
-        message: "Gagal menghapus link.",
-      });
-    },
-  });
-};
+        Inertia.delete(`/shorten/${selectedLinkToDelete.id}`, {
+            onSuccess: () => {
+                setDeleteModalOpen(false);
+                setNotification({
+                    type: "success",
+                    message: "Link berhasil dihapus!",
+                });
+                setSelectedLinkToDelete(null);
+            },
+            onError: () => {
+                setNotification({
+                    type: "error",
+                    message: "Gagal menghapus link.",
+                });
+            },
+        });
+    };
 
     const handleDeleteClick = (link) => {
         setSelectedLinkToDelete(link);
@@ -232,7 +231,10 @@ const handleConfirmDelete = () => {
                         </thead>
                         <tbody>
                             {paginatedLinks.map((link, idx) => (
-                                <tr key={idx} className="border-b border-muted hover:bg-gray-50">
+                                <tr
+                                    key={idx}
+                                    className="border-b border-muted hover:bg-gray-50"
+                                >
                                     {bulkMode && (
                                         <td className="px-4 py-4">
                                             <input
@@ -315,16 +317,16 @@ const handleConfirmDelete = () => {
                                             />
                                         </button>
                                         <Link
-                                                                                      href={`/shorten/${link.id}/edit`}
-                                                                                      title="Edit"
-                                                                                      className="hover:text-primary-100"
-                                                                                  >
-                                                                                      <Icon
-                                                                                          icon="iconamoon:edit-light"
-                                                                                          width={20}
-                                                                                          height={20}
-                                                                                      />
-                                                                                  </Link>
+                                            href={`/shorten/${link.id}/edit`}
+                                            title="Edit"
+                                            className="hover:text-primary-100"
+                                        >
+                                            <Icon
+                                                icon="iconamoon:edit-light"
+                                                width={20}
+                                                height={20}
+                                            />
+                                        </Link>
                                         <button
                                             title="Delete"
                                             onClick={() =>
