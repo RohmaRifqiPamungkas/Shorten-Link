@@ -8,10 +8,10 @@ import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
 import Notification from "@/Components/Notification/Notification";
 
-const EditLink = ({ project, selectedCategoryId }) => {
-    const { data, setData, post, processing, errors } = useForm({
-        category_id: selectedCategoryId ?? "",
-        links: [{ title: "", url: "" }],
+const EditLink = ({ project, link, categories }) => {
+    const { data, setData, patch, processing, errors } = useForm({
+        category_id: link.category_id ?? "",
+        links: [{ title: link.title ?? "", url: link.original_url ?? "" }],
     });
 
     const handleLinkChange = (index, field, value) => {
@@ -31,12 +31,11 @@ const EditLink = ({ project, selectedCategoryId }) => {
 
     const submit = (e) => {
         e.preventDefault();
-        post(`/dashboard/projects/${project.id}/links`);
+        patch(`/projects/${project.id}/links/${link.id}`);
     };
 
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [selectedProjectToDelete, setSelectedProjectToDelete] =
-        useState(null);
+    const [selectedProjectToDelete, setSelectedProjectToDelete] = useState(null);
     const [isShareModalOpen, setShareModalOpen] = useState(false);
     const [selectedShareUrl, setSelectedShareUrl] = useState("");
     const [notification, setNotification] = useState(null);
