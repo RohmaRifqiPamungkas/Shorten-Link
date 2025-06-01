@@ -27,31 +27,6 @@ export default function Links({
     const [notification, setNotification] = useState(null);
     const [perPage, setPerPage] = useState(10);
 
-    const getCustomFavicon = (url) => {
-        try {
-            const hostname = new URL(url).hostname.replace(/^www\./, "");
-
-            const customIcons = {
-                "github.com": "/icons/github.svg",
-                "facebook.com": "/icons/facebook.svg",
-                "twitter.com": "/icons/twitter.svg",
-                "linkedin.com": "/icons/linkedin.svg",
-                "youtube.com": "/icons/youtube.svg",
-                "figma.com": "/icons/figma.svg",
-            };
-
-            const matchedDomain = Object.keys(customIcons).find((domain) =>
-                hostname.includes(domain)
-            );
-
-            return matchedDomain
-                ? customIcons[matchedDomain]
-                : `https://www.google.com/s2/favicons?domain=${hostname}`;
-        } catch (error) {
-            return "https://www.google.com/s2/favicons?domain=default";
-        }
-    };
-
     const toggleSelect = (id) => {
         setSelectedIds((prev) =>
             prev.includes(id)
@@ -232,19 +207,16 @@ export default function Links({
                                         <td className="px-4 py-4 whitespace-nowrap flex items-center gap-2  w-full max-w-full md:max-w-[560px] overflow-hidden">
                                             {/* Logo/Favicon */}
                                             <img
-                                                src={getCustomFavicon(
-                                                    link.original_url
-                                                )}
+                                                src={`https://www.google.com/s2/favicons?sz=64&domain=${new URL(link.original_url)
+                                                        .hostname
+                                                    }`}
                                                 alt="favicon"
                                                 className="w-8 h-8 rounded-full bg-gray-100 object-contain"
                                                 style={{ flexShrink: 0 }}
                                                 onError={(e) => {
-                                                    e.target.onerror = null;
-                                                    e.target.src =
-                                                        "https://www.google.com/s2/favicons?domain=" +
-                                                        new URL(
-                                                            link.original_url
-                                                        ).hostname;
+                                                    e.currentTarget.onerror = null;
+                                                    e.currentTarget.src =
+                                                        "https://cdn-icons-png.flaticon.com/512/565/565547.png";
                                                 }}
                                             />
                                             <div className="min-w-0">
@@ -283,7 +255,7 @@ export default function Links({
                                         </td>
                                         <td className="px-4 py-4 space-x-4 flex">
                                             <Link
-                                                href={`/projects/${project.id}/categories/${link.category_id}/link/${link.link_id}/edit`}
+                                                href={`/projects/${project.id}/links/${link.id}/edit`}
                                                 title="Edit"
                                                 className="hover:text-primary-100 "
                                             >

@@ -44,6 +44,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [LinkController::class, 'index'])->name('index');
             Route::get('/create', [LinkController::class, 'create'])->name('create');
             Route::post('/', [LinkController::class, 'store'])->name('store');
+            Route::get('/{link}/edit', [LinkController::class, 'edit'])->name('edit');
+            Route::patch('/{link}', [LinkController::class, 'update'])->name('update');
         });
 
         // Kategori dalam project

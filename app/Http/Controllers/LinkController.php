@@ -99,6 +99,40 @@ class LinkController extends Controller
             ->with('success', 'Link berhasil ditambahkan.');
     }
 
+    public function edit(Project $project, Link $link)
+    {
+        abort_if($link->project_id !== $project->id, 404);
+
+        return Inertia::render('Projects/Links/Edit', [
+            'project' => $project,
+            'categories' => $project->categories,
+            'link' => $link,
+        ]);
+    }
+
+    public function update(Request $request, Project $project, Link $link)
+    {
+        abort_if($link->project_id !== $project->id, 404);
+        abort_if($link->user_id !== Auth::id(), 403);
+
+        $validated = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'links' => 'required|array|min:1',
+            'links.*.title' => 'required|string|max:255',
+            'links.*.url' => 'required|url',
+        ]);
+
+        $link->update([
+            'category_id' => $validated['category_id'],
+            'title' => $validated['links'][0]['title'],
+            'original_url' => $validated['links'][0]['url'],
+        ]);
+
+        return redirect()
+            ->route('projects.categories.index', $project->id)
+            ->with('success', 'Link berhasil diupdate.');
+    }
+
     public function destroy(Link $link): RedirectResponse
     {
         if ($link->user_id !== Auth::id()) {
