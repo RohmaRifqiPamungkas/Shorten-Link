@@ -17,14 +17,22 @@ class CategoryController extends Controller
     {
         $user = $request->user();
 
+        $perPage = $request->query('perPage', 10);
+        $search = $request->query('search');
+
         $project = Project::where('id', $projectId)
             ->where('user_id', $user->id)
             ->firstOrFail();
 
-        $categories = Category::withCount('links')
+        $query = Category::withCount('links')
             ->where('user_id', $user->id)
-            ->where('project_id', $projectId)
-            ->paginate(10);
+            ->where('project_id', $projectId);
+
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $categories = $query->paginate($perPage)->appends($request->query());
 
         return Inertia::render('Projects/Categories/Index', [
             'project' => $project,
@@ -128,5 +136,25 @@ class CategoryController extends Controller
 
         return redirect()->route('projects.categories.index', $project->id)
             ->with('success', 'Kategori berhasil diupdate');
+    }
+
+    public function destroy(Request $request, $projectId, $categoryId)
+    {
+        $user = $request->user();
+
+        $project = Project::where('id', $projectId)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        $category = Category::where('id', $categoryId)
+            ->where('user_id', $user->id)
+            ->where('project_id', $project->id)
+            ->firstOrFail();
+
+        $category->delete();
+
+        return redirect()
+            ->route('projects.categories.index', $project->id)
+            ->with('success', 'Kategori berhasil dihapus.');
     }
 }

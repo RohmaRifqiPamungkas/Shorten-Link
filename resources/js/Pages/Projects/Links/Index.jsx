@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
 import { Head, usePage, Link } from "@inertiajs/react";
 import { Inertia } from "@inertiajs/inertia";
@@ -16,16 +16,27 @@ export default function Links({
     auth,
     project = {},
     category = {},
-    links = { data: [] },
+    links = { data: [], meta: {} },
     categories = [],
 }) {
+    const { success } = usePage().props;
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
     const [selectedLinkToDelete, setSelectedLinkToDelete] = useState(null);
     const [notification, setNotification] = useState(null);
-    const [perPage, setPerPage] = useState(10);
+    const [perPage, setPerPage] = useState(Number(new URLSearchParams(window.location.search).get('perPage')) || 10);
+
+    // Show notification if success flash message from backend
+    useEffect(() => {
+        if (success) {
+            setNotification({
+                type: "success",
+                message: success,
+            });
+        }
+    }, [success]);
 
     const toggleSelect = (id) => {
         setSelectedIds((prev) =>
@@ -42,33 +53,37 @@ export default function Links({
 
     const handleConfirmDelete = () => {
         if (selectedLinkToDelete) {
-            Inertia.post(
-                `/links/${selectedLinkToDelete.id}`,
-                { _method: "DELETE" },
+            Inertia.delete(
+                `/projects/${project.id}/links/${selectedLinkToDelete.id}`,
                 {
-                    onSuccess: () =>
+                    onSuccess: () => {
                         setNotification({
                             type: "success",
                             message: "Link deleted successfully.",
-                        }),
-                    onError: () =>
+                        });
+                        setDeleteModalOpen(false);
+                        setSelectedLinkToDelete(null);
+                    },
+                    onError: () => {
                         setNotification({
                             type: "error",
                             message: "Failed to delete link. Please try again.",
-                        }),
+                        });
+                        setDeleteModalOpen(false);
+                        setSelectedLinkToDelete(null);
+                    },
+                    preserveScroll: true,
                 }
             );
+        } else {
+            setDeleteModalOpen(false);
         }
-        setDeleteModalOpen(false);
     };
 
-    const filteredLinks = links.data.filter((link) =>
-        link.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
+    // Pagination & Search handled by backend
     const handlePageChange = (newPage) => {
         Inertia.get(
-            `/projects`,
+            window.location.pathname,
             {
                 page: newPage,
                 perPage,
@@ -84,11 +99,27 @@ export default function Links({
     const handlePerPageChange = (newPerPage) => {
         setPerPage(newPerPage);
         Inertia.get(
-            `/projects`,
+            window.location.pathname,
             {
                 page: 1,
                 perPage: newPerPage,
                 search: searchTerm,
+            },
+            {
+                preserveState: true,
+                replace: true,
+            }
+        );
+    };
+
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+        Inertia.get(
+            window.location.pathname,
+            {
+                page: 1,
+                perPage,
+                search: term,
             },
             {
                 preserveState: true,
@@ -134,7 +165,7 @@ export default function Links({
                             />
                         </div>
                         <div className="transition-all duration-300">
-                            <SearchBar onSearch={setSearchTerm} />
+                            <SearchBar onSearch={handleSearch} />
                         </div>
                         <div className="transition-all duration-300">
                             <BulkActions
@@ -172,7 +203,6 @@ export default function Links({
                                 <th className="px-4 py-6 font-semibold">
                                     URL & Link Name
                                 </th>
-
                                 <th className="px-4 py-6 font-semibold">
                                     Date Created
                                 </th>
@@ -185,8 +215,8 @@ export default function Links({
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredLinks.length > 0 ? (
-                                filteredLinks.map((link) => (
+                            {links.data.length > 0 ? (
+                                links.data.map((link) => (
                                     <tr
                                         key={link.id}
                                         className="border-b border-muted hover:bg-gray-50"
@@ -208,7 +238,7 @@ export default function Links({
                                             {/* Logo/Favicon */}
                                             <img
                                                 src={`https://www.google.com/s2/favicons?sz=64&domain=${new URL(link.original_url)
-                                                        .hostname
+                                                    .hostname
                                                     }`}
                                                 alt="favicon"
                                                 className="w-8 h-8 rounded-full bg-gray-100 object-contain"
@@ -220,8 +250,6 @@ export default function Links({
                                                 }}
                                             />
                                             <div className="min-w-0">
-                                                {" "}
-                                                {/* supaya teks bisa terpotong */}
                                                 <a
                                                     href={link.original_url}
                                                     target="_blank"
@@ -229,11 +257,11 @@ export default function Links({
                                                     className="text-sm text-foreground hover:underline block overflow-hidden text-ellipsis whitespace-nowrap"
                                                 >
                                                     {link.original_url.length >
-                                                    50
+                                                        50
                                                         ? `${link.original_url.slice(
-                                                              0,
-                                                              60
-                                                          )}...`
+                                                            0,
+                                                            60
+                                                        )}...`
                                                         : link.original_url}
                                                 </a>
                                                 <div className="text-foreground">
@@ -296,15 +324,13 @@ export default function Links({
                 </div>
 
                 <Pagination
-                    pagination={
-                        links.meta || {
-                            current_page: 1,
-                            last_page: 1,
-                            from: 1,
-                            to: 1,
-                            total: 1,
-                        }
-                    }
+                    pagination={{
+                        current_page: links.current_page,
+                        last_page: links.last_page,
+                        from: links.from,
+                        to: links.to,
+                        total: links.total,
+                    }}
                     perPage={perPage}
                     onPageChange={handlePageChange}
                     onPerPageChange={handlePerPageChange}

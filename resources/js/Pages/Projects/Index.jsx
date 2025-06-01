@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
 import { Head, usePage, Link } from "@inertiajs/react";
 import { Inertia } from "@inertiajs/inertia";
@@ -20,11 +20,21 @@ export default function ProjectsDashboard({ auth }) {
     const [selectedIds, setSelectedIds] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [selectedProjectToDelete, setSelectedProjectToDelete] =
-        useState(null);
+    const [selectedProjectToDelete, setSelectedProjectToDelete] = useState(null);
     const [isShareModalOpen, setShareModalOpen] = useState(false);
     const [selectedShareUrl, setSelectedShareUrl] = useState("");
     const [notification, setNotification] = useState(null);
+    const [perPage, setPerPage] = useState(Number(new URLSearchParams(window.location.search).get('perPage')) || 10);
+
+    // Show notification if success flash message from backend
+    useEffect(() => {
+        if (success) {
+            setNotification({
+                type: "success",
+                message: success,
+            });
+        }
+    }, [success]);
 
     const toggleSelect = (id) => {
         setSelectedIds((prev) =>
@@ -65,38 +75,63 @@ export default function ProjectsDashboard({ auth }) {
 
     const handleConfirmDelete = () => {
         if (selectedProjectToDelete) {
-            Inertia.post(
+            Inertia.delete(
                 `/projects/${selectedProjectToDelete.id}`,
                 {
-                    _method: "DELETE",
-                },
-                {
                     onSuccess: () => {
-                        setNotification({
-                            type: "success",
-                            message: "Project deleted successfully.",
-                        });
+                        setDeleteModalOpen(false);
+                        setSelectedProjectToDelete(null);
                     },
                     onError: () => {
                         setNotification({
                             type: "error",
-                            message:
-                                "Failed to delete project. Please try again.",
+                            message: "Failed to delete project. Please try again.",
                         });
+                        setDeleteModalOpen(false);
+                        setSelectedProjectToDelete(null);
                     },
+                    preserveScroll: true,
                 }
             );
+        } else {
+            setDeleteModalOpen(false);
         }
-
-        setDeleteModalOpen(false);
     };
 
-    const filteredProjects = projects.data.filter((project) =>
-        project.project_name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const handleBulkDelete = () => {
+        if (selectedIds.length === 0) {
+            setNotification({
+                type: "error",
+                message: "No projects selected.",
+            });
+            return;
+        }
 
-    const [perPage, setPerPage] = useState(10);
+        if (!window.confirm("Are you sure you want to delete selected projects?")) return;
 
+        Inertia.post('/projects/bulk-delete', {
+            ids: selectedIds,
+            _method: 'DELETE',
+        }, {
+            onSuccess: () => {
+                setNotification({
+                    type: "success",
+                    message: "Selected projects deleted successfully.",
+                });
+                setSelectedIds([]);
+                setBulkMode(false);
+            },
+            onError: () => {
+                setNotification({
+                    type: "error",
+                    message: "Failed to delete selected projects.",
+                });
+            },
+            preserveScroll: true,
+        });
+    };
+
+    // Search & Pagination handled by backend, so just send params
     const handlePageChange = (newPage) => {
         Inertia.get(
             `/projects`,
@@ -128,6 +163,22 @@ export default function ProjectsDashboard({ auth }) {
         );
     };
 
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+        Inertia.get(
+            `/projects`,
+            {
+                page: 1,
+                perPage,
+                search: term,
+            },
+            {
+                preserveState: true,
+                replace: true,
+            }
+        );
+    };
+
     return (
         <DashboardLayout user={auth.user}>
             <Head title="Management Link" />
@@ -151,7 +202,7 @@ export default function ProjectsDashboard({ auth }) {
                             />
                         </div>
                         <div className="transition-all duration-300">
-                            <SearchBar onSearch={setSearchTerm} />
+                            <SearchBar onSearch={handleSearch} />
                         </div>
                         <div className="transition-all duration-300">
                             <BulkActions
@@ -160,11 +211,7 @@ export default function ProjectsDashboard({ auth }) {
                                     setBulkMode(!bulkMode);
                                     setSelectedIds([]);
                                 }}
-                                onDelete={() =>
-                                    alert(
-                                        "Bulk delete belum diimplementasikan."
-                                    )
-                                }
+                                onDelete={handleBulkDelete}
                             />
                         </div>
                     </div>
@@ -184,7 +231,17 @@ export default function ProjectsDashboard({ auth }) {
                             <tr className="border-b border-muted">
                                 {bulkMode && (
                                     <th className="px-4 py-6">
-                                        <input type="checkbox" disabled />
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedIds.length === projects.data.length && projects.data.length > 0}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setSelectedIds(projects.data.map((p) => p.id));
+                                                } else {
+                                                    setSelectedIds([]);
+                                                }
+                                            }}
+                                        />
                                     </th>
                                 )}
                                 <th className="px-4 py-6 font-semibold">
@@ -200,8 +257,8 @@ export default function ProjectsDashboard({ auth }) {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredProjects.length > 0 ? (
-                                filteredProjects.map((project) => (
+                            {projects.data.length > 0 ? (
+                                projects.data.map((project) => (
                                     <tr
                                         key={project.id}
                                         className="border-b border-muted hover:bg-gray-50"
