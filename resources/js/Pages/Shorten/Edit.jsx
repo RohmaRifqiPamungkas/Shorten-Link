@@ -71,35 +71,6 @@ const EditUrlPage = ({ auth, link }) => {
 };
 
 
-    // const handleConfirmDelete = () => {
-    //     if (selectedLinkToDelete) {
-    //         Inertia.post(
-    //             `/shorten/${selectedLinkToDelete.id}`,
-    //             {
-    //                 _method: "DELETE",
-    //             },
-    //             {
-    //                 onSuccess: () => {
-    //                     setNotification({
-    //                         type: "success",
-    //                         message: "Project deleted successfully.",
-    //                     });
-    //                 },
-    //                 onError: () => {
-    //                     setNotification({
-    //                         type: "error",
-    //                         message:
-    //                             "Failed to delete project. Please try again.",
-    //                     });
-    //                 },
-    //             }
-    //         );
-    //     }
-
-
-    //     setDeleteModalOpen(false);
-    // };
-
     const onSubmit = (e) => {
         e.preventDefault();
         patch(`/shorten/${link.id}`);
