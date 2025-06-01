@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm, Head } from "@inertiajs/react";
-import { Icon } from "@iconify/react";
 import { Inertia } from '@inertiajs/inertia';
+import { Icon } from "@iconify/react";
 import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
@@ -9,20 +9,21 @@ import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
 import Notification from "@/Components/Notification/Notification";
 
-const EditUrlPage = ({ auth, project }) => {
+const EditUrlPage = ({ auth, link }) => {
     const { data, setData, patch, processing, errors } = useForm({
-        project_name: project.project_name || "",
-        project_slug: project.project_slug || "",
+        original_url: link.original_url,
+        custom_alias: link.custom_alias || "",
+        expires_at: link.expires_at ? link.expires_at.substring(0, 10) : "",
     });
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [selectedProjectToDelete, setSelectedProjectToDelete] =
+    const [selectedLinkToDelete, setSelectedLinkToDelete] =
         useState(null);
     const [isShareModalOpen, setShareModalOpen] = useState(false);
     const [selectedShareUrl, setSelectedShareUrl] = useState("");
     const [notification, setNotification] = useState(null);
 
-    const handleCopy = (project) => {
-        const fullUrl = `${window.location.origin}/m/${project.project_slug}`;
+    const handleCopy = (link) => {
+        const fullUrl = `${window.location.origin}/s/${link.custom_alias}`;
         navigator.clipboard
             .writeText(fullUrl)
             .then(() => {
@@ -39,77 +40,63 @@ const EditUrlPage = ({ auth, project }) => {
             });
     };
 
-    const handleShareClick = (project) => {
-        const fullUrl = `${window.location.origin}/m/${project.project_slug}`;
+    const handleShareClick = (link) => {
+          const fullUrl = `${window.location.origin}/s/${link.custom_alias}`;
         setSelectedShareUrl(fullUrl);
         setShareModalOpen(true);
     };
 
-    const handleDeleteClick = (project) => {
-        setSelectedProjectToDelete(project);
+    const handleDeleteClick = (link) => {
+        setSelectedLinkToDelete(link);
         setDeleteModalOpen(true);
     };
 
     const handleConfirmDelete = () => {
-        if (selectedProjectToDelete) {
-            Inertia.post(
-                `/projects/${selectedProjectToDelete.id}`,
-                {
-                    _method: "DELETE",
+    if (selectedLinkToDelete) {
+        Inertia.post(
+            `/shorten/${selectedLinkToDelete.id}`,
+            { _method: "DELETE" },
+            {
+                onSuccess: () => {
+                    Inertia.visit("/shorten", {
+                        replace: true,
+                        preserveScroll: true,
+                    });
                 },
-                {
-                    onSuccess: () => {
-                        setNotification({
-                            type: "success",
-                            message: "Project deleted successfully.",
-                        });
-                    },
-                    onError: () => {
-                        setNotification({
-                            type: "error",
-                            message:
-                                "Failed to delete project. Please try again.",
-                        });
-                    },
-                }
-            );
-        }
+            }
+        );
+    }
 
-        setDeleteModalOpen(false);
-    };
+    setDeleteModalOpen(false);
+};
+
 
     const onSubmit = (e) => {
         e.preventDefault();
-        patch(`/projects/${project.id}`);
+        patch(`/shorten/${link.id}`);
     };
 
     return (
         <DashboardLayout user={auth.user}>
-            <Head title="   Edit Link" />
             <Breadcrumb />
-
+              <Head title="   Edit Link" />
             <h2 className="text-xl font-semibold text-blue-900 mt-4 mb-4">
-                Edit Project URL
+                Edit URL
             </h2>
 
-            {/* URL & Icons Row */}
+            {/* Link & Icons */}
             <div className="mb-4 flex items-center justify-between text-sm text-foreground">
-                <span className="text-foreground font-medium">
+                <span className="font-medium">
                     Your Link Is :{" "}
-                    <a
-                        className="underline"
-                        href={`/m/${project.project_slug}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        sevenpion.com/m/{project.project_slug}
+                    <a className="underline">
+                        sevenpion.com/s/{data.custom_alias}
                     </a>
                 </span>
                 <div className="flex gap-2 ml-4">
                     <button
                         type="button"
                         title="Copy"
-                        onClick={() => handleCopy(project)}
+                        onClick={() => handleCopy(link)}
                         className="group bg-white p-3 rounded-lg shadow hover:bg-primary-100"
                     >
                         <Icon
@@ -122,7 +109,7 @@ const EditUrlPage = ({ auth, project }) => {
                     <button
                         type="button"
                         title="Delete"
-                        onClick={() => handleDeleteClick(project)}
+                        onClick={() => handleDeleteClick(link)}
                         className="group bg-white p-3 rounded-lg shadow hover:bg-primary-100"
                     >
                         <Icon
@@ -135,7 +122,7 @@ const EditUrlPage = ({ auth, project }) => {
                     <button
                         type="button"
                         title="Share"
-                        onClick={() => handleShareClick(project)}
+                        onClick={() => handleShareClick(link)}
                         className="group bg-white p-3 rounded-lg shadow hover:bg-primary-100"
                     >
                         <Icon
@@ -161,34 +148,34 @@ const EditUrlPage = ({ auth, project }) => {
                 <form onSubmit={onSubmit} className="space-y-6">
                     <div>
                         <label className="text-sm text-foreground">
-                            Project Name
+                            Long URL
                         </label>
                         <input
-                            type="text"
+                            type="url"
                             className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
-                            placeholder="Nama project"
-                            value={data.project_name}
+                            placeholder="https://example.com/"
+                            value={data.original_url}
                             onChange={(e) =>
-                                setData("project_name", e.target.value)
+                                setData("original_url", e.target.value)
                             }
                             required
                         />
-                        {errors.project_name && (
-                            <div className="text-red-500 text-sm mt-1">
-                                {errors.project_name}
-                            </div>
+                        {errors.original_url && (
+                            <p className="text-red-500 text-sm mt-1">
+                                {errors.original_url}
+                            </p>
                         )}
                     </div>
 
                     <div className="flex flex-row">
                         <div className="basis-1/5">
                             <label className="text-sm text-foreground">
-                                Project URL
+                                Short URL
                             </label>
                             <input
                                 type="text"
                                 className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-gray-100 text-gray-700"
-                                value="sevenpion.com/m/"
+                                value={`sevenpion.com/s/`}
                                 readOnly
                             />
                         </div>
@@ -198,27 +185,44 @@ const EditUrlPage = ({ auth, project }) => {
                             </label>
                             <input
                                 type="text"
-                                className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
+                                className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
                                 placeholder="custom-alias"
-                                value={data.project_slug}
+                                value={data.custom_alias}
                                 onChange={(e) =>
-                                    setData("project_slug", e.target.value)
+                                    setData("custom_alias", e.target.value)
                                 }
-                                required
                             />
-                            {errors.project_slug && (
-                                <div className="text-red-500 text-sm mt-1">
-                                    {errors.project_slug}
-                                </div>
+                            {errors.custom_alias && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.custom_alias}
+                                </p>
                             )}
                         </div>
                     </div>
 
+                    <div>
+                        <label className="text-sm text-foreground">
+                            Expiration Date
+                        </label>
+                        <input
+                            type="date"
+                            className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
+                            value={data.expires_at}
+                            onChange={(e) =>
+                                setData("expires_at", e.target.value)
+                            }
+                        />
+                        {errors.expires_at && (
+                            <p className="text-red-500 text-sm mt-1">
+                                {errors.expires_at}
+                            </p>
+                        )}
+                    </div>
+
                     <PrimaryButton type="submit" disabled={processing}>
-                        Update
+                        {processing ? "Updating..." : "Update"}
                     </PrimaryButton>
                 </form>
-
                 {isDeleteModalOpen && (
                     <DeleteModal
                         isOpen={isDeleteModalOpen}

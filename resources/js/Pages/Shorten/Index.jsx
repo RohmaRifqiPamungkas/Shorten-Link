@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
 import { Head, useForm, Link } from "@inertiajs/react";
+import { Inertia } from '@inertiajs/inertia';
 import SearchBar from "@/Components/Searchbar/Search";
 import Pagination from "@/Components/Pagination/Pagination";
 import BulkActions from "@/Components/BulkAction/BulkAction";
@@ -87,10 +88,32 @@ export default function ShortenedLinkPage({ shortends }) {
             });
     };
 
-    const handleConfirmDelete = () => {
-        console.log("Deleting link:", selectedLinkToDelete);
-        setDeleteModalOpen(false);
-    };
+    // const handleConfirmDelete = () => {
+    //     console.log("Deleting link:", selectedLinkToDelete);
+    //     setDeleteModalOpen(false);
+    // };
+
+    
+const handleConfirmDelete = () => {
+  if (!selectedLinkToDelete) return;
+
+  Inertia.delete(`/shorten/${selectedLinkToDelete.id}`, {
+    onSuccess: () => {
+      setDeleteModalOpen(false);
+      setNotification({
+        type: "success",
+        message: "Link berhasil dihapus!",
+      });
+      setSelectedLinkToDelete(null);
+    },
+    onError: () => {
+      setNotification({
+        type: "error",
+        message: "Gagal menghapus link.",
+      });
+    },
+  });
+};
 
     const handleDeleteClick = (link) => {
         setSelectedLinkToDelete(link);
@@ -186,7 +209,7 @@ export default function ShortenedLinkPage({ shortends }) {
                 <div className="overflow-x-auto bg-white shadow rounded-2xl">
                     <table className="min-w-full text-left border-collapse">
                         <thead>
-                            <tr className="border-b border-muted">
+                            <tr className="border-b border-muted hover:bg-gray-50">
                                 {bulkMode && (
                                     <th className="px-4 py-6">
                                         <input type="checkbox" disabled />
@@ -209,7 +232,7 @@ export default function ShortenedLinkPage({ shortends }) {
                         </thead>
                         <tbody>
                             {paginatedLinks.map((link, idx) => (
-                                <tr key={idx} className="border-b border-muted">
+                                <tr key={idx} className="border-b border-muted hover:bg-gray-50">
                                     {bulkMode && (
                                         <td className="px-4 py-4">
                                             <input
