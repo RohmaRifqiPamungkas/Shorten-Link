@@ -181,7 +181,7 @@ const EditUrlPage = ({ auth, project }) => {
                     </div>
 
                     <div className="flex flex-row">
-                        <div className="basis-2/4">
+                        <div className="basis-1/5">
                             <label className="text-sm text-foreground">
                                 Project URL
                             </label>
@@ -192,7 +192,7 @@ const EditUrlPage = ({ auth, project }) => {
                                 readOnly
                             />
                         </div>
-                        <div className="basis-3/4 ms-4">
+                        <div className="basis-4/5 ms-4">
                             <label className="text-sm text-foreground">
                                 Alias
                             </label>
