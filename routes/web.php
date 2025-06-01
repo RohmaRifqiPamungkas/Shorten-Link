@@ -17,6 +17,10 @@ Route::get('/', function () {
 // Redirect Shorten Link Publik
 Route::get('/s/{code}', [ShortenLinkController::class, 'redirect'])->name('shorten.redirect');
 
+
+// Tampilkan proyek berdasarkan slug (publik)
+Route::get('/m/{slug}', [ProjectController::class, 'showBySlug'])->name('projects.showBySlug');
+
 // Route yang memerlukan autentikasi
 Route::middleware(['auth'])->group(function () {
 
@@ -27,8 +31,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
     });
 
-    // Tampilkan proyek berdasarkan slug (publik)
-    Route::get('/m/{slug}', [ProjectController::class, 'showBySlug'])->name('projects.showBySlug');
+ 
 
     // Projects (CRUD)
     Route::prefix('projects')->name('projects.')->group(function () {
