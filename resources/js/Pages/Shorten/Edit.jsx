@@ -179,7 +179,7 @@ const EditUrlPage = ({ auth, link }) => {
                                 readOnly
                             />
                         </div>
-                        <div className="basis-3/4 ms-4">
+                        <div className="basis-4/5 ms-4">
                             <label className="text-sm text-foreground">
                                 Alias
                             </label>
