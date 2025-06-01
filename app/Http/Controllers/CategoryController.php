@@ -89,4 +89,44 @@ class CategoryController extends Controller
         return redirect()->route('projects.categories.index', $project->id)
             ->with('success', 'Kategori berhasil dibuat');
     }
+    public function update(Request $request, $projectId, $categoryId)
+    {
+        $user = $request->user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $project = Project::where('id', $projectId)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        $category = Category::where('id', $categoryId)
+            ->where('user_id', $user->id)
+            ->where('project_id', $project->id)
+            ->firstOrFail();
+
+        $newName = strtolower(trim($request->name));
+
+        // Cek kemiripan nama kategori lain (kecuali dirinya sendiri)
+        $existingCategories = Category::where('user_id', $user->id)
+            ->where('project_id', $project->id)
+            ->where('id', '!=', $category->id)
+            ->pluck('name');
+
+        foreach ($existingCategories as $existingName) {
+            $distance = levenshtein($newName, strtolower($existingName));
+            if ($distance <= 2) {
+                return back()->withErrors([
+                    'name' => "Nama kategori mirip dengan yang sudah ada: '{$existingName}' (selisih $distance karakter)."
+                ]);
+            }
+        }
+
+        $category->name = $request->name;
+        $category->save();
+
+        return redirect()->route('projects.categories.index', $project->id)
+            ->with('success', 'Kategori berhasil diupdate');
+    }
 }
