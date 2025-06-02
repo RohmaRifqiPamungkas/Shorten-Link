@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DeleteModal = ({ isOpen, onClose, onConfirm }) => {
+const DeleteModal = ({ isOpen, onClose, onConfirm, processing }) => {
   if (!isOpen) return null;
 
   return (
@@ -12,10 +12,18 @@ const DeleteModal = ({ isOpen, onClose, onConfirm }) => {
         <h2 className="text-lg md:text-2xl font-semibold mb-4">Delete this link?</h2>
         <p className="mb-6 text-sm md:text-lg text-gray-600 text-center">All data related to the link will be completely deleted. This action cannot be undone.</p>
         <div className="flex justify-end gap-6">
-          <button onClick={onConfirm} className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-secondary">
-            Delete
+          <button
+            onClick={onConfirm}
+            className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-secondary"
+            disabled={processing}
+          >
+            {processing ? "Deleting..." : "Delete"}
           </button>
-          <button onClick={onClose} className="px-6 py-2 border border-foreground rounded-lg hover:bg-gray-400 hover:border-none hover:text-white">
+          <button
+            onClick={onClose}
+            className="px-6 py-2 border border-foreground rounded-lg hover:bg-gray-400 hover:border-none hover:text-white"
+            disabled={processing}
+          >
             Cancel
           </button>
         </div>

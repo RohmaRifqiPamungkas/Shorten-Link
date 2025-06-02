@@ -163,7 +163,7 @@ const EditLink = ({ project, link, categories }) => {
                 />
             )}
 
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl md:max-w-7xl p-10 relative">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl md:max-w-full p-10 relative">
                 <div className="mt-4">
                     <form onSubmit={submit} className=" space-y-5 ">
                         <input
@@ -261,7 +261,7 @@ const EditLink = ({ project, link, categories }) => {
                             disabled={processing}
                             className="w-full bg-primary-100 hover:bg-secondary text-white py-2 rounded-md font-semibold"
                         >
-                         Update
+                            {processing ? "Updating..." : "Update"}
                         </PrimaryButton>
                     </form>
 
