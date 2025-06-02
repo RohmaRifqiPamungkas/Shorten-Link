@@ -172,7 +172,7 @@ const CreateLink = ({ project, selectedCategoryId }) => {
                 />
             )}
 
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl md:max-w-7xl p-10 relative">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl md:max-w-full p-10 relative">
                 <div className="mt-4">
                     <form onSubmit={submit} className=" space-y-5 ">
                         <input
@@ -207,6 +207,8 @@ const CreateLink = ({ project, selectedCategoryId }) => {
                                                 e.target.value
                                             )
                                         }
+                                        required
+
                                         className="w-full px-3 py-2 border-brfourth rounded-md focus:outline-none"
                                     />
                                 </div>
@@ -227,6 +229,8 @@ const CreateLink = ({ project, selectedCategoryId }) => {
                                                 e.target.value
                                             )
                                         }
+                                        required
+                                        
                                         className="w-full px-3 py-2 border-brfourth rounded-md focus:outline-none"
                                     />
                                 </div>
@@ -273,7 +277,7 @@ const CreateLink = ({ project, selectedCategoryId }) => {
                             disabled={processing}
                             className="w-full bg-primary-100 hover:bg-secondary text-white py-2 rounded-md font-semibold"
                         >
-                            Submit
+                            {processing ? "Submit..." : "Submit"}
                         </PrimaryButton>
                     </form>
 

@@ -144,7 +144,7 @@ const EditUrlPage = ({ auth, link }) => {
             )}
 
             {/* Form */}
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl md:max-w-7xl p-10 relative">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl md:max-w-full p-10 relative">
                 <form onSubmit={onSubmit} className="space-y-6">
                     <div>
                         <label className="text-sm text-foreground">

@@ -157,7 +157,7 @@ const EditUrlPage = ({ auth, project }) => {
             )}
 
             {/* Form */}
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl md:max-w-7xl p-10 relative">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl md:max-w-full p-10 relative">
                 <form onSubmit={onSubmit} className="space-y-6">
                     <div>
                         <label className="text-sm text-foreground">
@@ -214,8 +214,12 @@ const EditUrlPage = ({ auth, project }) => {
                         </div>
                     </div>
 
-                    <PrimaryButton type="submit" disabled={processing}>
-                        Update
+                    <PrimaryButton
+                        type="submit"
+                        disabled={processing}
+                        className="w-full bg-primary-100 hover:bg-secondary text-white py-2 rounded-md font-semibold"
+                    >
+                        {processing ? "Updating..." : "Update"}
                     </PrimaryButton>
                 </form>
 
