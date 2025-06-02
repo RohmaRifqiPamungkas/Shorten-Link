@@ -19,7 +19,7 @@ export default function Links({
     links = { data: [], meta: {} },
     categories = [],
 }) {
-    const { success } = usePage().props;
+    const { success, error } = usePage().props;
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
@@ -57,12 +57,9 @@ export default function Links({
                 `/projects/${project.id}/links/${selectedLinkToDelete.id}`,
                 {
                     onSuccess: () => {
-                        setNotification({
-                            type: "success",
-                            message: "Link deleted successfully.",
-                        });
                         setDeleteModalOpen(false);
                         setSelectedLinkToDelete(null);
+                        Inertia.reload({ only: ['links', 'success'] }); // reload agar flash message backend muncul
                     },
                     onError: () => {
                         setNotification({

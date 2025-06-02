@@ -171,7 +171,7 @@ class LinkController extends Controller
                 'project' => $project->id,
                 'category' => $validated['category_id'],
             ])
-            ->with('success', 'Link berhasil ditambahkan.');
+            ->with('success', 'Link berhasil diupdate.');
     }
 
     public function destroy(Project $project, Link $link)
@@ -182,10 +182,14 @@ class LinkController extends Controller
         if ($link->project_id !== $project->id) {
             abort(404);
         }
+        $categoryId = $link->category_id;
         $link->delete();
 
         return redirect()
-            ->route('projects.links.index', $project->id)
-            ->with('success', 'Link berhasil dihapus.');
+            ->route('projects.categories.links.index', [
+                'project' => $project->id,
+                'category' => $categoryId,
+            ])
+            ->with('success', 'Link deleted successfully.');
     }
 }
