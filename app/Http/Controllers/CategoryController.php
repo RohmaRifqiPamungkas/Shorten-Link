@@ -37,6 +37,7 @@ class CategoryController extends Controller
         return Inertia::render('Projects/Categories/Index', [
             'project' => $project,
             'categories' => $categories,
+            'success' => session('success'),
         ]);
     }
 
@@ -155,6 +156,6 @@ class CategoryController extends Controller
 
         return redirect()
             ->route('projects.categories.index', $project->id)
-            ->with('success', 'Kategori berhasil dihapus.');
+            ->with('success', 'Project deleted successfully.');
     }
 }
