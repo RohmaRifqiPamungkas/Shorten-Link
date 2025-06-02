@@ -116,7 +116,7 @@ export default function ProjectsDashboard({ auth }) {
             onSuccess: () => {
                 setNotification({
                     type: "success",
-                    message: "Selected projects deleted successfully.",
+                    message: "Selected Deleted Successfully.",
                 });
                 setSelectedIds([]);
                 setBulkMode(false);

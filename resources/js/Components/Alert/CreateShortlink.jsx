@@ -25,7 +25,7 @@ export default function CreateShortlink({
             onSuccess: () => {
                 setNotification({
                     type: 'success',
-                    message: 'Create Successfully',
+                    message: 'Create Successfully.',
                 })
                 reset()
             },

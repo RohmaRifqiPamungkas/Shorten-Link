@@ -44,11 +44,24 @@ class ShortenLinkController extends Controller
     {
         $request->validate([
             'original_url' => 'required|url',
-            'custom_alias' => 'nullable|string|alpha_dash|unique:shortened_links,custom_alias',
+            'custom_alias' => 'nullable|string',
             'expires_at' => 'nullable|date|after:' . now()->addMinute(),
         ]);
 
         $alias = $request->custom_alias ?? Str::random(6);
+
+        // Levenshtein validation for custom_alias
+        if ($request->custom_alias) {
+            $allAliases = ShortenedLink::pluck('custom_alias')->filter();
+            foreach ($allAliases as $existingAlias) {
+                $distance = levenshtein($alias, $existingAlias);
+                if ($distance <= 2) {
+                    return back()->withErrors([
+                        'custom_alias' => "The custom alias you entered is too similar to an existing alias ('{$existingAlias}'). Please choose a more distinct alias (difference: $distance character(s))."
+                    ])->withInput();
+                }
+            }
+        }
 
         $expiresAt = $request->filled('expires_at')
             ? Carbon::parse($request->expires_at)->endOfDay()
@@ -62,7 +75,7 @@ class ShortenLinkController extends Controller
             'expires_at'   => $expiresAt,
         ]);
 
-        return redirect()->route('shorten.index')->with('success', 'Link berhasil dipendekkan!');
+        return redirect()->route('shorten.index')->with('success', 'Created Successfully.');
     }
 
     public function edit($id)
@@ -100,7 +113,7 @@ class ShortenLinkController extends Controller
             'expires_at'   => $expiresAt,
         ]);
 
-        return redirect()->route('shorten.index')->with('success', 'Link berhasil diperbarui!');
+        return redirect()->route('shorten.index')->with('success', 'Updated Successfully.');
     }
 
     public function destroy($id)
@@ -110,7 +123,7 @@ class ShortenLinkController extends Controller
 
         return redirect()
             ->route('shorten.index')
-            ->with('success', 'Shorten URL deleted successfully.');
+            ->with('success', 'Deleted Successfully.');
     }
 
     public function redirect($code)

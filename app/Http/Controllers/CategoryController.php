@@ -83,7 +83,7 @@ class CategoryController extends Controller
             $distance = levenshtein($newName, strtolower($existingName));
             if ($distance <= 2) {
                 return back()->withErrors([
-                    'name' => "Nama kategori mirip dengan yang sudah ada: '{$existingName}' (selisih $distance karakter)."
+                    'name' => "Category name is too similar to an existing one: '{$existingName}' (difference of $distance character(s))."
                 ]);
             }
         }
@@ -96,8 +96,9 @@ class CategoryController extends Controller
 
         // Redirect ke halaman kategori project terkait
         return redirect()->route('projects.categories.index', $project->id)
-            ->with('success', 'Kategori berhasil dibuat');
+            ->with('success', 'Created Succesfully.');
     }
+    
     public function update(Request $request, $projectId, $categoryId)
     {
         $user = $request->user();
@@ -127,7 +128,7 @@ class CategoryController extends Controller
             $distance = levenshtein($newName, strtolower($existingName));
             if ($distance <= 2) {
                 return back()->withErrors([
-                    'name' => "Nama kategori mirip dengan yang sudah ada: '{$existingName}' (selisih $distance karakter)."
+                    'name' => "The categories you entered is too similar to an existing slug ('{$existingName}'). Please choose a more distinct slug (difference: $distance character(s))."
                 ]);
             }
         }
@@ -136,7 +137,7 @@ class CategoryController extends Controller
         $category->save();
 
         return redirect()->route('projects.categories.index', $project->id)
-            ->with('success', 'Kategori berhasil diupdate');
+            ->with('success', 'Update Successfully.');
     }
 
     public function destroy(Request $request, $projectId, $categoryId)
@@ -156,6 +157,6 @@ class CategoryController extends Controller
 
         return redirect()
             ->route('projects.categories.index', $project->id)
-            ->with('success', 'Project deleted successfully.');
+            ->with('success', 'Deleted Successfully.');
     }
 }

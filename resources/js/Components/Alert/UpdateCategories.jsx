@@ -23,7 +23,7 @@ export default function UpdateCategories({ show, onClose, project, category }) {
             onSuccess: () => {
                 setNotification({
                     type: 'success',
-                    message: 'Updated Succesfully',
+                    message: 'Updated Succesfully.',
                 });
                 reset();
             },

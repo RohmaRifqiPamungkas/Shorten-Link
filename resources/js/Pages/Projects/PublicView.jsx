@@ -12,6 +12,53 @@ export default function PublicView({ project, categories }) {
         }));
     };
 
+    // Fungsi untuk memilih logo berdasarkan nama kategori
+    const getCategoryLogo = (categoryName) => {
+        switch (categoryName.toLowerCase()) {
+            case "figma":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg";
+            case "canva":
+                return "https://static.canva.com/static/images/favicon.ico";
+            case "youtube":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/youtube/youtube-original.svg";
+            case "github":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg";
+            case "facebook":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg";
+            case "instagram":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/instagram/instagram-original.svg";
+            case "twitter":
+            case "x":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg";
+            case "linkedin":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg";
+            case "whatsapp":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/whatsapp/whatsapp-original.svg";
+            case "telegram":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/telegram/telegram-original.svg";
+            case "google drive":
+            case "drive":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg";
+            case "dropbox":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dropbox/dropbox-original.svg";
+            case "notion":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/notion/notion-original.svg";
+            case "slack":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/slack/slack-original.svg";
+            case "discord":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/discord/discord-original.svg";
+            case "tiktok":
+                return "https://cdn-icons-png.flaticon.com/512/3046/3046125.png";
+            case "medium":
+                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/medium/medium-original.svg";
+            case "gmail":
+                return "https://cdn-icons-png.flaticon.com/512/281/281769.png";
+            // Tambahkan kategori lain jika perlu
+            default:
+                return "/images/Globe.png";
+        }
+    };
+
     if (!project || !categories) {
         return (
             <div className="text-center mt-10 text-gray-500">
@@ -57,23 +104,14 @@ export default function PublicView({ project, categories }) {
                                     >
                                         <div className="flex items-center gap-3">
                                             <img
-                                                src={
-                                                    firstLink
-                                                        ? `https://www.google.com/s2/favicons?sz=64&domain=${
-                                                              new URL(
-                                                                  firstLink.original_url
-                                                              ).hostname
-                                                          }`
-                                                        : "https://cdn-icons-png.flaticon.com/512/565/565547.png"
-                                                }
-                                                alt="favicon"
+                                                src={getCategoryLogo(categoryName)}
+                                                alt="category-logo"
                                                 className="w-8 h-8 rounded-full bg-gray-100 object-contain"
                                                 style={{ flexShrink: 0 }}
                                                 onError={(e) => {
-                                                    e.currentTarget.onerror =
-                                                        null;
+                                                    e.currentTarget.onerror = null;
                                                     e.currentTarget.src =
-                                                        "https://cdn-icons-png.flaticon.com/512/565/565547.png";
+                                                        "/images/Globe.png";
                                                 }}
                                             />
                                             <span>{categoryName}</span>
