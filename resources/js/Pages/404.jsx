@@ -41,7 +41,7 @@ export default function NotFound() {
 
                     {/* Tombol Home */}
                     <Link
-                        href="/dashboard/projects"
+                        href="/projects"
                         className="md:px-32 px-6 py-2 text-lg bg-primary-100 hover:bg-secondary text-white rounded-lg shadow-md transition duration-300 inline-block "
                     >
                         Go To Home Page!
