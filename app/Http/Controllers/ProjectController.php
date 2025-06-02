@@ -29,11 +29,8 @@ class ProjectController extends Controller
             ->paginate($perPage)
             ->appends(request()->query());
 
-        $success = session('success');
-
         return Inertia::render('Projects/Index', [
             'projects' => $projects,
-            'success' => $success,
         ]);
     }
 
@@ -57,12 +54,14 @@ class ProjectController extends Controller
 
         $slug = $request->project_slug ?? Str::slug($request->project_name);
 
-        // Validasi slug mirip (custom)
+        // Validasi slug mirip (pakai levenshtein)
         $allSlugs = Project::pluck('project_slug');
         foreach ($allSlugs as $existingSlug) {
-            similar_text($slug, $existingSlug, $percent); // atau pakai levenshtein
-            if ($percent >= 85) {
-                return back()->withErrors(['project_slug' => 'Slug terlalu mirip dengan slug yang sudah ada: ' . $existingSlug])->withInput();
+            $distance = levenshtein($slug, $existingSlug);
+            if ($distance <= 2) {
+                return back()->withErrors([
+                    'project_slug' => "The project slug you entered is too similar to an existing slug ('{$existingSlug}'). Please choose a more distinct slug (difference: $distance character(s))."
+                ])->withInput();
             }
         }
 
@@ -78,7 +77,7 @@ class ProjectController extends Controller
             'is_active' => true,
         ]);
 
-        return redirect()->route('projects.index')->with('success', 'Project berhasil dibuat!');
+        return redirect()->route('projects.index')->with('success', 'Created Successfully.');
     }
 
     /**
@@ -110,7 +109,7 @@ class ProjectController extends Controller
             'project_slug' => $request->project_slug ?? Str::slug($request->project_name),
         ]);
 
-        return redirect()->route('projects.index')->with('success', 'Project berhasil diperbarui.');
+        return redirect()->route('projects.index')->with('success', 'Created Successfully.');
     }
 
     /**
@@ -121,7 +120,7 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
         $project->delete();
 
-        return redirect()->route('projects.index')->with('success', 'Project deleted successfully.');
+        return redirect()->route('projects.index')->with('success', 'Deleted Successfully.');
     }
 
     /**
@@ -132,7 +131,7 @@ class ProjectController extends Controller
         $ids = $request->input('ids', []);
         Project::whereIn('id', $ids)->where('user_id', Auth::id())->delete();
 
-        return redirect()->route('projects.index')->with('success', 'Selected projects deleted successfully.');
+        return redirect()->route('projects.index')->with('success', 'Selected Deleted Successfully.');
     }
 
     /**
@@ -154,7 +153,7 @@ class ProjectController extends Controller
             ->get();
 
         $grouped = $mainLinks->groupBy(function ($link) {
-            return optional($link->category)->name ?? 'Tanpa Kategori';
+            return optional($link->category)->name ?? 'Uncategorized';
         })->map(function ($links, $categoryName) {
             return [
                 'category' => $categoryName,

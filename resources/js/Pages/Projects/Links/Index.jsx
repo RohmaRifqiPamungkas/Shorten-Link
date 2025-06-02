@@ -59,7 +59,7 @@ export default function Links({
                     onSuccess: () => {
                         setDeleteModalOpen(false);
                         setSelectedLinkToDelete(null);
-                        Inertia.reload({ only: ['links', 'success'] }); // reload agar flash message backend muncul
+                        Inertia.reload({ only: ['links', 'success'] });
                     },
                     onError: () => {
                         setNotification({

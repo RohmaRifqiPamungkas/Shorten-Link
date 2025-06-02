@@ -58,7 +58,7 @@ export default function Categories({ auth, project = {} }) {
                     onSuccess: () => {
                         setNotification({
                             type: "success",
-                            message: "Category deleted successfully.",
+                            message: "Deleted successfully.",
                         });
                         setDeleteModalOpen(false);
                         setSelectedCategoryToDelete(null);

@@ -81,9 +81,8 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
             {/* menu nih */}
             <nav className="flex-grow mt-4">
                 <div
-                    className={`mb-4 flex-col items-center ${
-                        isExpanded ? "px-6" : " justify-center px-3"
-                    }`}
+                    className={`mb-4 flex-col items-center ${isExpanded ? "px-6" : " justify-center px-3"
+                        }`}
                 >
                     {!isExpanded && <hr className="my-1 border-transparent " />}
                     {isExpanded && (
@@ -98,25 +97,22 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
                                 key={item.name}
                                 href={item.href}
                                 className={`
-                  relative group flex items-center gap-4 py-2  ${
-                      isExpanded ? "px-6" : "justify-center"
-                  } my-1 rounded-lg transition-all
+                  relative group flex items-center gap-4 py-2  ${isExpanded ? "px-6" : "justify-center"
+                                    } my-1 rounded-lg transition-all
                   overflow-hidden
-                  ${
-                      isActive
-                          ? "bg-primary-25 text-foreground"
-                          : "text-foreground hover:bg-primary-25 hover:text-primary-100"
-                  }
+                  ${isActive
+                                        ? "bg-primary-25 text-foreground"
+                                        : "text-foreground hover:bg-primary-25 hover:text-primary-100"
+                                    }
                 `}
                             >
                                 <span
                                     className={`
                     absolute right-0 top-0 bottom-0 w-1 bg-primary-100 rounded-r-full transition-transform transform
-                    ${
-                        isActive
-                            ? "scale-y-100"
-                            : "scale-y-0 group-hover:scale-y-100"
-                    }
+                    ${isActive
+                                            ? "scale-y-100"
+                                            : "scale-y-0 group-hover:scale-y-100"
+                                        }
                   `}
                                 />
                                 <span className="text-xl z-10 relative ">

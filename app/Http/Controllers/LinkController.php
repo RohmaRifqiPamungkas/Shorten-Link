@@ -121,7 +121,7 @@ class LinkController extends Controller
                 'project' => $project->id,
                 'category' => $validated['category_id'],
             ])
-            ->with('success', 'Link berhasil ditambahkan.');
+            ->with('success', 'Created Succesfully.');
     }
 
     public function edit(Project $project, Link $link)
@@ -171,7 +171,7 @@ class LinkController extends Controller
                 'project' => $project->id,
                 'category' => $validated['category_id'],
             ])
-            ->with('success', 'Link berhasil diupdate.');
+            ->with('success', 'Updated Succesfully.');
     }
 
     public function destroy(Project $project, Link $link)
@@ -190,6 +190,6 @@ class LinkController extends Controller
                 'project' => $project->id,
                 'category' => $categoryId,
             ])
-            ->with('success', 'Link deleted successfully.');
+            ->with('success', 'Deleted Successfully.');
     }
 }
