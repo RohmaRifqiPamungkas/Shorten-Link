@@ -48,8 +48,14 @@ class ShortenLinkController extends Controller
     {
         $request->validate([
             'original_url' => 'required|url',
-            'custom_alias' => 'nullable|string',
+            'custom_alias' => [
+                'nullable',
+                'string',
+                'regex:/^[A-Za-z0-9\-_]+$/',
+            ],
             'expires_at' => 'nullable|date|after:' . now()->addMinute(),
+        ], [
+            'custom_alias.regex' => 'Alias can only contain letters, numbers, dashes (-), or underscores (_), no spaces.',
         ]);
 
         $alias = $request->custom_alias ?? Str::random(6);

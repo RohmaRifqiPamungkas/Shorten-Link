@@ -32,7 +32,6 @@ export default function CreateProject({ show, onClose }) {
                     type: "error",
                     message: "An error occurred, please check your input.",
                 });
-                 reset();
             },
         });
     };
@@ -118,7 +117,7 @@ export default function CreateProject({ show, onClose }) {
                                     onChange={(e) =>
                                         setData("project_slug", e.target.value)
                                     }
-                                    required
+                                    
                                 />
                                 {errors.project_slug && (
                                     <div className="text-red-500 text-sm mt-1">
