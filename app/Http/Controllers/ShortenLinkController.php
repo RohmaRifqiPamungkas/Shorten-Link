@@ -14,6 +14,10 @@ class ShortenLinkController extends Controller
 {
     protected $baseUrl = 'http://localhost:8000/s/';
 
+    protected $casts = [
+        'expires_at' => 'datetime',
+    ];
+
     public function index()
     {
         $perPage = request('perPage', 10);
@@ -128,12 +132,18 @@ class ShortenLinkController extends Controller
 
     public function redirect($code)
     {
-        $link = ShortenedLink::where('custom_alias', $code)
-            ->orWhere('short_code', $code)
-            ->where(function ($q) {
-                $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
-            })
-            ->firstOrFail();
+        $link = ShortenedLink::where(function ($q) use ($code) {
+            $q->where('custom_alias', $code)
+                ->orWhere('short_code', $code);
+        })
+            ->first();
+
+        if (
+            !$link ||
+            ($link->expires_at && $link->expires_at->isPast())
+        ) {
+            abort(404);
+        }
 
         return redirect()->away($link->original_url);
     }
