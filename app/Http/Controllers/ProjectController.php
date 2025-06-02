@@ -49,12 +49,20 @@ class ProjectController extends Controller
     {
         $request->validate([
             'project_name' => 'required|string|max:255',
-            'project_slug' => 'nullable|string|max:255',
+            'project_slug' => [
+                'nullable',
+                'string',
+                'max:255',
+                'regex:/^[A-Za-z0-9\-_]+$/',
+            ],
+        ], [
+            'project_slug.regex' => 'Slug can only contain letters, numbers, dashes (-), or underscores (_), and no spaces.',
         ]);
 
-        $slug = $request->project_slug ?? Str::slug($request->project_name);
+        // Jika slug tidak diisi, generate random 4 karakter
+        $slug = $request->project_slug ?: Str::lower(Str::random(4));
 
-        // Validasi slug mirip (pakai levenshtein)
+        // Validasi slug levenshtein
         $allSlugs = Project::pluck('project_slug');
         foreach ($allSlugs as $existingSlug) {
             $distance = levenshtein($slug, $existingSlug);
@@ -65,9 +73,10 @@ class ProjectController extends Controller
             }
         }
 
-        // Jamin tetap unik slug-nya
         while (Project::where('project_slug', $slug)->exists()) {
-            $slug = Str::slug($request->project_name) . '-' . Str::random(4);
+            $slug = $request->project_slug
+                ? Str::slug($request->project_slug) . '-' . Str::random(4)
+                : Str::lower(Str::random(4));
         }
 
         Project::create([
