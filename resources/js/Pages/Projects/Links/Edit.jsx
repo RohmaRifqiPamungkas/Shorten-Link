@@ -192,6 +192,8 @@ const EditLink = ({ project, link, categories }) => {
                                                 e.target.value
                                             )
                                         }
+                                        required
+
                                         className="w-full px-3 py-2 border-brfourth rounded-md focus:outline-none"
                                     />
                                 </div>
@@ -211,6 +213,8 @@ const EditLink = ({ project, link, categories }) => {
                                                 e.target.value
                                             )
                                         }
+                                        required
+
                                         className="w-full px-3 py-2 border-brfourth rounded-md focus:outline-none"
                                     />
                                 </div>

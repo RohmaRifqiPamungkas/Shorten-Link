@@ -35,7 +35,6 @@ class ShortenLinkController extends Controller
 
         return Inertia::render('Shorten/Index', [
             'shortends' => $shortends,
-            'success' => session('success'),
         ]);
     }
 
