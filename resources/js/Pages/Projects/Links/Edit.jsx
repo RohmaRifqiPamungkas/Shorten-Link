@@ -110,7 +110,7 @@ const EditLink = ({ project, link, categories }) => {
             <div className="mb-4 flex items-center justify-between text-sm text-foreground">
                 <span className="text-foreground font-medium">
                     Your Link Is :{" "}
-                    <a className="underline">sevenpion.com/s/example-alias</a>
+                    <a className="underline">sevenpion.com/m/{project.project_slug}</a>
                 </span>
                 <div className="flex gap-2 ml-4">
                     <button

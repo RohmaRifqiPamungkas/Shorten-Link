@@ -118,7 +118,7 @@ class ProjectController extends Controller
             'project_slug' => $request->project_slug ?? Str::slug($request->project_name),
         ]);
 
-        return redirect()->route('projects.index')->with('success', 'Created Successfully.');
+        return redirect()->route('projects.index')->with('success', 'Updated Successfully.');
     }
 
     /**
