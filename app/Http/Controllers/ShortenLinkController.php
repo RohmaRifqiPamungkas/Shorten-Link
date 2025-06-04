@@ -57,7 +57,7 @@ class ShortenLinkController extends Controller
             'custom_alias.regex' => 'Alias can only contain letters, numbers, dashes (-), or underscores (_), no spaces.',
         ]);
 
-        $alias = $request->custom_alias ?? Str::random(6);
+        $alias = $request->custom_alias ?? Str::random(4);
 
         // Levenshtein validation for custom_alias
         if ($request->custom_alias) {

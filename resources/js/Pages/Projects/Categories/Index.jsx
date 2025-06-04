@@ -34,6 +34,7 @@ export default function Categories({ auth, project = {} }) {
                 type: "success",
                 message: success,
             });
+            Inertia.replace(window.location.pathname + window.location.search);
         }
     }, [success]);
 
