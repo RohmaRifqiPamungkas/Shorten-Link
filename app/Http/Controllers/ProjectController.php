@@ -137,6 +137,7 @@ class ProjectController extends Controller
      */
     public function bulkDelete(Request $request)
     {
+        dd($request->all());
         $ids = $request->input('ids', []);
         Project::whereIn('id', $ids)->where('user_id', Auth::id())->delete();
 

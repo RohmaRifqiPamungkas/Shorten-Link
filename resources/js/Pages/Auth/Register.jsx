@@ -27,10 +27,10 @@ export default function Register() {
             <Head title="Register" />
 
             <div className="flex justify-center">
-                            <Link href="/">
-                                <ApplicationLogo className="h-20 w-20 " />
-                            </Link>
-                        </div>
+                <Link href="/">
+                    <ApplicationLogo className="h-20 w-20 " />
+                </Link>
+            </div>
 
             <form onSubmit={submit}>
                 <div>
@@ -42,7 +42,7 @@ export default function Register() {
                         value={data.name}
                         className="mt-1 block w-full"
                         autoComplete="name"
-                             placeholder="Enter your name"
+                        placeholder="Enter your name"
                         isFocused={true}
                         onChange={(e) => setData('name', e.target.value)}
                         required
@@ -61,7 +61,7 @@ export default function Register() {
                         value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
-                             placeholder="Enter your username"
+                        placeholder="Enter your username"
                         onChange={(e) => setData('email', e.target.value)}
                         required
                     />
@@ -112,12 +112,12 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4 flex items-center ">
-                    <PrimaryButton  disabled={processing}>
+                    <PrimaryButton disabled={processing}>
                         Register
                     </PrimaryButton>
                 </div>
                 <p className="text-center text-sm text-gray-600 mt-6">
-                Already have an account? {" "}
+                    Already have an account? {" "}
                     <Link
                         href={route('login')}
                         className="font-semibold text-primary-100 underline hover:text-secondary"

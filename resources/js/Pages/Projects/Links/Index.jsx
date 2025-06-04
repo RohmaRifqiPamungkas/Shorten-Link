@@ -35,6 +35,7 @@ export default function Links({
                 type: "success",
                 message: success,
             });
+            Inertia.replace(window.location.pathname + window.location.search);
         }
     }, [success]);
 

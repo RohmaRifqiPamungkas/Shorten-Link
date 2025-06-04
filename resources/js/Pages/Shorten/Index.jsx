@@ -32,6 +32,7 @@ export default function ShortenedLinkPage({ shortends }) {
                 type: "success",
                 message: success,
             });
+            Inertia.replace(window.location.pathname + window.location.search);
         }
     }, [success]);
 

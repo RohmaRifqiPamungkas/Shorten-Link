@@ -116,7 +116,7 @@ export default function CreateShortlink({
                                     onChange={(e) =>
                                         setData("custom_alias", e.target.value)
                                     }
-                                    required
+                                    // required
                                 />
                                 {errors.custom_alias && (
                                     <div className="text-red-500 text-sm mt-1">

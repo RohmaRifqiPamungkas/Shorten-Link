@@ -32,7 +32,7 @@ export default function Login({ status, canResetPassword }) {
                 </div>
             )}
 
-<div className="flex justify-center">
+            <div className="flex justify-center">
                 <Link href="/">
                     <ApplicationLogo className="h-20 w-20 " />
                 </Link>
@@ -67,7 +67,7 @@ export default function Login({ status, canResetPassword }) {
                         value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="current-password"
-                         placeholder="Enter your email"
+                        placeholder="Enter your email"
                         onChange={(e) => setData("password", e.target.value)}
                     />
 
@@ -99,9 +99,9 @@ export default function Login({ status, canResetPassword }) {
                 </div>
 
                 <div className="mt-4 flex items-center ">
-                
+
                     <PrimaryButton className="" disabled={processing}>
-                      LOGIN
+                        LOGIN
                     </PrimaryButton>
                 </div>
                 <p className="text-center text-sm text-gray-600 mt-6">
