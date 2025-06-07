@@ -79,11 +79,21 @@ class CategoryController extends Controller
             ->where('project_id', $project->id)
             ->pluck('name');
 
+        // foreach ($existingCategories as $existingName) {
+        //     $distance = levenshtein($newName, strtolower($existingName));
+        //     if ($distance <= 2) {
+        //         return back()->withErrors([
+        //             'name' => "Category name is too similar to an existing one: '{$existingName}' (difference of $distance character(s))."
+        //         ]);
+        //     }
+        // }
+
         foreach ($existingCategories as $existingName) {
-            $distance = levenshtein($newName, strtolower($existingName));
-            if ($distance <= 2) {
+            similar_text($newName, strtolower($existingName), $percent);
+            $roundedPercent = round($percent);
+            if ($percent >= 80) {
                 return back()->withErrors([
-                    'name' => "Category name is too similar to an existing one: '{$existingName}' (difference of $distance character(s))."
+                    'name' => "Category name is too similar to an existing one: '{$existingName}' ({$roundedPercent}% similarity)."
                 ]);
             }
         }
@@ -124,12 +134,22 @@ class CategoryController extends Controller
             ->where('id', '!=', $category->id)
             ->pluck('name');
 
+        // foreach ($existingCategories as $existingName) {
+        //     $distance = levenshtein($newName, strtolower($existingName));
+        //     if ($distance <= 2) {
+        //         return back()->withErrors([
+        //             'name' => "The categories you entered is too similar to an existing slug ('{$existingName}'). Please choose a more distinct slug (difference: $distance character(s))."
+        //         ]);
+        //     }
+        // }
+
         foreach ($existingCategories as $existingName) {
-            $distance = levenshtein($newName, strtolower($existingName));
-            if ($distance <= 2) {
+            similar_text($newName, strtolower($existingName), $percent);
+            $roundedPercent = round($percent);
+            if ($roundedPercent >= 80) {
                 return back()->withErrors([
-                    'name' => "The categories you entered is too similar to an existing slug ('{$existingName}'). Please choose a more distinct slug (difference: $distance character(s))."
-                ]);
+                    'name' => "Category name is too similar to an existing one: '{$existingName}' ({$roundedPercent}% similarity)."
+                ])->withInput();
             }
         }
 
