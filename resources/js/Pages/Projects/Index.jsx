@@ -46,7 +46,7 @@ export default function ProjectsDashboard({ auth }) {
     };
 
     const handleCopy = (project) => {
-        const fullUrl = `${window.location.origin}/m/${project.project_slug}`;
+        const fullUrl = `${window.location.host}/m/${project.project_slug}`;
         navigator.clipboard
             .writeText(fullUrl)
             .then(() => {
@@ -64,7 +64,7 @@ export default function ProjectsDashboard({ auth }) {
     };
 
     const handleShareClick = (project) => {
-        const fullUrl = `${window.location.origin}/m/${project.project_slug}`;
+        const fullUrl = `${window.location.host}/m/${project.project_slug}`;
         setSelectedShareUrl(fullUrl);
         setShareModalOpen(true);
     };
@@ -295,12 +295,12 @@ export default function ProjectsDashboard({ auth }) {
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
                                             <a
-                                                href={`http://localhost:8000/m/${project.project_slug}`}
+                                                href={`${window.location.host}/m/${project.project_slug}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="text-foreground hover:underline"
                                             >
-                                                {`http://localhost:8000/m/${project.project_slug}`}
+                                                {`${window.location.host}/m/${project.project_slug}`}
                                             </a>
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">

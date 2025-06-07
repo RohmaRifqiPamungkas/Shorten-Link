@@ -63,16 +63,26 @@ class ProjectController extends Controller
         $slug = $request->project_slug ?: Str::lower(Str::random(4));
 
         // Validasi slug levenshtein
+        // $allSlugs = Project::pluck('project_slug');
+        // foreach ($allSlugs as $existingSlug) {
+        //     $distance = levenshtein($slug, $existingSlug);
+        //     if ($distance <= 2) {
+        //         return back()->withErrors([
+        //             'project_slug' => "The project slug you entered is too similar to an existing slug ('{$existingSlug}'). Please choose a more distinct slug (difference: $distance character(s))."
+        //         ])->withInput();
+        //     }
+        // }
         $allSlugs = Project::pluck('project_slug');
         foreach ($allSlugs as $existingSlug) {
-            $distance = levenshtein($slug, $existingSlug);
-            if ($distance <= 2) {
+            similar_text($slug, $existingSlug, $percent);
+            $roundedPercent = round($percent); 
+            if ($roundedPercent >= 70) {
                 return back()->withErrors([
-                    'project_slug' => "The project slug you entered is too similar to an existing slug ('{$existingSlug}'). Please choose a more distinct slug (difference: $distance character(s))."
+                    'project_slug' => "The project slug you entered is too similar to an existing slug ('{$existingSlug}'). Please choose a more distinct slug (similarity: {$roundedPercent}%)."
                 ])->withInput();
             }
         }
-
+        
         while (Project::where('project_slug', $slug)->exists()) {
             $slug = $request->project_slug
                 ? Str::slug($request->project_slug) . '-' . Str::random(4)
@@ -110,16 +120,39 @@ class ProjectController extends Controller
 
         $request->validate([
             'project_name' => 'required|string|max:255',
-            'project_slug' => 'nullable|string|max:255|unique:projects,project_slug,' . $project->id,
+            'project_slug' => [
+                'nullable',
+                'string',
+                'max:255',
+                'regex:/^[A-Za-z0-9\-_]+$/',
+                'unique:projects,project_slug,' . $project->id,
+            ],
+        ], [
+            'project_slug.regex' => 'Slug can only contain letters, numbers, dashes (-), or underscores (_), and no spaces.',
         ]);
+
+        $slug = $request->project_slug ?? Str::slug($request->project_name);
+
+        // Validasi similar_text
+        $allSlugs = Project::where('id', '!=', $project->id)->pluck('project_slug');
+        foreach ($allSlugs as $existingSlug) {
+            similar_text($slug, $existingSlug, $percent);
+            $roundedPercent = round($percent); 
+            if ($roundedPercent >= 80) {
+                return back()->withErrors([
+                    'project_slug' => "The project slug you entered is too similar to an existing slug ('{$existingSlug}'). Please choose a more distinct slug (similarity: {$roundedPercent}%)."
+                ])->withInput();
+            }
+        }
 
         $project->update([
             'project_name' => $request->project_name,
-            'project_slug' => $request->project_slug ?? Str::slug($request->project_name),
+            'project_slug' => $slug,
         ]);
 
         return redirect()->route('projects.index')->with('success', 'Updated Successfully.');
     }
+
 
     /**
      * Hapus project.

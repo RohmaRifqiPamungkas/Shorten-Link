@@ -60,13 +60,26 @@ class ShortenLinkController extends Controller
         $alias = $request->custom_alias ?? Str::random(4);
 
         // Levenshtein validation for custom_alias
+        // if ($request->custom_alias) {
+        //     $allAliases = ShortenedLink::pluck('custom_alias')->filter();
+        //     foreach ($allAliases as $existingAlias) {
+        //         $distance = levenshtein($alias, $existingAlias);
+        //         if ($distance <= 2) {
+        //             return back()->withErrors([
+        //                 'custom_alias' => "The custom alias you entered is too similar to an existing alias ('{$existingAlias}'). Please choose a more distinct alias (difference: $distance character(s))."
+        //             ])->withInput();
+        //         }
+        //     }
+        // }
+
         if ($request->custom_alias) {
             $allAliases = ShortenedLink::pluck('custom_alias')->filter();
             foreach ($allAliases as $existingAlias) {
-                $distance = levenshtein($alias, $existingAlias);
-                if ($distance <= 2) {
+                similar_text($alias, $existingAlias, $percent);
+                $roundedPercent = round($percent); 
+                if ($roundedPercent >= 70) {
                     return back()->withErrors([
-                        'custom_alias' => "The custom alias you entered is too similar to an existing alias ('{$existingAlias}'). Please choose a more distinct alias (difference: $distance character(s))."
+                        'custom_alias' => "The custom alias you entered is too similar to an existing alias ('{$existingAlias}'). Please choose a more distinct alias (similarity: {$roundedPercent}%)."
                     ])->withInput();
                 }
             }
@@ -111,14 +124,33 @@ class ShortenLinkController extends Controller
             'expires_at' => 'nullable|date|after:' . now()->addMinute(),
         ]);
 
+        $alias = $request->custom_alias;
+
+        // Cek kemiripan alias dengan existing alias lain (kecuali dirinya sendiri)
+        if ($alias) {
+            $allAliases = ShortenedLink::where('id', '!=', $link->id)
+                ->whereNotNull('custom_alias')
+                ->pluck('custom_alias');
+
+            foreach ($allAliases as $existingAlias) {
+                similar_text($alias, $existingAlias, $percent);
+                $roundedPercent = round($percent);
+                if ($roundedPercent >= 70) {
+                    return back()->withErrors([
+                        'custom_alias' => "The custom alias you entered is too similar to an existing alias ('{$existingAlias}'). Please choose a more distinct alias (similarity: {$roundedPercent}%)."
+                    ])->withInput();
+                }
+            }
+        }
+
         $expiresAt = $request->filled('expires_at')
             ? Carbon::parse($request->expires_at)->endOfDay()
             : null;
 
         $link->update([
             'original_url' => $request->original_url,
-            'custom_alias' => $request->custom_alias,
-            'short_code'   => $request->custom_alias ?? $link->short_code,
+            'custom_alias' => $alias,
+            'short_code'   => $alias ?? $link->short_code,
             'expires_at'   => $expiresAt,
         ]);
 

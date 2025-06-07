@@ -135,7 +135,7 @@ export default function ShortenedLinkPage({ shortends }) {
     };
 
     const handleCopy = (link) => {
-        const fullUrl = `${window.location.origin}/s/${link.short_code}`;
+        const fullUrl = `${window.location.host}/s/${link.short_code}`;
         navigator.clipboard
             .writeText(fullUrl)
             .then(() => {
@@ -153,7 +153,7 @@ export default function ShortenedLinkPage({ shortends }) {
     };
 
     const handleShareClick = (link) => {
-        const fullUrl = `${window.location.origin}/s/${link.short_code}`;
+        const fullUrl = `${window.location.host}/s/${link.short_code}`;
         setSelectedShareUrl(fullUrl);
         setShareModalOpen(true);
     };
@@ -313,19 +313,26 @@ export default function ShortenedLinkPage({ shortends }) {
                                             <div className="min-w-0">
                                                 {/* Short link */}
                                                 <a
-                                                    href={`http://localhost:8000/s/${link.short_code}`}
+                                                    href={`${window.location.host}/s/${link.short_code}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="text-sm text-foreground hover:underline block overflow-hidden text-ellipsis whitespace-nowrap"
                                                 >
-                                                    {`http://localhost:8000/s/${link.short_code}`}
+                                                    {`${window.location.host}/s/${link.short_code}`}
                                                 </a>
                                                 {/* Original URL */}
-                                                <div className="text-sm text-foreground break-all hover:underline">
-                                                    {link.original_url.length > 50
+                                                <a
+                                                    href={link.original_url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-sm text-foreground break-all hover:underline block"
+                                                    title={link.original_url} 
+                                                >
+                                                    {link.original_url.length > 60
                                                         ? `${link.original_url.slice(0, 60)}...`
                                                         : link.original_url}
-                                                </div>
+                                                </a>
+
                                             </div>
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
