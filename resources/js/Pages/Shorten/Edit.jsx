@@ -23,7 +23,7 @@ const EditUrlPage = ({ auth, link }) => {
     const [notification, setNotification] = useState(null);
 
     const handleCopy = (link) => {
-        const fullUrl = `${window.location.origin}/s/${link.custom_alias}`;
+        const fullUrl = `${window.location.host}/s/${link.custom_alias}`;
         navigator.clipboard
             .writeText(fullUrl)
             .then(() => {
@@ -41,7 +41,7 @@ const EditUrlPage = ({ auth, link }) => {
     };
 
     const handleShareClick = (link) => {
-          const fullUrl = `${window.location.origin}/s/${link.custom_alias}`;
+          const fullUrl = `${window.location.host}/s/${link.custom_alias}`;
         setSelectedShareUrl(fullUrl);
         setShareModalOpen(true);
     };
@@ -86,10 +86,15 @@ const EditUrlPage = ({ auth, link }) => {
 
             {/* Link & Icons */}
             <div className="mb-4 flex items-center justify-between text-sm text-foreground">
-                <span className="font-medium">
+                <span className="text-foreground text-lg font-medium">
                     Your Link Is :{" "}
-                    <a className="underline">
-                        sevenpion.com/s/{data.custom_alias}
+                    <a
+                        className="underline"
+                        href={`/s/${data.custom_alias}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        {`${window.location.host}/m/${data.custom_alias}`}
                     </a>
                 </span>
                 <div className="flex gap-2 ml-4">

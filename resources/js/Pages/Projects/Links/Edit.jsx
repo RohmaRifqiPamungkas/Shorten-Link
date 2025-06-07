@@ -41,7 +41,7 @@ const EditLink = ({ project, link, categories }) => {
     const [notification, setNotification] = useState(null);
 
     const handleCopy = (project) => {
-        const fullUrl = `${window.location.origin}/m/${project.project_slug}`;
+        const fullUrl = `${window.location.host}/m/${project.project_slug}`;
         navigator.clipboard
             .writeText(fullUrl)
             .then(() => {
@@ -59,7 +59,7 @@ const EditLink = ({ project, link, categories }) => {
     };
 
     const handleShareClick = (project) => {
-        const fullUrl = `${window.location.origin}/m/${project.project_slug}`;
+        const fullUrl = `${window.location.host}/m/${project.project_slug}`;
         setSelectedShareUrl(fullUrl);
         setShareModalOpen(true);
     };
@@ -108,9 +108,16 @@ const EditLink = ({ project, link, categories }) => {
 
             {/* URL & Icons Row */}
             <div className="mb-4 flex items-center justify-between text-sm text-foreground">
-                <span className="text-foreground font-medium">
-                    Your Link Is :{" "}
-                    <a className="underline">sevenpion.com/m/{project.project_slug}</a>
+                <span className="text-foreground text-lg font-medium">
+                    List link in :{" "}
+                    <a
+                        className="underline"
+                        href={`/m/${project.project_slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        {`${window.location.host}/m/${project.project_slug}`}
+                    </a>
                 </span>
                 <div className="flex gap-2 ml-4">
                     <button

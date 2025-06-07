@@ -22,7 +22,7 @@ const EditUrlPage = ({ auth, project }) => {
     const [notification, setNotification] = useState(null);
 
     const handleCopy = (project) => {
-        const fullUrl = `${window.location.origin}/m/${project.project_slug}`;
+        const fullUrl = `${window.location.host}/m/${project.project_slug}`;
         navigator.clipboard
             .writeText(fullUrl)
             .then(() => {
@@ -40,7 +40,7 @@ const EditUrlPage = ({ auth, project }) => {
     };
 
     const handleShareClick = (project) => {
-        const fullUrl = `${window.location.origin}/m/${project.project_slug}`;
+        const fullUrl = `${window.location.host}/m/${project.project_slug}`;
         setSelectedShareUrl(fullUrl);
         setShareModalOpen(true);
     };
@@ -94,7 +94,7 @@ const EditUrlPage = ({ auth, project }) => {
 
             {/* URL & Icons Row */}
             <div className="mb-4 flex items-center justify-between text-sm text-foreground">
-                <span className="text-foreground font-medium">
+                <span className="text-foreground text-lg font-medium">
                     Your Link Is :{" "}
                     <a
                         className="underline"
@@ -102,7 +102,7 @@ const EditUrlPage = ({ auth, project }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        sevenpion.com/m/{project.project_slug}
+                        {`${window.location.host}/m/${project.project_slug}`}
                     </a>
                 </span>
                 <div className="flex gap-2 ml-4">
@@ -188,7 +188,7 @@ const EditUrlPage = ({ auth, project }) => {
                             <input
                                 type="text"
                                 className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-gray-100 text-gray-700"
-                                value="sevenpion.com/m/"
+                                value={`${window.location.host}/m/`}
                                 readOnly
                             />
                         </div>

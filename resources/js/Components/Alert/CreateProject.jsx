@@ -99,7 +99,7 @@ export default function CreateProject({ show, onClose }) {
                                 <input
                                     type="text"
                                     className="w-full border border-brfourth rounded-lg px-2.5 py-2 mt-1 bg-white text-foreground"
-                                    value={`sevenpion.com/m/`}
+                                    value={`${window.location.host}/m/`}
                                     readOnly
                                 />
                             </div>

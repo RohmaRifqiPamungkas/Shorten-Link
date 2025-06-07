@@ -146,7 +146,7 @@ export default function Links({
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            sevenpion.com/m/{project.project_slug}
+                            {`${window.location.host}/m/${project.project_slug}`}
                         </a>
                     </span>
 
