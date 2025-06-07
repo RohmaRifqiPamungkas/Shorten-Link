@@ -13,51 +13,40 @@ export default function PublicView({ project, categories }) {
     };
 
     // Fungsi untuk memilih logo berdasarkan nama kategori
-    const getCategoryLogo = (categoryName) => {
-        switch (categoryName.toLowerCase()) {
-            case "figma":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg";
-            case "canva":
-                return "https://static.canva.com/static/images/favicon.ico";
-            case "youtube":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/youtube/youtube-original.svg";
-            case "github":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg";
-            case "facebook":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg";
-            case "instagram":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/instagram/instagram-original.svg";
-            case "twitter":
-            case "x":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg";
-            case "linkedin":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg";
-            case "whatsapp":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/whatsapp/whatsapp-original.svg";
-            case "telegram":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/telegram/telegram-original.svg";
-            case "google drive":
-            case "drive":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg";
-            case "dropbox":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dropbox/dropbox-original.svg";
-            case "notion":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/notion/notion-original.svg";
-            case "slack":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/slack/slack-original.svg";
-            case "discord":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/discord/discord-original.svg";
-            case "tiktok":
-                return "https://cdn-icons-png.flaticon.com/512/3046/3046125.png";
-            case "medium":
-                return "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/medium/medium-original.svg";
-            case "gmail":
-                return "https://cdn-icons-png.flaticon.com/512/281/281769.png";
-            // Tambahkan kategori lain jika perlu
-            default:
-                return "/images/Globe.png";
-        }
+    const categoryLogos = {
+        figma: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
+        canva: "https://static.canva.com/static/images/favicon.ico",
+        youtube: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/youtube/youtube-original.svg",
+        github: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+        facebook: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg",
+        instagram: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/instagram/instagram-original.svg",
+        twitter: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg",
+        x: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg",
+        linkedin: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg",
+        whatsapp: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/whatsapp/whatsapp-original.svg",
+        telegram: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/telegram/telegram-original.svg",
+        "google drive": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg",
+        drive: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg",
+        dropbox: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dropbox/dropbox-original.svg",
+        notion: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/notion/notion-original.svg",
+        slack: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/slack/slack-original.svg",
+        discord: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/discord/discord-original.svg",
+        tiktok: "https://cdn-icons-png.flaticon.com/512/3046/3046125.png",
+        medium: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/medium/medium-original.svg",
+        gmail: "https://cdn-icons-png.flaticon.com/512/281/281769.png",
     };
+
+    const getCategoryLogo = (name) => {
+        const lowerName = name.toLowerCase();
+
+        for (const keyword in categoryLogos) {
+            if (lowerName.includes(keyword)) {
+                return categoryLogos[keyword];
+            }
+        }
+
+        return "/images/Globe.png"; // default jika tidak ada keyword yang cocok
+    };    
 
     if (!project || !categories) {
         return (
