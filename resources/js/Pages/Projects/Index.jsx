@@ -295,12 +295,12 @@ export default function ProjectsDashboard({ auth }) {
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">
                                             <a
-                                                href={`${window.location.host}/m/${project.project_slug}`}
+                                                href={`${window.location.origin}/m/${project.project_slug}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="text-foreground hover:underline"
                                             >
-                                                {`${window.location.host}/m/${project.project_slug}`}
+                                                {`${window.location.origin}/m/${project.project_slug}`}
                                             </a>
                                         </td>
                                         <td className="px-4 py-4 whitespace-nowrap">

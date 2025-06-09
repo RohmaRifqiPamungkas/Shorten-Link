@@ -135,7 +135,7 @@ export default function ShortenedLinkPage({ shortends }) {
     };
 
     const handleCopy = (link) => {
-        const fullUrl = `${window.location.host}/s/${link.short_code}`;
+        const fullUrl = `${window.location.origin}/s/${link.short_code}`;
         navigator.clipboard
             .writeText(fullUrl)
             .then(() => {
@@ -153,7 +153,7 @@ export default function ShortenedLinkPage({ shortends }) {
     };
 
     const handleShareClick = (link) => {
-        const fullUrl = `${window.location.host}/s/${link.short_code}`;
+        const fullUrl = `${window.location.origin}/s/${link.short_code}`;
         setSelectedShareUrl(fullUrl);
         setShareModalOpen(true);
     };
@@ -313,12 +313,12 @@ export default function ShortenedLinkPage({ shortends }) {
                                             <div className="min-w-0">
                                                 {/* Short link */}
                                                 <a
-                                                    href={`${window.location.host}/s/${link.short_code}`}
+                                                    href={`${window.location.origin}/s/${link.short_code}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="text-sm text-foreground hover:underline block overflow-hidden text-ellipsis whitespace-nowrap"
                                                 >
-                                                    {`${window.location.host}/s/${link.short_code}`}
+                                                    {`${window.location.origin}/s/${link.short_code}`}
                                                 </a>
                                                 {/* Original URL */}
                                                 <a
