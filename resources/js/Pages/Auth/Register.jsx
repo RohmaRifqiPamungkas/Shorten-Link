@@ -61,7 +61,7 @@ export default function Register() {
                         value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
-                        placeholder="Enter your username"
+                        placeholder="Enter your email"
                         onChange={(e) => setData('email', e.target.value)}
                         required
                     />

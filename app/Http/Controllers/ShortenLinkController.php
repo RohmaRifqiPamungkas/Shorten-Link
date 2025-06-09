@@ -59,19 +59,6 @@ class ShortenLinkController extends Controller
 
         $alias = $request->custom_alias ?? Str::random(4);
 
-        // Levenshtein validation for custom_alias
-        // if ($request->custom_alias) {
-        //     $allAliases = ShortenedLink::pluck('custom_alias')->filter();
-        //     foreach ($allAliases as $existingAlias) {
-        //         $distance = levenshtein($alias, $existingAlias);
-        //         if ($distance <= 2) {
-        //             return back()->withErrors([
-        //                 'custom_alias' => "The custom alias you entered is too similar to an existing alias ('{$existingAlias}'). Please choose a more distinct alias (difference: $distance character(s))."
-        //             ])->withInput();
-        //         }
-        //     }
-        // }
-
         if ($request->custom_alias) {
             $allAliases = ShortenedLink::pluck('custom_alias')->filter();
             foreach ($allAliases as $existingAlias) {
