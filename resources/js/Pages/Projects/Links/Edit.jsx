@@ -41,7 +41,7 @@ const EditLink = ({ project, link, categories }) => {
     const [notification, setNotification] = useState(null);
 
     const handleCopy = (project) => {
-        const fullUrl = `${window.location.host}/m/${project.project_slug}`;
+        const fullUrl = `${window.location.origin}/m/${project.project_slug}`;
         navigator.clipboard
             .writeText(fullUrl)
             .then(() => {
@@ -59,7 +59,7 @@ const EditLink = ({ project, link, categories }) => {
     };
 
     const handleShareClick = (project) => {
-        const fullUrl = `${window.location.host}/m/${project.project_slug}`;
+        const fullUrl = `${window.location.origin}/m/${project.project_slug}`;
         setSelectedShareUrl(fullUrl);
         setShareModalOpen(true);
     };
@@ -116,7 +116,7 @@ const EditLink = ({ project, link, categories }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        {`${window.location.host}/m/${project.project_slug}`}
+                        {`${window.location.origin}/m/${project.project_slug}`}
                     </a>
                 </span>
                 <div className="flex gap-2 ml-4">

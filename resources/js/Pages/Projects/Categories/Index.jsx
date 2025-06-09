@@ -148,7 +148,7 @@ export default function Categories({ auth, project = {} }) {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            {`${window.location.host}/m/${project.project_slug}`}
+                            {`${window.location.origin}/m/${project.project_slug}`}
                         </a>
                     </span>
 
