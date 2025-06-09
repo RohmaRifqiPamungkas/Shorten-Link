@@ -29,7 +29,7 @@ const DashboardLayout = ({ children }) => {
           <button onClick={() => setIsMobileOpen(true)}>
             <FaBars size={20} />
           </button>
-          <div className="font-bold text-lg">Sevenpion</div>
+         
         </div>
 
         {/* Konten Utama */}
