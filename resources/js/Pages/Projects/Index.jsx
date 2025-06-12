@@ -185,7 +185,7 @@ export default function ProjectsDashboard({ auth }) {
             <Head title="Management Link" />
 
             <div className="py-5">
-                <h1 className="text-2xl font-semibold text-primary-100">
+                <h1 className="text-xl md:text-2xl font-semibold text-primary-100">
                     Management Link
                 </h1>
 
@@ -227,7 +227,7 @@ export default function ProjectsDashboard({ auth }) {
                 )}
 
                 <div className="overflow-x-auto bg-white shadow rounded-2xl">
-                    <table className="min-w-full text-left border-collapse">
+                    <table className="min-w-full text-left border-collapse text-sm  md:text-[16px]">
                         <thead>
                             <tr className="border-b border-muted">
                                 {bulkMode && (

@@ -35,7 +35,7 @@ export default function BulkActions({ onDelete, isActive, toggleBulkMode }) {
 
           {/* Dropdown aksi jika aktif */}
           {showDropdown && isActive && (
-            <div className="absolute right-0 mt-2 w-40 bg-white border border-primary-100 hover:border-none rounded-lg shadow-lg z-10 transition-all duration-300 ease-in-out">
+            <div className="absolute right-0 left-0 mt-2 w-40 bg-white border border-primary-100 hover:border-none rounded-lg shadow-lg z-10 transition-all duration-300 ease-in-out">
               <button
                 onClick={() => {
                   setShowDropdown(false);

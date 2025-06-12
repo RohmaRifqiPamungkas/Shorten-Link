@@ -11,7 +11,7 @@ export default function SharePopup({ url, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-5 ">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm md:max-w-2xl flex flex-col items-center justify-center py-20 px-10">
 
         {/* Judul */}
@@ -56,7 +56,7 @@ export default function SharePopup({ url, onClose }) {
         {/* Tombol OK */}
         <button
           onClick={onClose}
-          className="bg-primary-100 hover:bg-secondary text-white px-4 py-2 rounded-lg w-24"
+          className="bg-primary-100  hover:bg-secondary text-white px-4 py-2 rounded-lg w-24 text-sm md:text-lg"
         >
           OK
         </button>
