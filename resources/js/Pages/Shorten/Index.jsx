@@ -248,7 +248,7 @@ export default function ShortenedLinkPage({ shortends }) {
 
                 {/* Table */}
                 <div className="overflow-x-auto bg-white shadow rounded-2xl">
-                    <table className="min-w-full text-left border-collapse">
+                    <table className="min-w-full text-left border-collapse text-sm  md:text-[16px]">
                         <thead>
                             <tr className="border-b border-muted hover:bg-gray-50">
                                 {bulkMode && (

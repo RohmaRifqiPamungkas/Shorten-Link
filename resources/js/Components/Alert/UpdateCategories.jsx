@@ -59,8 +59,8 @@ export default function UpdateCategories({ show, onClose, project, category }) {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-10 relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-5">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-5 md:p-10 relative">
                 <div className="flex justify-between">
                     <div className="flex flex-row">
                         <img
@@ -68,13 +68,13 @@ export default function UpdateCategories({ show, onClose, project, category }) {
                             style={{ width: "24px", height: "24px" }}
                             alt="hyperlink"
                         />
-                        <h2 className="text-xl ms-4 font-semibold text-primary-100 mb-4">
+                        <h2 className="text-sm md:text-xl ms-4 font-semibold text-primary-100 mb-4">
                             Edit Categories Link
                         </h2>
                     </div>
                     <button
                         onClick={onClose}
-                        className="text-foreground font-black hover:text-primary-100"
+                        className="text-foreground font-black hover:text-primary-100 w-2 h-2 md:w-4 md:h-4"
                     >
                         ✕
                     </button>
@@ -104,7 +104,7 @@ export default function UpdateCategories({ show, onClose, project, category }) {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm text-foreground">Image (optional)</label>
+                        <label className="text-sm text-foreground">Image Logo</label>
                         <input
                             type="file"
                             accept="image/*"

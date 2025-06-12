@@ -39,7 +39,7 @@ export default function CreateShortlink({
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-5">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm md:max-w-2xl p-10 relative">
                 <div className="flex justify-between">
                     <div className="flex flex-row">
@@ -48,13 +48,13 @@ export default function CreateShortlink({
                             style={{ width: "24px", height: "24px" }}
                             alt="hyperlink"
                         />
-                        <h2 className="text-xl ms-4 font-semibold text-primary-100 mb-4">
+                        <h2 className="text-sm md:text-xl ms-4 font-semibold text-primary-100 mb-4">
                             Shortened Link
                         </h2>
                     </div>
                     <button
                         onClick={onClose}
-                        className="text-foreground font-black hover:text-primary-100"
+                        className="text-foreground font-black hover:text-primary-100 w-2 h-2 md:w-4 md:h-4"
                     >
                         ✕
                     </button>
@@ -92,7 +92,7 @@ export default function CreateShortlink({
                             )}
                         </div>
 
-                        <div className="flex flex-col gap-4 md:flex-row ">
+                        <div className="flex flex-col gap-4 md:flex-row md:gap-0 ">
                             <div className="w-full md:basis-3/4 md:me-4">
                                 <label className="text-sm text-foreground">
                                     Short URL
