@@ -25,7 +25,7 @@ export default function PublicView({ project, categories }) {
         linkedin: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg",
         whatsapp: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/whatsapp/whatsapp-original.svg",
         telegram: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/telegram/telegram-original.svg",
-        "google drive": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg",
+        drive: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg",
         drive: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg",
         dropbox: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dropbox/dropbox-original.svg",
         notion: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/notion/notion-original.svg",
@@ -36,7 +36,7 @@ export default function PublicView({ project, categories }) {
         gmail: "https://cdn-icons-png.flaticon.com/512/281/281769.png",
     };
 
-    const getCategoryLogo = (name) => {
+    const getCategoryLogo = (name = "", imageUrl = null) => {
         const lowerName = name.toLowerCase();
 
         for (const keyword in categoryLogos) {
@@ -45,16 +45,12 @@ export default function PublicView({ project, categories }) {
             }
         }
 
-        return "/images/Globe.png"; // default jika tidak ada keyword yang cocok
-    };    
+        if (imageUrl) {
+            return `/storage/${imageUrl}`;
+        }
 
-    if (!project || !categories) {
-        return (
-            <div className="text-center mt-10 text-gray-500">
-                Data not found
-            </div>
-        );
-    }
+        return "/images/Globe.png";
+    };
 
     return (
         <>
@@ -93,14 +89,12 @@ export default function PublicView({ project, categories }) {
                                     >
                                         <div className="flex items-center gap-3">
                                             <img
-                                                src={getCategoryLogo(categoryName)}
+                                                src={getCategoryLogo(categoryName, categoryItem.image_url)}
                                                 alt="category-logo"
                                                 className="w-8 h-8 rounded-full bg-gray-100 object-contain"
-                                                style={{ flexShrink: 0 }}
                                                 onError={(e) => {
                                                     e.currentTarget.onerror = null;
-                                                    e.currentTarget.src =
-                                                        "/images/Globe.png";
+                                                    e.currentTarget.src = "/images/Globe.png";
                                                 }}
                                             />
                                             <span>{categoryName}</span>

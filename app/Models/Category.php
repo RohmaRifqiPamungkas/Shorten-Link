@@ -13,6 +13,7 @@ class Category extends Model
         'user_id',
         'project_id',
         'name',
+        'image_url',
     ];
 
     public function links()

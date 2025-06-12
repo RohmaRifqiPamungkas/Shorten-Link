@@ -7,6 +7,8 @@ use Inertia\Inertia;
 use App\Models\Project;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -33,6 +35,13 @@ class CategoryController extends Controller
         }
 
         $categories = $query->paginate($perPage)->appends($request->query());
+
+        $categories->getCollection()->transform(function ($category) {
+            $category->image_full_url = $category->image_url
+                ? asset('storage/' . $category->image_url)
+                : null;
+            return $category;
+        });
 
         return Inertia::render('Projects/Categories/Index', [
             'project' => $project,
@@ -66,6 +75,7 @@ class CategoryController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'image' => 'nullable|image|max:2048',
         ]);
 
         $project = Project::where('id', $projectId)
@@ -98,10 +108,16 @@ class CategoryController extends Controller
             }
         }
 
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('categories', 'public');
+        }
+
         $category = Category::create([
             'user_id' => $user->id,
             'project_id' => $project->id,
             'name' => $request->name,
+            'image_url' => $imagePath,
         ]);
 
         // Redirect ke halaman kategori project terkait
@@ -111,10 +127,12 @@ class CategoryController extends Controller
     
     public function update(Request $request, $projectId, $categoryId)
     {
+
         $user = $request->user();
 
-        $request->validate([
-            'name' => 'required|string|max:255',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|filled',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $project = Project::where('id', $projectId)
@@ -151,6 +169,16 @@ class CategoryController extends Controller
                     'name' => "Category name is too similar to an existing one: '{$existingName}' ({$roundedPercent}% similarity)."
                 ])->withInput();
             }
+        }
+
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($category->image_url) {
+                Storage::disk('public')->delete($category->image_url);
+            }
+
+            $imagePath = $request->file('image')->store('categories', 'public');
+            $category->image_url = $imagePath;
         }
 
         $category->name = $request->name;

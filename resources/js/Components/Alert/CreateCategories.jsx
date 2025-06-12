@@ -5,17 +5,35 @@ import { useForm } from "@inertiajs/react";
 
 export default function CreateCategories({ show, onClose, project }) {
     const [notification, setNotification] = useState(null);
+    const [previewImage, setPreviewImage] = useState(null);
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
+        image: null,
     });
 
     if (!show) return null;
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setData("image", file);
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setPreviewImage(null);
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         post(`/projects/${project.id}/categories`, {
+            forceFormData: true,
             onSuccess: () => {
                 setNotification({
                     type: 'success',
@@ -84,8 +102,32 @@ export default function CreateCategories({ show, onClose, project }) {
                             )}
                         </div>
 
+                        <div className="space-y-2">
+                            <label className="text-sm text-foreground">
+                                Image (optional)
+                            </label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
+                                onChange={handleImageChange}
+                            />
+                            {errors.image && (
+                                <div className="text-red-500 text-sm mt-1">
+                                    {errors.image}
+                                </div>
+                            )}
+                            {previewImage && (
+                                <img
+                                    src={previewImage}
+                                    alt="Preview"
+                                    className="mt-2 max-h-32 object-contain rounded"
+                                />
+                            )}
+                        </div>
+
                         <PrimaryButton type="submit" disabled={processing}>
-                            {processing ? 'Create Categories...' : 'Create Categories'}
+                            {processing ? 'Creating...' : 'Create Categories'}
                         </PrimaryButton>
                     </form>
                 </div>
