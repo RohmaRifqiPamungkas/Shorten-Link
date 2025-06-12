@@ -37,12 +37,12 @@ export default function SharePopup({ url, onClose }) {
         <h2 className="text-lg md:text-xl font-normal text-foreground mb-4">Copy your link</h2>
 
         {/* Copy Area */}
-        <div className="rounded-2xl px-6 py-4 flex items-center justify-between mb-4 space-x-2 border border-brfourth bg-white">
-          <span className="text-sm text-gray-700 truncate">{url}</span>
-          <button onClick={handleCopy}>
-            <Icon icon="mdi:content-copy" className="text-lg text-gray-600 hover:text-gray-800" />
-          </button>
-        </div>
+      <div className="w-full rounded-2xl px-4 py-3 flex items-center justify-between mb-4 gap-2 border border-brfourth bg-white overflow-hidden">
+  <span className="text-sm text-gray-700 truncate max-w-[80%]">{url}</span>
+  <button onClick={handleCopy}>
+    <Icon icon="mdi:content-copy" className="text-lg text-gray-600 hover:text-gray-800" />
+  </button>
+</div>
 
         {/* Notifikasi muncul di atas tombol OK */}
         {showNotif && (
