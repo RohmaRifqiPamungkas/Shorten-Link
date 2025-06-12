@@ -227,7 +227,7 @@ export default function ProjectsDashboard({ auth }) {
                 )}
 
                 <div className="overflow-x-auto bg-white shadow rounded-2xl">
-                    <table className="min-w-full text-left border-collapse">
+                    <table className="min-w-full text-left border-collapse text-sm  md:text-[16px]">
                         <thead>
                             <tr className="border-b border-muted">
                                 {bulkMode && (

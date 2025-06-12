@@ -104,7 +104,7 @@ export default function CreateCategories({ show, onClose, project }) {
 
                         <div className="space-y-2">
                             <label className="text-sm text-foreground">
-                                Image (optional)
+                                Image Logo
                             </label>
                             <input
                                 type="file"

@@ -109,8 +109,8 @@ const CreateLink = ({ project, selectedCategoryId }) => {
             </h2>
 
             {/* URL & Icons Row */}
-            <div className="mb-4 flex items-center justify-between text-sm text-foreground">
-                <span className="text-foreground text-lg font-medium">
+            <div className="mb-4 flex flex-col md:flex-row md:items-center gap-4 md:justify-between text-sm text-foreground">
+                <span className="text-foreground text-sm md:text-lg font-medium">
                     List link in :{" "}
                     <a
                         className="underline"
@@ -121,7 +121,7 @@ const CreateLink = ({ project, selectedCategoryId }) => {
                         {`${window.location.origin}/m/${project.project_slug}`}
                     </a>
                 </span>
-                <div className="flex gap-2 ml-4">
+                <div className="flex gap-2 md:ml-4">
                     <button
                         type="button"
                         title="Copy"

@@ -91,7 +91,7 @@ export default function CreateProject({ show, onClose }) {
                             )}
                         </div>
 
-                        <div className="flex  flex-col gap-4 md:flex-row md:gap-0">
+                        <div className="flex flex-col gap-4 md:flex-row md:gap-0">
                             <div className="w-full md:basis-3/4 md:me-4">
                                 <label className="text-sm text-foreground">
                                     URL

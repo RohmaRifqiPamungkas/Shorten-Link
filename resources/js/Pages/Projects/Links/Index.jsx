@@ -138,7 +138,7 @@ export default function Links({
                 </h1>
 
                 <div className="flex justify-between items-center flex-wrap gap-5 my-3">
-                    <span className="text-foreground text-lg font-medium">
+                    <span className="text-foreground text-sm md:text-lg font-medium">
                         List link in :{" "}
                         <a
                             className="underline"
@@ -190,7 +190,7 @@ export default function Links({
                 )}
 
                 <div className="overflow-x-auto bg-white shadow rounded-2xl">
-                    <table className="min-w-full text-left border-collapse">
+                    <table className="min-w-full text-left border-collapse text-sm  md:text-[16px]">
                         <thead>
                             <tr className="border-b border-muted">
                                 {bulkMode && (

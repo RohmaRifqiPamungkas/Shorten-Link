@@ -85,8 +85,8 @@ const EditUrlPage = ({ auth, link }) => {
             </h2>
 
             {/* Link & Icons */}
-            <div className="mb-4 flex items-center justify-between text-sm text-foreground">
-                <span className="text-foreground text-lg font-medium">
+            <div className="mb-4 flex flex-col md:flex-row md:items-center gap-4 md:justify-between text-sm text-foreground">
+                <span className="text-foreground text-sm md:text-lg font-medium">
                     Your Link Is :{" "}
                     <a
                         className="underline"
@@ -97,7 +97,7 @@ const EditUrlPage = ({ auth, link }) => {
                         {`${window.location.origin}/m/${data.custom_alias}`}
                     </a>
                 </span>
-                <div className="flex gap-2 ml-4">
+                <div className="flex gap-2 md:ml-4">
                     <button
                         type="button"
                         title="Copy"
@@ -172,19 +172,19 @@ const EditUrlPage = ({ auth, link }) => {
                         )}
                     </div>
 
-                    <div className="flex flex-row">
-                        <div className="basis-1/5">
+                    <div className="flex flex-col md:flex-row gap-4 md:gap-0">
+                        <div className="basis-3/4 md:me-4">
                             <label className="text-sm text-foreground">
                                 Short URL
                             </label>
                             <input
                                 type="text"
-                                className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-gray-100 text-gray-700"
+                                className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
                                 value={`sevenpion.com/s/`}
                                 readOnly
                             />
                         </div>
-                        <div className="basis-4/5 ms-4">
+                        <div className="basis-3/4 ">
                             <label className="text-sm text-foreground">
                                 Alias
                             </label>
