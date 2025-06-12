@@ -198,8 +198,10 @@ class ProjectController extends Controller
         $grouped = $mainLinks->groupBy(function ($link) {
             return optional($link->category)->name ?? 'Uncategorized';
         })->map(function ($links, $categoryName) {
+            $categoryImage = optional($links->first()->category)->image_url;
             return [
                 'category' => $categoryName,
+                'image_url' => $categoryImage,
                 'links' => $links->map(function ($link) {
                     return [
                         'id' => $link->id,
