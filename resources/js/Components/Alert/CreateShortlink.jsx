@@ -40,7 +40,7 @@ export default function CreateShortlink({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-10 relative">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm md:max-w-2xl p-10 relative">
                 <div className="flex justify-between">
                     <div className="flex flex-row">
                         <img
@@ -92,8 +92,8 @@ export default function CreateShortlink({
                             )}
                         </div>
 
-                        <div className="flex flex-row">
-                            <div className="basis-1/3">
+                        <div className="flex flex-col gap-4 md:flex-row ">
+                            <div className="w-full md:basis-3/4 md:me-4">
                                 <label className="text-sm text-foreground">
                                     Short URL
                                 </label>
@@ -104,7 +104,7 @@ export default function CreateShortlink({
                                     readOnly
                                 />
                             </div>
-                            <div className="basis-3/4 ms-4">
+                            <div className="w-full  md:basis-3/4 ">
                                 <label className="text-sm text-foreground">
                                     Alias
                                 </label>
