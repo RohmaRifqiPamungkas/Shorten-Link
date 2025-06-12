@@ -185,7 +185,7 @@ export default function ProjectsDashboard({ auth }) {
             <Head title="Management Link" />
 
             <div className="py-5">
-                <h1 className="text-2xl font-semibold text-primary-100">
+                <h1 className="text-xl md:text-2xl font-semibold text-primary-100">
                     Management Link
                 </h1>
 

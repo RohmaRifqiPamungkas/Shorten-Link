@@ -133,7 +133,7 @@ export default function Links({
             <Breadcrumb />
 
             <div className="py-5">
-                <h1 className="text-2xl font-semibold text-primary-100">
+                <h1 className="text-xl md:text-2xl font-semibold text-primary-100">
                     Link in Categories
                 </h1>
 

@@ -211,7 +211,7 @@ export default function ShortenedLinkPage({ shortends }) {
             <Head title="Shortened Links" />
 
             <div className="py-5">
-                <h1 className="text-2xl font-semibold text-primary-100">
+                <h1 className="text-xl md:text-2xl font-semibold text-primary-100">
                     Shortened Link
                 </h1>
                 <div className="flex justify-between items-center flex-wrap gap-5 my-3">
