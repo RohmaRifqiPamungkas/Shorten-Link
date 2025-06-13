@@ -59,6 +59,10 @@ return [
             'throw' => false,
             'report' => false,
         ],
+        'uploads' => [
+            'driver' => 'local',
+            'root' => 'uploads',
+        ],
 
     ],
 

@@ -19,7 +19,7 @@ export default function UpdateCategories({ show, onClose, project, category }) {
                 image: null,
             });
 
-            setImagePreview(category.image_url ? `/storage/${category.image_url}` : "");
+            setImagePreview(category.image_url ? `/uploads/${category.image_url}` : "");
         }
     }, [category?.id]);
 
