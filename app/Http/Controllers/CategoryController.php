@@ -101,7 +101,7 @@ class CategoryController extends Controller
         foreach ($existingCategories as $existingName) {
             similar_text($newName, strtolower($existingName), $percent);
             $roundedPercent = round($percent);
-            if ($percent >= 80) {
+            if ($percent >= 100) {
                 return back()->withErrors([
                     'name' => "Category name is too similar to an existing one: '{$existingName}' ({$roundedPercent}% similarity)."
                 ]);
@@ -164,7 +164,7 @@ class CategoryController extends Controller
         foreach ($existingCategories as $existingName) {
             similar_text($newName, strtolower($existingName), $percent);
             $roundedPercent = round($percent);
-            if ($roundedPercent >= 80) {
+            if ($roundedPercent >= 100) {
                 return back()->withErrors([
                     'name' => "Category name is too similar to an existing one: '{$existingName}' ({$roundedPercent}% similarity)."
                 ])->withInput();

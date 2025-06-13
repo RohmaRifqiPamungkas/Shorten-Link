@@ -64,7 +64,7 @@ class ShortenLinkController extends Controller
             foreach ($allAliases as $existingAlias) {
                 similar_text($alias, $existingAlias, $percent);
                 $roundedPercent = round($percent); 
-                if ($roundedPercent >= 70) {
+                if ($roundedPercent >= 100) {
                     return back()->withErrors([
                         'custom_alias' => "The custom alias you entered is too similar to an existing alias ('{$existingAlias}'). Please choose a more distinct alias (similarity: {$roundedPercent}%)."
                     ])->withInput();
@@ -122,7 +122,7 @@ class ShortenLinkController extends Controller
             foreach ($allAliases as $existingAlias) {
                 similar_text($alias, $existingAlias, $percent);
                 $roundedPercent = round($percent);
-                if ($roundedPercent >= 70) {
+                if ($roundedPercent >= 100) {
                     return back()->withErrors([
                         'custom_alias' => "The custom alias you entered is too similar to an existing alias ('{$existingAlias}'). Please choose a more distinct alias (similarity: {$roundedPercent}%)."
                     ])->withInput();

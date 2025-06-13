@@ -76,7 +76,7 @@ class ProjectController extends Controller
         foreach ($allSlugs as $existingSlug) {
             similar_text($slug, $existingSlug, $percent);
             $roundedPercent = round($percent); 
-            if ($roundedPercent >= 70) {
+            if ($roundedPercent >= 100) {
                 return back()->withErrors([
                     'project_slug' => "The project slug you entered is too similar to an existing slug ('{$existingSlug}'). Please choose a more distinct slug (similarity: {$roundedPercent}%)."
                 ])->withInput();
@@ -138,7 +138,7 @@ class ProjectController extends Controller
         foreach ($allSlugs as $existingSlug) {
             similar_text($slug, $existingSlug, $percent);
             $roundedPercent = round($percent); 
-            if ($roundedPercent >= 80) {
+            if ($roundedPercent >= 100) {
                 return back()->withErrors([
                     'project_slug' => "The project slug you entered is too similar to an existing slug ('{$existingSlug}'). Please choose a more distinct slug (similarity: {$roundedPercent}%)."
                 ])->withInput();
