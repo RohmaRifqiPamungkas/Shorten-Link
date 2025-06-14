@@ -306,6 +306,8 @@ export default function Categories({ auth, project = {} }) {
                         from: categories.from,
                         to: categories.to,
                         total: categories.total,
+                        prev_page_url: categories.prev_page_url,
+                        next_page_url: categories.next_page_url,
                     }}
                     perPage={perPage}
                     onPageChange={handlePageChange}
