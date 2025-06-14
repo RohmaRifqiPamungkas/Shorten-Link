@@ -388,6 +388,8 @@ export default function ProjectsDashboard({ auth }) {
                         from: projects.from,
                         to: projects.to,
                         total: projects.total,
+                        prev_page_url: projects.prev_page_url,
+                        next_page_url: projects.next_page_url,
                     }}
                     perPage={perPage}
                     onPageChange={handlePageChange}

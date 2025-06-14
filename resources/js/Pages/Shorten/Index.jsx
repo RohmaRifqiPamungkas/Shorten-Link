@@ -421,6 +421,8 @@ export default function ShortenedLinkPage({ shortends }) {
                         from: shortends.from,
                         to: shortends.to,
                         total: shortends.total,
+                        prev_page_url: shortends.prev_page_url,
+                        next_page_url: shortends.next_page_url,
                     }}
                     perPage={perPage}
                     onPageChange={handlePageChange}

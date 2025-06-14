@@ -328,6 +328,8 @@ export default function Links({
                         from: links.from,
                         to: links.to,
                         total: links.total,
+                        prev_page_url: links.prev_page_url,
+                        next_page_url: links.next_page_url,
                     }}
                     perPage={perPage}
                     onPageChange={handlePageChange}

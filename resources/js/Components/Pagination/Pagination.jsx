@@ -116,10 +116,10 @@ export default function Pagination({
     from = 0,
     to = 0,
     total = 0,
-    prev_page_url = null,
-    next_page_url = null,
+    prev_page_url = current_page > 1 ? '#' : null,
+    next_page_url = current_page < last_page ? '#' : null,
   } = pagination;
-
+  
   const renderPageNumbers = () => {
     // Batasi maksimal 7 tombol page (1 ... 4 5 6 ... 10)
     const pages = [];
