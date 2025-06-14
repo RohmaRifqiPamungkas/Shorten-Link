@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use App\Models\Link;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Project;
+use App\Models\Category;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -160,6 +163,27 @@ class ProjectController extends Controller
     public function destroy($id)
     {
         $project = Project::findOrFail($id);
+
+        // Ambil semua kategori dalam project
+        $categories = Category::where('project_id', $project->id)->get();
+
+        foreach ($categories as $category) {
+            // Hapus gambar dari storage jika ada
+            if ($category->image_url && Storage::disk('public')->exists($category->image_url)) {
+                Storage::disk('public')->delete($category->image_url);
+            }
+
+            // Hapus semua link yang terkait dengan kategori ini
+            Link::where('category_id', $category->id)->delete();
+
+            // Hapus kategori itu sendiri
+            $category->delete();
+        }
+
+        // Hapus semua link yang tidak punya kategori tapi masih terhubung ke project ini
+        Link::where('project_id', $project->id)->delete();
+
+        // Terakhir, hapus project
         $project->delete();
 
         return redirect()->route('projects.index')->with('success', 'Deleted Successfully.');
