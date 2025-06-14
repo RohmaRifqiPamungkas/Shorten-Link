@@ -221,6 +221,12 @@ class CategoryController extends Controller
             ->where('project_id', $project->id)
             ->firstOrFail();
 
+        Link::where('category_id', $category->id)->delete();
+
+        if ($category->image_url && Storage::disk('public')->exists($category->image_url)) {
+            Storage::disk('public')->delete($category->image_url);
+        }
+
         $category->delete();
 
         return redirect()
