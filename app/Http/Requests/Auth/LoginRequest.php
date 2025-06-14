@@ -27,8 +27,26 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'regex:/^[^@]+@[^@]+\.[^@]+$/',
+            ],
             'password' => ['required', 'string'],
+        ];
+    }
+
+    /**
+     * Custom error messages in English.
+     */
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'Email is required.',
+            'email.email' => 'Please enter a valid email address.',
+            'email.regex' => 'Email must contain a valid domain and extension (e.g., gmail.com, yahoo.co.id).',
+            'password.required' => 'Password is required.',
         ];
     }
 
