@@ -124,6 +124,7 @@ export default function CreateCategories({ show, onClose, project }) {
                                 accept="image/*"
                                 className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
                                 onChange={handleImageChange}
+                                required
                             />
                             <p className="text-xs text-gray-500 mt-1">
                                 Recommended format: JPG, PNG, or WEBP. Maximum size: 1 MB.

@@ -180,7 +180,7 @@ const EditUrlPage = ({ auth, link }) => {
                             <input
                                 type="text"
                                 className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
-                                value={`sevenpion.com/s/`}
+                                value={`${window.location.origin}/m/`}
                                 readOnly
                             />
                         </div>
