@@ -46,7 +46,7 @@ export default function PublicView({ project, categories }) {
         }
 
         if (imageUrl) {
-            return `/storage/${imageUrl}`;
+            return `/uploads/${imageUrl}`;
         }
 
         return "/images/Globe.png";

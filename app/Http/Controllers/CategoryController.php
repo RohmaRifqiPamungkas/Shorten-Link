@@ -9,6 +9,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use File;
 
 class CategoryController extends Controller
 {
@@ -38,7 +39,7 @@ class CategoryController extends Controller
 
         $categories->getCollection()->transform(function ($category) {
             $category->image_full_url = $category->image_url
-                ? asset('storage/' . $category->image_url)
+                ? asset('uploads/' . $category->image_url)
                 : null;
             return $category;
         });
@@ -109,8 +110,14 @@ class CategoryController extends Controller
         }
 
         $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('categories', 'public');
+        // kodingan lama
+        // if ($request->hasFile('image')) {
+        //     $imagePath = $request->file('image')->store('categories', 'public');
+        // }
+
+        // kodingan baru format sevenpion
+        if ($request->has('image')) {
+            $imagePath = Storage::disk('uploads')->put('category', $request->image);
         }
 
         $category = Category::create([
@@ -170,15 +177,28 @@ class CategoryController extends Controller
                 ])->withInput();
             }
         }
+        
+        // kodingan lama
+        // if ($request->hasFile('image')) {
+        //     // Hapus gambar lama jika ada
+        //     if ($category->image_url) {
+        //         Storage::disk('public')->delete($category->image_url);
+        //     }
 
-        if ($request->hasFile('image')) {
-            // Hapus gambar lama jika ada
-            if ($category->image_url) {
-                Storage::disk('public')->delete($category->image_url);
-            }
+        //     $imagePath = $request->file('image')->store('categories', 'public');
+        //     $category->image_url = $imagePath;
+        // }
 
-            $imagePath = $request->file('image')->store('categories', 'public');
+
+        // kodingan baru format sevenpion
+        if ($request->has('image')) {
+            $imagePath = Storage::disk('uploads')->put('category', $request->image);
             $category->image_url = $imagePath;
+            
+            // dd($object['avatar']);
+            if ($category->image_url) {
+                File::delete('./uploads/' . $category->image_url);
+            }
         }
 
         $category->name = $request->name;
