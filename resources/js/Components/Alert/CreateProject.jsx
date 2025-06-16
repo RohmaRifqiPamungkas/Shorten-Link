@@ -5,16 +5,23 @@ import { useForm } from "@inertiajs/react";
 
 export default function CreateProject({ show, onClose }) {
     const [notification, setNotification] = useState(null);
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
         project_name: "",
         project_slug: "",
     });
 
+    // Tidak render modal jika show = false
     if (!show) return null;
+
+    const handleClose = () => {
+        reset();
+        clearErrors();
+        setNotification(null);
+        onClose();
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
         setNotification(null);
 
         post("/projects", {
@@ -24,8 +31,7 @@ export default function CreateProject({ show, onClose }) {
                     message: "Created Successfully.",
                 });
                 reset();
-          
-         
+                clearErrors();
             },
             onError: () => {
                 setNotification({
@@ -51,7 +57,7 @@ export default function CreateProject({ show, onClose }) {
                         </h2>
                     </div>
                     <button
-                        onClick={onClose}
+                        onClick={handleClose}
                         className="text-foreground font-black hover:text-primary-100 w-2 h-2 md:w-4 md:h-4"
                     >
                         ✕
@@ -103,7 +109,7 @@ export default function CreateProject({ show, onClose }) {
                                     readOnly
                                 />
                             </div>
-                            <div className="w-full md:basis-3/4 ">
+                            <div className="w-full md:basis-3/4">
                                 <label className="text-sm text-foreground">
                                     Alias
                                 </label>
@@ -117,7 +123,6 @@ export default function CreateProject({ show, onClose }) {
                                     onChange={(e) =>
                                         setData("project_slug", e.target.value)
                                     }
-                                    
                                 />
                                 {errors.project_slug && (
                                     <div className="text-red-500 text-sm mt-1">
