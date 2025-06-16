@@ -9,7 +9,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use File;
+use Illuminate\Support\Facades\File;
 
 class CategoryController extends Controller
 {
