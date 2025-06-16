@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Notification from "../Notification/Notification";
 import { useForm } from "@inertiajs/react";
@@ -6,11 +6,24 @@ import { useForm } from "@inertiajs/react";
 export default function CreateCategories({ show, onClose, project }) {
     const [notification, setNotification] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
+    const fileInputRef = useRef(null);
 
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
         name: '',
         image: null,
     });
+
+    useEffect(() => {
+        if (!show) {
+            reset();
+            clearErrors();
+            setNotification(null);
+            setPreviewImage(null);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+        }
+    }, [show]);
 
     if (!show) return null;
 
@@ -53,6 +66,11 @@ export default function CreateCategories({ show, onClose, project }) {
                     message: 'Created Succesfully',
                 });
                 reset();
+                clearErrors();
+                setPreviewImage(null);
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = '';
+                }
             },
             onError: () => {
                 setNotification({
@@ -61,6 +79,17 @@ export default function CreateCategories({ show, onClose, project }) {
                 });
             },
         });
+    };
+
+    const handleClose = () => {
+        reset();
+        clearErrors();
+        setNotification(null);
+        setPreviewImage(null);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+        onClose();
     };
 
     return (
@@ -78,7 +107,7 @@ export default function CreateCategories({ show, onClose, project }) {
                         </h2>
                     </div>
                     <button
-                        onClick={onClose}
+                        onClick={handleClose}
                         className="text-foreground font-black hover:text-primary-100 w-2 h-2 md:w-4 md:h-4"
                     >
                         ✕
