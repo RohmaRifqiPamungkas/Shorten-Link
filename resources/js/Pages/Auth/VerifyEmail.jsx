@@ -16,11 +16,11 @@ export default function VerifyEmail({ status }) {
         <GuestLayout>
             <Head title="Email Verification" />
 
-             <div className="flex justify-center">
-                            <Link href="/">
-                                <ApplicationLogo className="h-20 w-20 " />
-                            </Link>
-                        </div>
+            <div className="flex justify-center">
+                <Link href="/">
+                    <ApplicationLogo className="h-20 w-20 " />
+                </Link>
+            </div>
 
             <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
                 Thanks for signing up! Before getting started, could you verify
@@ -41,19 +41,16 @@ export default function VerifyEmail({ status }) {
                     <PrimaryButton disabled={processing}>
                         Resend Verification Email
                     </PrimaryButton>
-
-                   
                 </div>
-              
 
-                    <p className="text-center text-sm text-gray-600 mt-6">
+                <p className="text-center text-sm text-gray-600 mt-6">
                     Not using your account anymore?{" "}
                     <Link
                         href={route('logout')}
-                        method="post"                 
+                        method="post"
                         className="font-semibold text-primary-100 underline hover:text-secondary"
                     >
-                       Log Out
+                        Log Out
                     </Link>
                 </p>
             </form>
