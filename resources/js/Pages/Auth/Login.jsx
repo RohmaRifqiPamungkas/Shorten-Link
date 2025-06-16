@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import Checkbox from "@/Components/Checkbox";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
@@ -6,6 +7,7 @@ import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -13,6 +15,8 @@ export default function Login({ status, canResetPassword }) {
         password: "",
         remember: false,
     });
+
+    const [showPassword, setShowPassword] = useState(false);
 
     const submit = (e) => {
         e.preventDefault();
@@ -60,19 +64,31 @@ export default function Login({ status, canResetPassword }) {
                 <div className="mt-4">
                     <InputLabel htmlFor="password" value="Password" />
 
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        placeholder="Enter your password"
-                        onChange={(e) => setData("password", e.target.value)}
-                    />
+                    <div className="relative">
+                        <TextInput
+                            id="password"
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            value={data.password}
+                            className="mt-1 block w-full pr-10"
+                            autoComplete="current-password"
+                            placeholder="Enter your password"
+                            onChange={(e) => setData("password", e.target.value)}
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                            tabIndex={-1}
+                        >
+                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                        </button>
+                    </div>
 
                     <InputError message={errors.password} className="mt-2" />
                 </div>
+
 
                 <div className="mt-4 flex items-center justify-between">
                     <label className="flex items-center">
