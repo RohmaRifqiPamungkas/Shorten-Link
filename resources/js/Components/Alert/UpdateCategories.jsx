@@ -27,11 +27,23 @@ export default function UpdateCategories({ show, onClose, project, category }) {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+
         if (file) {
+            if (file.size > 1 * 1024 * 1024) {
+                setNotification({
+                    type: "error",
+                    message: "The file is too large. Maximum size is 1 MB.",
+                });
+                setData("image", null);
+                setImagePreview(category.image_url ? `/storage/${category.image_url}` : "");
+                e.target.value = ''; // reset file input
+                return;
+            }
+
             setData("image", file);
             setImagePreview(URL.createObjectURL(file));
         }
-    };
+    };    
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -111,6 +123,9 @@ export default function UpdateCategories({ show, onClose, project, category }) {
                             className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
                             onChange={handleFileChange}
                         />
+                        <p className="text-xs text-gray-500 mt-1">
+                            Recommended format: JPG, PNG, or WEBP. Max size: 1 MB.
+                        </p>
                         {errors.image && (
                             <div className="text-red-500 text-sm mt-1">{errors.image}</div>
                         )}

@@ -16,9 +16,22 @@ export default function CreateCategories({ show, onClose, project }) {
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        setData("image", file);
 
         if (file) {
+            // Frontend validation: max 1MB
+            if (file.size > 1 * 1024 * 1024) {
+                setNotification({
+                    type: 'error',
+                    message: 'The file is too large. Maximum size is 1 MB.',
+                });
+                setData("image", null);
+                setPreviewImage(null);
+                e.target.value = '';
+                return;
+            }
+
+            setData("image", file);
+
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviewImage(reader.result);
@@ -27,7 +40,7 @@ export default function CreateCategories({ show, onClose, project }) {
         } else {
             setPreviewImage(null);
         }
-    };
+    };    
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -112,6 +125,9 @@ export default function CreateCategories({ show, onClose, project }) {
                                 className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
                                 onChange={handleImageChange}
                             />
+                            <p className="text-xs text-gray-500 mt-1">
+                                Recommended format: JPG, PNG, or WEBP. Maximum size: 1 MB.
+                            </p>
                             {errors.image && (
                                 <div className="text-red-500 text-sm mt-1">
                                     {errors.image}
