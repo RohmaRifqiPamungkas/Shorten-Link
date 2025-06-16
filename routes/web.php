@@ -10,7 +10,38 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ShortenLinkController;
-use App\Http\Controllers\Auth\VerifyEmailController;
+// use App\Http\Controllers\Auth\VerifyEmailController;
+// use Symfony\Component\HttpKernel\Exception\HttpException;
+
+// =====================================
+// Test Errors Routes
+// =====================================
+
+// Route::get('/test-error/{code}', function ($code) {
+//     switch ($code) {
+//         case 401:
+//             abort(401);
+//         case 402:
+//             throw new HttpException(402);
+//         case 403:
+//             abort(403, 'Access denied.');
+//         case 419:
+//             abort(419);
+//         case 429:
+//             abort(429);
+//         case 500:
+//             abort(500);
+//         case 503:
+//             abort(503);
+//         default:
+//             abort(404);
+//     }
+// });
+
+// Route::get('/db-error', function () {
+//     \DB::table('tabel_yang_tidak_ada')->get(); // trigger SQL error
+// });
+
 
 // =====================================
 // Public Routes
@@ -38,20 +69,20 @@ Route::get('/m/{slug}', [ProjectController::class, 'showBySlug'])->name('project
 Route::middleware(['auth'])->group(function () {
 
     // Email Verification Routes
-    Route::get('/email/verify', function () {
-        return Inertia::render('Auth/VerifyEmail', [
-            'status' => session('status'),
-        ]);
-    })->name('verification.notice');
+    // Route::get('/email/verify', function () {
+    //     return Inertia::render('Auth/VerifyEmail', [
+    //         'status' => session('status'),
+    //     ]);
+    // })->name('verification.notice');
 
-    Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)
-        ->middleware(['signed'])
-        ->name('verification.verify');
+    // Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)
+    //     ->middleware(['signed'])
+    //     ->name('verification.verify');
 
-    Route::post('/email/verification-notification', function (Request $request) {
-        $request->user()->sendEmailVerificationNotification();
-        return back()->with('status', 'verification-link-sent');
-    })->middleware('throttle:6,1')->name('verification.send');
+    // Route::post('/email/verification-notification', function (Request $request) {
+    //     $request->user()->sendEmailVerificationNotification();
+    //     return back()->with('status', 'verification-link-sent');
+    // })->middleware('throttle:6,1')->name('verification.send');
 
 
     // ==========================
