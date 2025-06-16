@@ -10,7 +10,7 @@ export default function CreateShortlink({
     setData,
     errors,
     processing,
-    post,      
+    post,
     reset,
 }) {
     const [notification, setNotification] = useState(null);
@@ -116,7 +116,7 @@ export default function CreateShortlink({
                                     onChange={(e) =>
                                         setData("custom_alias", e.target.value)
                                     }
-                                    // required
+                                // required
                                 />
                                 {errors.custom_alias && (
                                     <div className="text-red-500 text-sm mt-1">
@@ -155,6 +155,3 @@ export default function CreateShortlink({
         </div>
     );
 }
-
-
-

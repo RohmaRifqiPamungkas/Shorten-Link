@@ -75,7 +75,7 @@ class CategoryController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:1024',
         ]);
 
         $project = Project::where('id', $projectId)
@@ -132,7 +132,7 @@ class CategoryController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255|filled',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:1024',
         ]);
 
         $project = Project::where('id', $projectId)

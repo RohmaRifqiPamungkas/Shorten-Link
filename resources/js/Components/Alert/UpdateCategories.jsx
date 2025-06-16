@@ -43,7 +43,7 @@ export default function UpdateCategories({ show, onClose, project, category }) {
             setData("image", file);
             setImagePreview(URL.createObjectURL(file));
         }
-    };    
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -109,9 +109,12 @@ export default function UpdateCategories({ show, onClose, project, category }) {
                             placeholder="Example"
                             value={data.name}
                             onChange={(e) => setData("name", e.target.value)}
+                            required
                         />
                         {errors.name && (
-                            <div className="text-red-500 text-sm mt-1">{errors.name}</div>
+                            <div className="text-red-500 text-sm mt-1">
+                                {errors.name}
+                            </div>
                         )}
                     </div>
 
@@ -122,12 +125,15 @@ export default function UpdateCategories({ show, onClose, project, category }) {
                             accept="image/*"
                             className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
                             onChange={handleFileChange}
+                            required
                         />
                         <p className="text-xs text-gray-500 mt-1">
                             Recommended format: JPG, PNG, or WEBP. Max size: 1 MB.
                         </p>
                         {errors.image && (
-                            <div className="text-red-500 text-sm mt-1">{errors.image}</div>
+                            <div className="text-red-500 text-sm mt-1">
+                                {errors.image}
+                            </div>
                         )}
                         {imagePreview && (
                             <img

@@ -52,7 +52,7 @@ class ShortenLinkController extends Controller
                 'string',
                 'regex:/^[A-Za-z0-9\-_]+$/',
             ],
-            'expires_at' => 'nullable|date|after:' . now()->addMinute(),
+            'expires_at' => 'required|date|after:' . now()->addMinute(),
         ], [
             'custom_alias.regex' => 'Alias can only contain letters, numbers, dashes (-), or underscores (_), no spaces.',
         ]);
@@ -108,7 +108,7 @@ class ShortenLinkController extends Controller
                 'alpha_dash',
                 Rule::unique('shortened_links', 'custom_alias')->ignore($link->id),
             ],
-            'expires_at' => 'nullable|date|after:' . now()->addMinute(),
+            'expires_at' => 'required|date|after:' . now()->addMinute(),
         ]);
 
         $alias = $request->custom_alias;
