@@ -94,7 +94,7 @@ export default function Register() {
                             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
                             tabIndex={-1}
                         >
-                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                            {showPassword ? <FiEye /> : <FiEyeOff />}
                         </button>
                     </div>
 
@@ -125,7 +125,7 @@ export default function Register() {
                             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
                             tabIndex={-1}
                         >
-                            {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+                            {showConfirmPassword ? <FiEye /> : <FiEyeOff />}
                         </button>
                     </div>
 

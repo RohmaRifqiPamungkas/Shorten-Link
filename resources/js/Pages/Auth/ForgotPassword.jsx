@@ -4,6 +4,7 @@ import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, useForm } from "@inertiajs/react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
+import { Link } from "@inertiajs/react";
 
 export default function ForgotPassword({ status }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -12,7 +13,6 @@ export default function ForgotPassword({ status }) {
 
     const submit = (e) => {
         e.preventDefault();
-
         post(route("password.email"));
     };
 
@@ -22,7 +22,7 @@ export default function ForgotPassword({ status }) {
 
             <div className="flex justify-center">
                 <Link href="/">
-                    <ApplicationLogo className="h-20 w-20 " />
+                    <ApplicationLogo className="h-20 w-20" />
                 </Link>
             </div>
 
