@@ -1,0 +1,1 @@
+import{j as m}from"./app-BO4aS4VV.js";function s({value:t,className:e="",children:o,...r}){return m.jsx("label",{...r,className:"block text-sm md:text-lg font-medium text-foreground  "+e,children:t||o})}export{s as I};
