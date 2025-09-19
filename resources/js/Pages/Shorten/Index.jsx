@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
+import DashboardLayout from "@/Components/DashboardLayout/DashboardLayout";
 import { Head, usePage, useForm, Link } from "@inertiajs/react";
 import { Inertia } from "@inertiajs/inertia";
 import SearchBar from "@/Components/Searchbar/Search";

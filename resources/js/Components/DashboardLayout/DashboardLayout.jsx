@@ -1,7 +1,7 @@
 
 
 
-import Sidebar from '@/Components/Sidebar/sidebar';
+import Sidebar from '@/Components/Sidebar/Sidebar';
 import Footer from '@/Components/Footer/Footer';
 import { useState } from 'react';
 import { FaBars } from 'react-icons/fa';

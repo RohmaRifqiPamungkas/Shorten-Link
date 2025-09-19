@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm, Head } from "@inertiajs/react";
 import { Icon } from "@iconify/react";
 import { Inertia } from '@inertiajs/inertia';
-import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
+import DashboardLayout from "@/Components/DashboardLayout/DashboardLayout";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
 import DeleteModal from "@/Components/Alert/DeleteModal";

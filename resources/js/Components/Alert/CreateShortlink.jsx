@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import axios from "axios";
 import PrimaryButton from "@/Components/PrimaryButton";
+import AISuggestButton from "@/Components/AISuggestButton";
 import Notification from "../Notification/Notification";
 import { useForm } from "@inertiajs/react";
 
 export default function CreateShortlink({ show, onClose }) {
     const [notification, setNotification] = useState(null);
+    const [loadingAI, setLoadingAI] = useState(false);
 
     const {
         data,
@@ -53,6 +56,53 @@ export default function CreateShortlink({ show, onClose }) {
         });
     };
 
+    const handleAISuggest = async () => {
+        if (!data.original_url) {
+            setNotification({
+                type: "error",
+                message: "Isi Long URL dulu!",
+            });
+            return;
+        }
+
+        try {
+            setLoadingAI(true);
+
+            const res = await axios.post(
+                "/ai/slug",
+                { url: data.original_url },
+                {
+                    headers: {
+                        "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content"),
+                    },
+                }
+            );
+
+            if (res.data?.slug) {
+                setData("custom_alias", res.data.slug);
+                setNotification({
+                    type: "success",
+                    message: "AI berhasil generate slug.",
+                });
+            } else {
+                setNotification({
+                    type: "error",
+                    message: "AI tidak mengembalikan slug.",
+                });
+            }
+        } catch (err) {
+            console.error(err);
+            setNotification({
+                type: "error",
+                message: "Gagal generate slug dari AI.",
+            });
+        } finally {
+            setLoadingAI(false);
+        }
+    };
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-5">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm md:max-w-2xl p-5 md:p-10 relative">
@@ -86,6 +136,7 @@ export default function CreateShortlink({ show, onClose }) {
 
                 <div className="mt-4">
                     <form onSubmit={handleSubmit} className="space-y-6">
+                        {/* Long URL */}
                         <div>
                             <label className="text-sm text-foreground">
                                 Long URL
@@ -108,6 +159,7 @@ export default function CreateShortlink({ show, onClose }) {
                             )}
                         </div>
 
+                        {/* Short URL + Alias + AI Suggest */}
                         <div className="flex flex-col gap-4 md:flex-row md:gap-0">
                             <div className="w-full md:basis-3/4 md:me-4">
                                 <label className="text-sm text-foreground">
@@ -120,20 +172,28 @@ export default function CreateShortlink({ show, onClose }) {
                                     readOnly
                                 />
                             </div>
+
                             <div className="w-full md:basis-3/4">
                                 <label className="text-sm text-foreground">
                                     Alias
                                 </label>
-                                <input
-                                    type="text"
-                                    className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
-                                    placeholder="custom-alias"
-                                    name="custom_alias"
-                                    value={data.custom_alias}
-                                    onChange={(e) =>
-                                        setData("custom_alias", e.target.value)
-                                    }
-                                />
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
+                                        placeholder="custom-alias"
+                                        name="custom_alias"
+                                        value={data.custom_alias}
+                                        onChange={(e) =>
+                                            setData("custom_alias", e.target.value)
+                                        }
+                                    />
+                                    <AISuggestButton
+                                        onClick={handleAISuggest}
+                                        loading={loadingAI}
+                                        className="mt-1"
+                                    />
+                                </div>
                                 {errors.custom_alias && (
                                     <div className="text-red-500 text-sm mt-1">
                                         {errors.custom_alias}
@@ -142,6 +202,7 @@ export default function CreateShortlink({ show, onClose }) {
                             </div>
                         </div>
 
+                        {/* Expiration Date */}
                         <div>
                             <label className="text-sm text-foreground">
                                 Expiration Date
@@ -163,6 +224,7 @@ export default function CreateShortlink({ show, onClose }) {
                             )}
                         </div>
 
+                        {/* Submit Button */}
                         <PrimaryButton type="submit" disabled={processing}>
                             {processing ? "Shortened Link..." : "Shortened Link"}
                         </PrimaryButton>
