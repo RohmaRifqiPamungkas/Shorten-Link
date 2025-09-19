@@ -8,6 +8,7 @@ import { useForm } from "@inertiajs/react";
 export default function CreateShortlink({ show, onClose }) {
     const [notification, setNotification] = useState(null);
     const [loadingAI, setLoadingAI] = useState(false);
+    const [usePassword, setUsePassword] = useState(false);
 
     const {
         data,
@@ -21,6 +22,7 @@ export default function CreateShortlink({ show, onClose }) {
         original_url: "",
         custom_alias: "",
         expires_at: "",
+        password: "",
     });
 
     // Tidak render jika tidak show
@@ -30,12 +32,17 @@ export default function CreateShortlink({ show, onClose }) {
         reset();
         clearErrors();
         setNotification(null);
+        setUsePassword(false);
         onClose();
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setNotification(null);
+
+        if (!usePassword) {
+            setData("password", "");
+        }
 
         post(route("shorten.store"), {
             onSuccess: () => {
@@ -45,6 +52,7 @@ export default function CreateShortlink({ show, onClose }) {
                 });
                 reset();
                 clearErrors();
+                setUsePassword(false);
                 onClose();
             },
             onError: () => {
@@ -84,19 +92,19 @@ export default function CreateShortlink({ show, onClose }) {
                 setData("custom_alias", res.data.slug);
                 setNotification({
                     type: "success",
-                    message: "AI berhasil generate slug.",
+                    message: "AI successfully generated slug.",
                 });
             } else {
                 setNotification({
                     type: "error",
-                    message: "AI tidak mengembalikan slug.",
+                    message: "AI does not return slugs.",
                 });
             }
         } catch (err) {
             console.error(err);
             setNotification({
                 type: "error",
-                message: "Gagal generate slug dari AI.",
+                message: "Failed to generate slug from AI.",
             });
         } finally {
             setLoadingAI(false);
@@ -220,6 +228,38 @@ export default function CreateShortlink({ show, onClose }) {
                             {errors.expires_at && (
                                 <div className="text-red-500 text-sm mt-1">
                                     {errors.expires_at}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Opsional Password */}
+                        <div>
+                            <label className="flex items-center gap-2 text-sm text-foreground">
+                                <input
+                                    type="checkbox"
+                                    checked={usePassword}
+                                    onChange={(e) =>
+                                        setUsePassword(e.target.checked)
+                                    }
+                                />
+                                Protect with Password?
+                            </label>
+
+                            {usePassword && (
+                                <input
+                                    type="password"
+                                    className="w-full border border-brfourth rounded-lg px-3 py-2 mt-2"
+                                    placeholder="Enter password"
+                                    name="password"
+                                    value={data.password}
+                                    onChange={(e) =>
+                                        setData("password", e.target.value)
+                                    }
+                                />
+                            )}
+                            {errors.password && (
+                                <div className="text-red-500 text-sm mt-1">
+                                    {errors.password}
                                 </div>
                             )}
                         </div>

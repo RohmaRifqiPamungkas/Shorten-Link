@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Hash;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use App\Services\GroqService;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash as Hashpassword;
 
 class ShortenLinkController extends Controller
 {
@@ -155,6 +157,7 @@ class ShortenLinkController extends Controller
             'short_code'   => $alias,
             'custom_alias' => $alias,
             'expires_at'   => $expiresAt,
+            'password'     => $request->filled('password') ? bcrypt($request->password) : null,
         ]);
 
         return redirect()->route('shorten.index')->with('success', 'Created Successfully.');
@@ -181,7 +184,9 @@ class ShortenLinkController extends Controller
                 'alpha_dash',
                 Rule::unique('shortened_links', 'custom_alias')->ignore($link->id),
             ],
-            'expires_at' => 'required|date|after:' . now()->addMinute(),
+            'expires_at'        => 'required|date|after:' . now()->addMinute(),
+            'current_password'  => 'nullable|string',
+            'new_password'      => 'nullable|string|min:8',
         ]);
 
         $alias = $request->custom_alias;
@@ -214,6 +219,29 @@ class ShortenLinkController extends Controller
             'expires_at'   => $expiresAt,
         ]);
 
+        if ($link->password) {
+            if ($request->filled('new_password')) {
+                if (!$request->filled('current_password')) {
+                    return back()->withErrors(['current_password' => 'Please provide current password to update.']);
+                }
+                if (!\Hash::check($request->current_password, $link->password)) {
+                    return back()->withErrors(['current_password' => 'Current password is incorrect.']);
+                }
+                $updateData['password'] = bcrypt($request->new_password);
+            }
+            // kalau new_password = "" (string kosong) → hapus proteksi
+            elseif ($request->new_password === '') {
+                $updateData['password'] = null;
+            }
+        } else {
+            // link sebelumnya tidak ada password → boleh set langsung
+            if ($request->filled('new_password')) {
+                $updateData['password'] = bcrypt($request->new_password);
+            }
+        }
+
+        $link->update($updateData);
+
         return redirect()->route('shorten.index')->with('success', 'Updated Successfully.');
     }
 
@@ -232,16 +260,39 @@ class ShortenLinkController extends Controller
         $link = ShortenedLink::where(function ($q) use ($code) {
             $q->where('custom_alias', $code)
                 ->orWhere('short_code', $code);
-        })
-            ->first();
+        })->first();
 
-        if (
-            !$link ||
-            ($link->expires_at && $link->expires_at->isPast())
-        ) {
+        if (!$link || ($link->expires_at && $link->expires_at->isPast())) {
             abort(404);
         }
 
+        if ($link->password) {
+            return Inertia::render('PasswordForm', [
+                'short_code' => $code,
+            ]);
+        }
+
         return redirect()->away($link->original_url);
+    }
+
+    public function validatePassword(Request $request)
+    {
+        $request->validate([
+            'short_code' => 'required|string',
+            'password'   => 'required|string',
+        ]);
+
+        $link = ShortenedLink::where('short_code', $request->short_code)
+            ->orWhere('custom_alias', $request->short_code)
+            ->firstOrFail();
+
+        if (!\Hash::check($request->password, $link->password)) {
+            return response()->json(['error' => 'Password failed!'], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'url' => $link->original_url,
+        ]);
     }
 }
