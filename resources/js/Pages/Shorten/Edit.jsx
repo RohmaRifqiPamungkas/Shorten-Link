@@ -14,6 +14,8 @@ const EditUrlPage = ({ auth, link }) => {
         original_url: link.original_url,
         custom_alias: link.custom_alias || "",
         expires_at: link.expires_at ? link.expires_at.substring(0, 10) : "",
+        current_password: "",
+        new_password: "",
     });
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
     const [selectedLinkToDelete, setSelectedLinkToDelete] =
@@ -223,6 +225,43 @@ const EditUrlPage = ({ auth, link }) => {
                             </p>
                         )}
                     </div>
+
+                    <div className="mt-6">
+                        <h3 className="text-md font-semibold text-primary-100 mb-2">
+                            Password Protection
+                        </h3>
+
+                        {/* Input password lama */}
+                        {link.password && (
+                            <div className="mb-4">
+                                <label className="text-sm text-foreground">Current Password</label>
+                                <input
+                                    type="password"
+                                    className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
+                                    placeholder="Enter current password"
+                                    onChange={(e) => setData("current_password", e.target.value)}
+                                />
+                                {errors.current_password && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.current_password}</p>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Input password baru */}
+                        <div>
+                            <label className="text-sm text-foreground">New Password</label>
+                            <input
+                                type="password"
+                                className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
+                                placeholder="Enter new password (leave empty to remove)"
+                                onChange={(e) => setData("new_password", e.target.value)}
+                            />
+                            {errors.new_password && (
+                                <p className="text-red-500 text-sm mt-1">{errors.new_password}</p>
+                            )}
+                        </div>
+                    </div>
+
 
                     <PrimaryButton type="submit" disabled={processing}>
                         {processing ? "Updating..." : "Update"}

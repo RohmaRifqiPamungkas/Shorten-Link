@@ -9,7 +9,7 @@ class ShortenedLink extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'original_url', 'short_code', 'custom_alias', 'expires_at'];
+    protected $fillable = ['user_id', 'original_url', 'short_code', 'custom_alias', 'expires_at', 'password'];
 
     protected $casts = [
         'expires_at' => 'datetime',

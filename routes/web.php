@@ -63,6 +63,9 @@ Route::get('/s/{code}', [ShortenLinkController::class, 'redirect'])->name('short
 // Show project by slug
 Route::get('/m/{slug}', [ProjectController::class, 'showBySlug'])->name('projects.showBySlug');
 
+// Validasi password short link (public)
+Route::post('/validate-password', [ShortenLinkController::class, 'validatePassword'])
+    ->name('shorten.validate');
 
 // =====================================
 // Authenticated Routes (with email verification middleware support)
