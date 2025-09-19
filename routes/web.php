@@ -42,6 +42,7 @@ use App\Http\Controllers\ShortenLinkController;
 //     \DB::table('tabel_yang_tidak_ada')->get(); // trigger SQL error
 // });
 
+Route::post('/ai/slug', [ShortenLinkController::class, 'generateSlug']);
 
 // =====================================
 // Public Routes

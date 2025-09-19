@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
+import DashboardLayout from "@/Components/DashboardLayout/DashboardLayout";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
 import { Head, useForm, Link } from "@inertiajs/react";

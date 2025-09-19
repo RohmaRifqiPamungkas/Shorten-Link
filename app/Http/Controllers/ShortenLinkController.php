@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ShortenedLink;
+use App\Services\GroqService;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +44,71 @@ class ShortenLinkController extends Controller
         return inertia('Shorten/Create');
     }
 
-    public function store(Request $request)
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'original_url' => 'required|url',
+    //         'custom_alias' => [
+    //             'nullable',
+    //             'string',
+    //             'regex:/^[A-Za-z0-9\-_]+$/',
+    //         ],
+    //         'expires_at' => 'required|date|after:' . now()->addMinute(),
+    //     ], [
+    //         'custom_alias.regex' => 'Alias can only contain letters, numbers, dashes (-), or underscores (_), no spaces.',
+    //     ]);
+
+    //     $alias = $request->custom_alias ?? Str::random(4);
+
+    //     if ($request->custom_alias) {
+    //         $allAliases = ShortenedLink::pluck('custom_alias')->filter();
+    //         foreach ($allAliases as $existingAlias) {
+    //             similar_text($alias, $existingAlias, $percent);
+    //             $roundedPercent = round($percent); 
+    //             if ($roundedPercent >= 100) {
+    //                 return back()->withErrors([
+    //                     'custom_alias' => "The custom alias you entered is too similar to an existing alias ('{$existingAlias}'). Please choose a more distinct alias (similarity: {$roundedPercent}%)."
+    //                 ])->withInput();
+    //             }
+    //         }
+    //     }
+
+    //     $expiresAt = $request->filled('expires_at')
+    //         ? Carbon::parse($request->expires_at)->endOfDay()
+    //         : null;
+
+    //     $link = ShortenedLink::create([
+    //         'user_id'      => Auth::id(),
+    //         'original_url' => $request->original_url,
+    //         'short_code'   => $alias,
+    //         'custom_alias' => $request->custom_alias,
+    //         'expires_at'   => $expiresAt,
+    //     ]);
+
+    //     return redirect()->route('shorten.index')->with('success', 'Created Successfully.');
+    // }
+
+    public function generateSlug(Request $request, GroqService $groq)
+    {
+        $request->validate([
+            'url' => 'required|url',
+        ]);
+
+        try {
+            $aiSuggestion = $groq->suggestSlug($request->url);
+
+            $slug = !empty($aiSuggestion)
+                ? Str::slug($aiSuggestion, '-')
+                : Str::random(6);
+
+            return response()->json(['slug' => $slug]);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
+    public function store(Request $request, GroqService $groq)
     {
         $request->validate([
             'original_url' => 'required|url',
@@ -57,18 +122,26 @@ class ShortenLinkController extends Controller
             'custom_alias.regex' => 'Alias can only contain letters, numbers, dashes (-), or underscores (_), no spaces.',
         ]);
 
-        $alias = $request->custom_alias ?? Str::random(4);
+        // 👉 kalau user tidak isi custom_alias, generate via AI
+        $alias = $request->custom_alias;
+        if (!$alias) {
+            $aiSuggestion = $groq->suggestSlug($request->original_url);
 
-        if ($request->custom_alias) {
-            $allAliases = ShortenedLink::pluck('custom_alias')->filter();
-            foreach ($allAliases as $existingAlias) {
-                similar_text($alias, $existingAlias, $percent);
-                $roundedPercent = round($percent); 
-                if ($roundedPercent >= 100) {
-                    return back()->withErrors([
-                        'custom_alias' => "The custom alias you entered is too similar to an existing alias ('{$existingAlias}'). Please choose a more distinct alias (similarity: {$roundedPercent}%)."
-                    ])->withInput();
-                }
+            // fallback kalau AI kosong
+            $alias = !empty($aiSuggestion)
+                ? Str::slug($aiSuggestion, '-') // rapikan format
+                : Str::random(6);
+        }
+
+        // cek alias tidak bentrok
+        $allAliases = ShortenedLink::pluck('custom_alias')->filter();
+        foreach ($allAliases as $existingAlias) {
+            similar_text($alias, $existingAlias, $percent);
+            $roundedPercent = round($percent);
+            if ($roundedPercent >= 100) {
+                return back()->withErrors([
+                    'custom_alias' => "The alias '{$alias}' is too similar to an existing alias ('{$existingAlias}'). Please choose another."
+                ])->withInput();
             }
         }
 
@@ -80,7 +153,7 @@ class ShortenLinkController extends Controller
             'user_id'      => Auth::id(),
             'original_url' => $request->original_url,
             'short_code'   => $alias,
-            'custom_alias' => $request->custom_alias,
+            'custom_alias' => $alias,
             'expires_at'   => $expiresAt,
         ]);
 
