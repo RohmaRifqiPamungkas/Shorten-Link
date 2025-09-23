@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Hash;
 use Inertia\Inertia;
+use App\Models\UrlClick;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ShortenedLink;
@@ -271,6 +272,14 @@ class ShortenLinkController extends Controller
                 'short_code' => $code,
             ]);
         }
+        // Catat klik ke dalam tabel url_clicks
+        UrlClick::create([
+            'shortened_link_id' => $link->id,
+            'ip_address'        => request()->ip(),
+            'user_agent'        => request()->userAgent(),
+            'referer'           => request()->headers->get('referer'),
+            'country'           => null, // bisa diisi pakai geoip(request()->ip()) kalau mau
+        ]);
 
         return redirect()->away($link->original_url);
     }

@@ -9,6 +9,7 @@ use App\Http\Controllers\LinkController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ShortenLinkController;
 // use App\Http\Controllers\Auth\VerifyEmailController;
 // use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -88,6 +89,10 @@ Route::middleware(['auth'])->group(function () {
     //     return back()->with('status', 'verification-link-sent');
     // })->middleware('throttle:6,1')->name('verification.send');
 
+    // ==========================
+    // Dashboard Management
+    // ==========================
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // ==========================
     // Profile Management
