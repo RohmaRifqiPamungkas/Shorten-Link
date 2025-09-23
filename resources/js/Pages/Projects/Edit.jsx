@@ -13,12 +13,13 @@ const EditUrlPage = ({ auth, project }) => {
     const { data, setData, patch, processing, errors } = useForm({
         project_name: project.project_name || "",
         project_slug: project.project_slug || "",
+        current_password: "",
+        new_password: "",
     });
+
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [selectedProjectToDelete, setSelectedProjectToDelete] =
-        useState(null);
-    const [isShareModalOpen, setShareModalOpen] = useState(false);
     const [selectedShareUrl, setSelectedShareUrl] = useState("");
+    const [isShareModalOpen, setShareModalOpen] = useState(false);
     const [notification, setNotification] = useState(null);
 
     const handleCopy = (project) => {
@@ -39,7 +40,7 @@ const EditUrlPage = ({ auth, project }) => {
             });
     };
 
-    const handleShareClick = (project) => {
+    const handleShareClick = () => {
         const fullUrl = `${window.location.origin}/m/${project.project_slug}`;
         setSelectedShareUrl(fullUrl);
         setShareModalOpen(true);
@@ -210,6 +211,56 @@ const EditUrlPage = ({ auth, project }) => {
                                 <div className="text-red-500 text-sm mt-1">
                                     {errors.project_slug}
                                 </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Password */}
+                    <div className="mt-6">
+                        <h3 className="text-md font-semibold text-primary-100 mb-2">
+                            Password Protection
+                        </h3>
+
+                        {project.password && (
+                            <div className="mb-4">
+                                <label className="text-sm text-foreground">
+                                    Current Password
+                                </label>
+                                <input
+                                    type="password"
+                                    className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
+                                    placeholder="Enter current password"
+                                    onChange={(e) =>
+                                        setData(
+                                            "current_password",
+                                            e.target.value
+                                        )
+                                    }
+                                />
+                                {errors.current_password && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {errors.current_password}
+                                    </p>
+                                )}
+                            </div>
+                        )}
+
+                        <div>
+                            <label className="text-sm text-foreground">
+                                New Password
+                            </label>
+                            <input
+                                type="password"
+                                className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
+                                placeholder="Enter new password (leave empty to remove)"
+                                onChange={(e) =>
+                                    setData("new_password", e.target.value)
+                                }
+                            />
+                            {errors.new_password && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.new_password}
+                                </p>
                             )}
                         </div>
                     </div>

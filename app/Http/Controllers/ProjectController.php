@@ -133,6 +133,7 @@ class ProjectController extends Controller
                 'unique:projects,project_slug,' . $project->id,
             ],
             'password' => 'nullable|string|min:8',
+            'new_password' => 'nullable|string|min:8',
         ], [
             'project_slug.regex' => 'Slug can only contain letters, numbers, dashes (-), or underscores (_), and no spaces.',
         ]);
@@ -154,12 +155,38 @@ class ProjectController extends Controller
         $project->update([
             'project_name' => $request->project_name,
             'project_slug' => $slug,
-            'password' => $request->filled('password') ? bcrypt($request->password) : $project->password,
         ]);
+
+        // Password Handling
+        if ($project->password) {
+            if ($request->filled('new_password')) {
+                if (!$request->filled('current_password')) {
+                    return back()->withErrors([
+                        'current_password' => 'Please provide current password to update.'
+                    ]);
+                }
+                if (!\Hash::check($request->current_password, $project->password)) {
+                    return back()->withErrors([
+                        'current_password' => 'Current password is incorrect.'
+                    ]);
+                }
+                $updateData['password'] = bcrypt($request->new_password);
+            }
+            // kalau new_password = "" → hapus proteksi
+            elseif ($request->new_password === '') {
+                $updateData['password'] = null;
+            }
+        } else {
+            // project sebelumnya tidak ada password → boleh set langsung
+            if ($request->filled('new_password')) {
+                $updateData['password'] = bcrypt($request->new_password);
+            }
+        }
+
+        $project->update($updateData);
 
         return redirect()->route('projects.index')->with('success', 'Updated Successfully.');
     }
-
 
     /**
      * Hapus project.
@@ -214,7 +241,11 @@ class ProjectController extends Controller
 
         // Jika project punya password
         if ($project->password) {
-            
+            if (!$request->session()->has("project_access_{$project->id}")) {
+                return Inertia::render('PasswordForm', [
+                    'project_slug' => $project->project_slug,
+                ]);
+            }
         }
 
         $mainLinks = $project->links()
@@ -258,6 +289,26 @@ class ProjectController extends Controller
                 'slug' => $project->project_slug,
             ],
             'categories' => $grouped,
+        ]);
+    }
+
+    public function verifyPassword(Request $request, $slug)
+    {
+        $project = Project::where('project_slug', $slug)->firstOrFail();
+
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        if (!\Hash::check($request->password, $project->password)) {
+            return response()->json(['error' => 'Password is incorrect.'], 422);
+        }
+
+        $request->session()->put("project_access_{$project->id}", true);
+
+        return response()->json([
+            'success' => true,
+            'url' => route('projects.showBySlug', $project->project_slug),
         ]);
     }
 }

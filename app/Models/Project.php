@@ -14,6 +14,7 @@ class Project extends Model
         'project_name',
         'project_slug',
         'is_active',
+        'password'
     ];
 
     protected $attributes = [
