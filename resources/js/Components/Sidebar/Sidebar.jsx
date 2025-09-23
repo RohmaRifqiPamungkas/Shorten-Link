@@ -4,6 +4,7 @@ import { FiLogOut } from "react-icons/fi";
 import { RiFolderSettingsLine } from "react-icons/ri";
 import { MdOutlineLink } from "react-icons/md";
 import { FaBars } from "react-icons/fa";
+import { RxDashboard } from "react-icons/rx";
 
 export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -21,6 +22,11 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
     };
 
     const menuItems = [
+        {
+            name: "Dashboard",
+            href: "/dashboard",
+            icon: <RxDashboard />,
+        },
         {
             name: "Management Link",
             href: "/projects",

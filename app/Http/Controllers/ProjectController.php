@@ -75,6 +75,7 @@ class ProjectController extends Controller
         //         ])->withInput();
         //     }
         // }
+        
         $allSlugs = Project::pluck('project_slug');
         foreach ($allSlugs as $existingSlug) {
             similar_text($slug, $existingSlug, $percent);
@@ -97,6 +98,7 @@ class ProjectController extends Controller
             'project_name' => $request->project_name,
             'project_slug' => $slug,
             'is_active' => true,
+            'password' => $request->filled('password') ? bcrypt($request->password) : null, 
         ]);
 
         return redirect()->route('projects.index')->with('success', 'Created Successfully.');
@@ -130,6 +132,7 @@ class ProjectController extends Controller
                 'regex:/^[A-Za-z0-9\-_]+$/',
                 'unique:projects,project_slug,' . $project->id,
             ],
+            'password' => 'nullable|string|min:8',
         ], [
             'project_slug.regex' => 'Slug can only contain letters, numbers, dashes (-), or underscores (_), and no spaces.',
         ]);
@@ -151,6 +154,7 @@ class ProjectController extends Controller
         $project->update([
             'project_name' => $request->project_name,
             'project_slug' => $slug,
+            'password' => $request->filled('password') ? bcrypt($request->password) : $project->password,
         ]);
 
         return redirect()->route('projects.index')->with('success', 'Updated Successfully.');
@@ -204,9 +208,14 @@ class ProjectController extends Controller
     /**
      * Menampilkan halaman publik berdasarkan slug project.
      */
-    public function showBySlug($slug)
+    public function showBySlug(Request $request, $slug)
     {
         $project = Project::where('project_slug', $slug)->firstOrFail();
+
+        // Jika project punya password
+        if ($project->password) {
+            
+        }
 
         $mainLinks = $project->links()
             ->whereNull('parent_id')

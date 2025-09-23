@@ -14,4 +14,9 @@ class ShortenedLink extends Model
     protected $casts = [
         'expires_at' => 'datetime',
     ];
+
+    public function clicks()
+    {
+        return $this->hasMany(UrlClick::class);
+    }
 }
