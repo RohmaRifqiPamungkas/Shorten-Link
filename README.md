@@ -98,6 +98,9 @@ php artisan serve
 npm install
 npm run dev
 
+npm install @mui/material @mui/x-charts @emotion/react @emotion/styled
+npm install qrcode.react
+
 # For production build:
 npm run build
 ```
