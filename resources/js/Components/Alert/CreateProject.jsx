@@ -5,9 +5,19 @@ import { useForm } from "@inertiajs/react";
 
 export default function CreateProject({ show, onClose }) {
     const [notification, setNotification] = useState(null);
-    const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
+    const [usePassword, setUsePassword] = useState(false);
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        errors,
+        reset,
+        clearErrors,
+    } = useForm({
         project_name: "",
         project_slug: "",
+        password: "",
     });
 
     // Tidak render modal jika show = false
@@ -24,6 +34,10 @@ export default function CreateProject({ show, onClose }) {
         e.preventDefault();
         setNotification(null);
 
+        if (!usePassword) {
+            setData("password", "");
+        }
+
         post("/projects", {
             onSuccess: () => {
                 setNotification({
@@ -31,6 +45,7 @@ export default function CreateProject({ show, onClose }) {
                     message: "Created Successfully.",
                 });
                 reset();
+                setUsePassword(false);
                 clearErrors();
             },
             onError: () => {
@@ -130,6 +145,38 @@ export default function CreateProject({ show, onClose }) {
                                     </div>
                                 )}
                             </div>
+                        </div>
+
+                        {/* Opsional Password */}
+                        <div>
+                            <label className="flex items-center gap-2 text-sm text-foreground">
+                                <input
+                                    type="checkbox"
+                                    checked={usePassword}
+                                    onChange={(e) =>
+                                        setUsePassword(e.target.checked)
+                                    }
+                                />
+                                Protect with Password?
+                            </label>
+
+                            {usePassword && (
+                                <input
+                                    type="password"
+                                    className="w-full border border-brfourth rounded-lg px-3 py-2 mt-2"
+                                    placeholder="Enter password"
+                                    name="password"
+                                    value={data.password}
+                                    onChange={(e) =>
+                                        setData("password", e.target.value)
+                                    }
+                                />
+                            )}
+                            {errors.password && (
+                                <div className="text-red-500 text-sm mt-1">
+                                    {errors.password}
+                                </div>
+                            )}
                         </div>
 
                         <PrimaryButton type="submit" disabled={processing}>

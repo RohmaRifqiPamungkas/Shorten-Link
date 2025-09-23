@@ -262,7 +262,6 @@ const EditUrlPage = ({ auth, link }) => {
                         </div>
                     </div>
 
-
                     <PrimaryButton type="submit" disabled={processing}>
                         {processing ? "Updating..." : "Update"}
                     </PrimaryButton>

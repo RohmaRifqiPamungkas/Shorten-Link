@@ -1,44 +1,44 @@
 import { useState } from "react";
 import { useForm } from "@inertiajs/react";
 import Notification from "@/Components/Notification/Notification";
+import axios from "axios";
 
-export default function PasswordForm({ short_code }) {
-    const { data, setData, post, processing, errors } = useForm({
-        short_code,
+export default function PasswordForm({ short_code = null, project_slug = null }) {
+    const { data, setData, processing, errors } = useForm({
         password: "",
     });
 
     const [notif, setNotif] = useState(null);
 
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-
-    //     post(route("shorten.validate"), {
-    //         onError: () => {
-    //             setNotif({
-    //                 type: "error",
-    //                 message: "Password failed!",
-    //             });
-    //         },
-    //     });
-    // };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const res = await axios.post(route("shorten.validate"), {
-                short_code: short_code,
-                password: data.password,
-            });
+            let url = "";
+            let payload = { password: data.password };
 
-            if (res.data.success) {
-                window.location.href = res.data.url; 
+            if (short_code) {
+                // Untuk shorten link
+                url = route("shorten.validate");
+                payload.short_code = short_code;
+            } else if (project_slug) {
+                // Untuk project
+                url = route("projects.verifyPassword", project_slug);
+            }
+
+            const res = await axios.post(url, payload);
+
+            // Jika controller return redirect
+            if (res.data?.success && res.data?.url) {
+                window.location.href = res.data.url;
+            } else {
+                // Kalau pakai redirect biasa, langsung reload
+                window.location.reload();
             }
         } catch (err) {
             setNotif({
                 type: "error",
-                message: "Password salah!",
+                message: "Password failed!",
             });
         }
     };
