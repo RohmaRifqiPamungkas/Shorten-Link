@@ -52,7 +52,7 @@ Route::post('/ai/slug', [ShortenLinkController::class, 'generateSlug']);
 // Halaman awal → Login
 Route::get('/', function () {
     if (Auth::check()) {
-        return redirect()->route('projects.index');
+        return redirect()->route('dashboard.index');
     }
 
     return Inertia::render('Auth/Login');
@@ -95,7 +95,7 @@ Route::middleware(['auth'])->group(function () {
     // ==========================
     // Dashboard Management
     // ==========================
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     // ==========================
     // Profile Management

@@ -272,13 +272,17 @@ class ShortenLinkController extends Controller
                 'short_code' => $code,
             ]);
         }
+
+        // Get Location by IP
+        $location = geoip(request()->ip());
+
         // Catat klik ke dalam tabel url_clicks
         UrlClick::create([
             'shortened_link_id' => $link->id,
             'ip_address'        => request()->ip(),
             'user_agent'        => request()->userAgent(),
             'referer'           => request()->headers->get('referer'),
-            'country'           => null, // bisa diisi pakai geoip(request()->ip()) kalau mau
+            'country'           => $location->country ?? 'Unknown',
         ]);
 
         return redirect()->away($link->original_url);
