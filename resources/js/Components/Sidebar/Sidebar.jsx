@@ -42,7 +42,7 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
     return (
         <aside
             className={`
-    fixed top-0 left-0 z-40 h-screen min-h-screen bg-white border-r shadow-fourth
+    fixed top-0 left-0 z-10 h-screen min-h-screen bg-white border-r shadow-fourth
     flex flex-col
     transition-all duration-300 ease-in-out
     ${isExpanded ? "w-72" : "w-20"}
@@ -145,7 +145,11 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
             >
                 {isExpanded ? (
                     <>
-                        <div className="flex items-center gap-3 px-6">
+                        {/* Profil */}
+                        <Link
+                            href="/profile"
+                            className="flex items-center gap-3 px-6 cursor-pointer hover:opacity-80 transition"
+                        >
                             <div className="w-9 h-9 rounded-full bg-primary-100 text-white flex items-center justify-center font-semibold text-sm uppercase">
                                 {auth?.user?.name?.charAt(0)}
                             </div>
@@ -155,7 +159,7 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
                                 </p>
                                 <p className="text-xs text-orange-600">User</p>
                             </div>
-                        </div>
+                        </Link>
 
                         <button
                             onClick={handleLogout}

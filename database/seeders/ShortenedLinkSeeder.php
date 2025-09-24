@@ -25,9 +25,9 @@ class ShortenedLinkSeeder extends Seeder
             [
                 'user_id' => $userId,
                 'original_url' => 'https://example.com',
-                'short_code' => Str::random(6), // Atau bisa custom sesuai kebutuhan
+                'short_code' => Str::random(6), 
                 'custom_alias' => 'exmpl',
-                'expires_at' => Carbon::now()->addDays(7), // Link akan kadaluarsa dalam 7 hari
+                'expires_at' => Carbon::now()->addDays(7), 
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -36,7 +36,7 @@ class ShortenedLinkSeeder extends Seeder
                 'original_url' => 'https://laravel.com',
                 'short_code' => Str::random(6),
                 'custom_alias' => 'laravel',
-                'expires_at' => Carbon::now()->addDays(14), // Link akan kadaluarsa dalam 14 hari
+                'expires_at' => Carbon::now()->addDays(14), 
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

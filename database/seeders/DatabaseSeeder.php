@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             LinkSeeder::class,
             ShortenedLinkSeeder::class,
+            ClicksSeeder::class,
         ]);
     }
 }

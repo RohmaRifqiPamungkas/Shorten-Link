@@ -26,7 +26,6 @@ export default function PublicView({ project, categories }) {
         whatsapp: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/whatsapp/whatsapp-original.svg",
         telegram: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/telegram/telegram-original.svg",
         drive: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg",
-        drive: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg",
         dropbox: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dropbox/dropbox-original.svg",
         notion: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/notion/notion-original.svg",
         slack: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/slack/slack-original.svg",

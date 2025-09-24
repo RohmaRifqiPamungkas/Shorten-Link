@@ -1,39 +1,51 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import DeleteUserForm from './Partials/DeleteUserForm';
-import UpdatePasswordForm from './Partials/UpdatePasswordForm';
-import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
+import React from "react";
+import DashboardLayout from "@/Components/DashboardLayout/DashboardLayout";
+import { Head } from "@inertiajs/react";
+import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
+import PrimaryButton from "@/Components/PrimaryButton";
+import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm";
+import UpdatePasswordForm from "./Partials/UpdatePasswordForm";
+import DeleteUserForm from "./Partials/DeleteUserForm";
 
-export default function Edit({ mustVerifyEmail, status }) {
+export default function Edit({ mustVerifyEmail, status, auth }) {
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Profile
-                </h2>
-            }
-        >
+        <DashboardLayout user={auth.user}>
+            <Breadcrumb />
             <Head title="Profile" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
-                        <UpdateProfileInformationForm
-                            mustVerifyEmail={mustVerifyEmail}
-                            status={status}
-                            className="max-w-xl"
-                        />
-                    </div>
+            <h2 className="text-xl font-semibold text-primary-100 mt-4 mb-6">
+                My Profile
+            </h2>
 
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
-                        <UpdatePasswordForm className="max-w-xl" />
-                    </div>
+            <div className="min-w-full space-y-6 max-w-4xl">
+                {/* Card Profile Information */}
+                <div className="bg-white rounded-2xl shadow-xl w-full p-10">
+                    <h3 className="text-lg font-semibold text-foreground mb-4">
+                        Profile Information
+                    </h3>
+                    <UpdateProfileInformationForm
+                        mustVerifyEmail={mustVerifyEmail}
+                        status={status}
+                        className="space-y-6"
+                    />
+                </div>
 
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
-                        <DeleteUserForm className="max-w-xl" />
-                    </div>
+                {/* Card Update Password */}
+                <div className="bg-white rounded-2xl shadow-xl w-full p-10">
+                    <h3 className="text-lg font-semibold text-foreground mb-4">
+                        Update Password
+                    </h3>
+                    <UpdatePasswordForm className="space-y-6" />
+                </div>
+
+                {/* Card Delete Account */}
+                <div className="bg-white rounded-2xl shadow-xl w-full p-10 border border-red-200">
+                    <h3 className="text-lg font-semibold text-red-600 mb-4">
+                        Danger Zone
+                    </h3>
+                    <DeleteUserForm className="space-y-6" />
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </DashboardLayout>
     );
 }
