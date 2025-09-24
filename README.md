@@ -101,6 +101,9 @@ npm run dev
 npm install @mui/material @mui/x-charts @emotion/react @emotion/styled
 npm install qrcode.react
 
+composer require torann/geoip
+
+
 # For production build:
 npm run build
 ```
