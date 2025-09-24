@@ -57,6 +57,13 @@ class DashboardController extends Controller
             ->orderBy('month')
             ->get();
 
+        // Klik berdasarkan negara (shorten link)
+        $clicksByCountry = UrlClick::whereHas('shortenedLink', fn($q) => $q->where('user_id', $userId))
+            ->selectRaw('country, COUNT(*) as total')
+            ->groupBy('country')
+            ->orderByDesc('total')
+            ->get();
+
         return Inertia::render('Dashboard/Index', [
             // Shorten URL
             'totalLinks'           => $totalLinks,
@@ -69,6 +76,9 @@ class DashboardController extends Controller
             'totalCategories'      => $totalCategories,
             'topProjects'          => $topProjects,
             'clicksPerMonthProjects' => $clicksPerMonthProjects,
+
+            // By Country (Shorten Link)
+            'clicksByCountry'      => $clicksByCountry,
         ]);
     }
 }

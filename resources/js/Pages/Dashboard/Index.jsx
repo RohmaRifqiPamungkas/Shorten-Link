@@ -19,6 +19,7 @@ export default function DashboardPage({
     totalCategories,
     topProjects,
     clicksPerMonthProjects,
+    clicksByCountry,
 }) {
     const { success } = usePage().props;
     const [notification, setNotification] = useState(null);
@@ -36,6 +37,16 @@ export default function DashboardPage({
     // Data Chart Projects
     const projectMonths = clicksPerMonthProjects?.map((c) => c.month) || [];
     const projectCounts = clicksPerMonthProjects?.map((c) => c.count) || [];
+
+    // Data Table By Country
+    const countryLabels = clicksByCountry?.map(c => c.country || "Unknown") || [];
+    const countryCounts = clicksByCountry?.map(c => c.total) || [];
+
+    const [selectedCountry, setSelectedCountry] = useState("");
+    const filteredData = selectedCountry
+        ? clicksByCountry.filter(c => c.country === selectedCountry)
+        : clicksByCountry;
+
 
     return (
         <DashboardLayout>
@@ -151,6 +162,40 @@ export default function DashboardPage({
                             <p className="text-gray-500 text-sm">No data available</p>
                         )}
                     </div>
+                </div>
+
+                {/* By Country Section */}
+                <div className="bg-white p-5 rounded-2xl shadow mb-6">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-lg font-semibold">Clicks by Country</h2>
+                        <select
+                            value={selectedCountry}
+                            onChange={(e) => setSelectedCountry(e.target.value)}
+                            className="w-full md:w-auto border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700 focus:ring-2 focus:ring-primary-100 focus:border-primary-100 text-sm"
+                        >
+                            <option value="">All Countries</option>
+                            {countryLabels.map((c) => (
+                                <option key={c} value={c}>
+                                    {c}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    {filteredData.length > 0 ? (
+                        <BarChart
+                            xAxis={[{ scaleType: "band", data: filteredData.map(c => c.country || "Unknown") }]}
+                            series={[
+                                {
+                                    data: filteredData.map(c => c.total),
+                                    label: "Clicks",
+                                    color: "#28a745", // hijau
+                                },
+                            ]}
+                            height={300}
+                        />
+                    ) : (
+                        <p className="text-gray-500 text-sm">No data available</p>
+                    )}
                 </div>
 
                 {/* Top Links */}
