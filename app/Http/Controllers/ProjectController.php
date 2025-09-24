@@ -8,6 +8,7 @@ use Inertia\Response;
 use App\Models\Project;
 use App\Models\Category;
 use Illuminate\Support\Str;
+use App\Models\ProjectClick;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -247,6 +248,14 @@ class ProjectController extends Controller
                 ]);
             }
         }
+
+        ProjectClick::create([
+            'project_id' => $project->id,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'referer'    => $request->headers->get('referer'),
+            'country'    => null, // bisa isi geoip
+        ]);
 
         $mainLinks = $project->links()
             ->whereNull('parent_id')

@@ -52,4 +52,12 @@ class Project extends Model
     {
         return $query->where('is_active', true);
     }
+
+    /**
+     * Relasi: Project punya banyak klik (ProjectClick)
+     */
+    public function clicks()
+    {
+        return $this->hasMany(ProjectClick::class);
+    }
 }

@@ -33,14 +33,12 @@ const DashboardLayout = ({ children }) => {
         </div>
 
         {/* Konten Utama */}
-        <main className="flex-1 px-6 py-6 bg-tertiary min-w-0 overflow-y-auto">
+        <main className="flex-1 px-6 py-6 bg-tertiary min-w-0 overflow-y-auto z-20 relative">
           {children}
         </main>
          <Footer className="w-full bg-white shadow-md md:static md:mt-auto" />
       </div>
 
-
-     
     </div>
   );
 };
