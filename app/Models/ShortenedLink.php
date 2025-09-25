@@ -26,4 +26,9 @@ class ShortenedLink extends Model
     {
         return $this->hasMany(UrlClick::class);
     }
+
+    public function domain()
+    {
+        return $this->belongsTo(Domain::class);
+    }
 }
