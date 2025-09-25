@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LinkController;
+use App\Http\Controllers\DomainController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\CategoryController;
@@ -151,6 +152,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/edit', [ShortenLinkController::class, 'edit'])->name('edit');
         Route::patch('/{id}', [ShortenLinkController::class, 'update'])->name('update');
         Route::delete('/{id}', [ShortenLinkController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('domains')->name('domains.')->group(function () {
+        Route::get('/', [DomainController::class, 'index'])->name('index');
+        Route::post('/', [DomainController::class, 'store'])->name('store');
+        Route::post('/{id}/verify', [DomainController::class, 'verify'])->name('verify');
+        Route::delete('/{id}', [DomainController::class, 'destroy'])->name('destroy');
     });
 });
 

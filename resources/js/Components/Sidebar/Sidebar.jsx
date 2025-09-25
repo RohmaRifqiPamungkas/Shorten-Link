@@ -5,6 +5,7 @@ import { RiFolderSettingsLine } from "react-icons/ri";
 import { MdOutlineLink } from "react-icons/md";
 import { FaBars } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
+import { TbWorldWww } from "react-icons/tb";
 
 export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -36,6 +37,11 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
             name: "Shortened Link",
             href: "/shorten",
             icon: <MdOutlineLink />,
+        },
+        {
+            name: "Domains",
+            href: "/domains",
+            icon: <TbWorldWww />,
         },
     ];
 
