@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Hash;
 use Inertia\Inertia;
+use App\Models\Domain;
 use App\Models\UrlClick;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -37,14 +38,20 @@ class ShortenLinkController extends Controller
             ->paginate($perPage)
             ->appends(request()->query());
 
+        $domains = Domain::where('user_id', Auth::id())
+            ->where('status', 'active')
+            ->get();
+
         return Inertia::render('Shorten/Index', [
             'shortends' => $shortends,
+            'domains'   => $domains,
         ]);
     }
 
     public function create()
     {
-        return inertia('Shorten/Create');
+        return Inertia::render('Shorten/Create', [
+        ]);
     }
 
     // public function store(Request $request)
@@ -110,7 +117,6 @@ class ShortenLinkController extends Controller
         }
     }
 
-
     public function store(Request $request, GroqService $groq)
     {
         $request->validate([
@@ -121,6 +127,7 @@ class ShortenLinkController extends Controller
                 'regex:/^[A-Za-z0-9\-_]+$/',
             ],
             'expires_at' => 'required|date|after:' . now()->addMinute(),
+            'domain_id' => 'nullable|exists:domains,id',
         ], [
             'custom_alias.regex' => 'Alias can only contain letters, numbers, dashes (-), or underscores (_), no spaces.',
         ]);
@@ -154,6 +161,7 @@ class ShortenLinkController extends Controller
 
         $link = ShortenedLink::create([
             'user_id'      => Auth::id(),
+            'domain_id'    => $request->domain_id,
             'original_url' => $request->original_url,
             'short_code'   => $alias,
             'custom_alias' => $alias,

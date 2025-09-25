@@ -5,7 +5,7 @@ import AISuggestButton from "@/Components/AISuggestButton";
 import Notification from "../Notification/Notification";
 import { useForm } from "@inertiajs/react";
 
-export default function CreateShortlink({ show, onClose }) {
+export default function CreateShortlink({ show, onClose, domains = [] }) {
     const [notification, setNotification] = useState(null);
     const [loadingAI, setLoadingAI] = useState(false);
     const [usePassword, setUsePassword] = useState(false);
@@ -19,6 +19,7 @@ export default function CreateShortlink({ show, onClose }) {
         reset,
         clearErrors
     } = useForm({
+        domain_id: "",
         original_url: "",
         custom_alias: "",
         expires_at: "",
@@ -144,47 +145,70 @@ export default function CreateShortlink({ show, onClose }) {
 
                 <div className="mt-4">
                     <form onSubmit={handleSubmit} className="space-y-6">
+
+                        {/* Pilih Domain */}
+                        <div>
+                            <label className="text-sm text-foreground">Domain</label>
+                            <select
+                                name="domain_id"
+                                value={data.domain_id}
+                                onChange={(e) => setData("domain_id", e.target.value)}
+                                className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
+                                required
+                            >
+                                <option value="">-- Select Domain --</option>
+                                {(domains || []).length > 0 ? (
+                                    domains.map((d) => (
+                                        <option key={d.id} value={d.id}>
+                                            {d.domain} {d.status ? `(${d.status})` : ""}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option disabled>No domain available</option>
+                                )}
+                            </select>
+
+                            {errors.domain_id && (
+                                <div className="text-red-500 text-sm mt-1">{errors.domain_id}</div>
+                            )}
+                        </div>
+
                         {/* Long URL */}
                         <div>
-                            <label className="text-sm text-foreground">
-                                Long URL
-                            </label>
+                            <label className="text-sm text-foreground">Long URL</label>
                             <input
                                 type="url"
                                 className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
                                 placeholder="https://example.com/"
                                 name="original_url"
                                 value={data.original_url}
-                                onChange={(e) =>
-                                    setData("original_url", e.target.value)
-                                }
+                                onChange={(e) => setData("original_url", e.target.value)}
                                 required
                             />
                             {errors.original_url && (
-                                <div className="text-red-500 text-sm mt-1">
-                                    {errors.original_url}
-                                </div>
+                                <div className="text-red-500 text-sm mt-1">{errors.original_url}</div>
                             )}
                         </div>
 
                         {/* Short URL + Alias + AI Suggest */}
                         <div className="flex flex-col gap-4 md:flex-row md:gap-0">
                             <div className="w-full md:basis-3/4 md:me-4">
-                                <label className="text-sm text-foreground">
-                                    Short URL
-                                </label>
+                                <label className="text-sm text-foreground">Short URL</label>
                                 <input
                                     type="text"
                                     className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
-                                    value={`${window.location.host}/s/`}
+                                    value={
+                                        `${data.domain_id
+                                            ? domains.find((d) => d.id == data.domain_id)?.domain
+                                            : window.location.host
+                                        }/s/${data.custom_alias || ""}`
+                                    }
                                     readOnly
                                 />
                             </div>
 
                             <div className="w-full md:basis-3/4">
-                                <label className="text-sm text-foreground">
-                                    Alias
-                                </label>
+                                <label className="text-sm text-foreground">Alias</label>
                                 <div className="flex gap-2">
                                     <input
                                         type="text"
@@ -192,9 +216,7 @@ export default function CreateShortlink({ show, onClose }) {
                                         placeholder="custom-alias"
                                         name="custom_alias"
                                         value={data.custom_alias}
-                                        onChange={(e) =>
-                                            setData("custom_alias", e.target.value)
-                                        }
+                                        onChange={(e) => setData("custom_alias", e.target.value)}
                                     />
                                     <AISuggestButton
                                         onClick={handleAISuggest}
@@ -212,23 +234,17 @@ export default function CreateShortlink({ show, onClose }) {
 
                         {/* Expiration Date */}
                         <div>
-                            <label className="text-sm text-foreground">
-                                Expiration Date
-                            </label>
+                            <label className="text-sm text-foreground">Expiration Date</label>
                             <input
                                 type="date"
                                 className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1"
                                 name="expires_at"
                                 value={data.expires_at}
-                                onChange={(e) =>
-                                    setData("expires_at", e.target.value)
-                                }
+                                onChange={(e) => setData("expires_at", e.target.value)}
                                 required
                             />
                             {errors.expires_at && (
-                                <div className="text-red-500 text-sm mt-1">
-                                    {errors.expires_at}
-                                </div>
+                                <div className="text-red-500 text-sm mt-1">{errors.expires_at}</div>
                             )}
                         </div>
 
@@ -238,9 +254,7 @@ export default function CreateShortlink({ show, onClose }) {
                                 <input
                                     type="checkbox"
                                     checked={usePassword}
-                                    onChange={(e) =>
-                                        setUsePassword(e.target.checked)
-                                    }
+                                    onChange={(e) => setUsePassword(e.target.checked)}
                                 />
                                 Protect with Password?
                             </label>
@@ -252,15 +266,11 @@ export default function CreateShortlink({ show, onClose }) {
                                     placeholder="Enter password"
                                     name="password"
                                     value={data.password}
-                                    onChange={(e) =>
-                                        setData("password", e.target.value)
-                                    }
+                                    onChange={(e) => setData("password", e.target.value)}
                                 />
                             )}
                             {errors.password && (
-                                <div className="text-red-500 text-sm mt-1">
-                                    {errors.password}
-                                </div>
+                                <div className="text-red-500 text-sm mt-1">{errors.password}</div>
                             )}
                         </div>
 
@@ -269,6 +279,7 @@ export default function CreateShortlink({ show, onClose }) {
                             {processing ? "Shortened Link..." : "Shortened Link"}
                         </PrimaryButton>
                     </form>
+
                 </div>
             </div>
         </div>

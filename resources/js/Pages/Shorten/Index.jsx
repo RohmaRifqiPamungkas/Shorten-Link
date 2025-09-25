@@ -12,7 +12,7 @@ import SharePopup from "@/Components/Alert/ShareModal";
 import Notification from "@/Components/Notification/Notification";
 import { Icon } from "@iconify/react";
 
-export default function ShortenedLinkPage({ shortends }) {
+export default function ShortenedLinkPage({ shortends, domains }) {
     const { success } = usePage().props;
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
@@ -455,6 +455,7 @@ export default function ShortenedLinkPage({ shortends }) {
                     processing={processing}
                     post={post}
                     reset={reset}
+                    domains={domains}
                 />
             </div>
         </DashboardLayout>
