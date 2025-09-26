@@ -157,15 +157,9 @@ export default function CreateShortlink({ show, onClose, domains = [] }) {
                                 required
                             >
                                 <option value="">-- Select Domain --</option>
-                                {(domains || []).length > 0 ? (
-                                    domains.map((d) => (
-                                        <option key={d.id} value={d.id}>
-                                            {d.domain} {d.status ? `(${d.status})` : ""}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <option disabled>No domain available</option>
-                                )}
+                                {domains.map(d => (
+                                    <option key={d.id} value={d.id}>{d.domain}</option>
+                                ))}
                             </select>
 
                             {errors.domain_id && (
@@ -199,8 +193,8 @@ export default function CreateShortlink({ show, onClose, domains = [] }) {
                                     className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
                                     value={
                                         `${data.domain_id
-                                            ? domains.find((d) => d.id == data.domain_id)?.domain
-                                            : window.location.host
+                                            ? domains.find((d) => d.id == data.domain_id)?.domain.replace(/\/+$/, "") // hapus trailing /
+                                            : window.location.origin
                                         }/s/${data.custom_alias || ""}`
                                     }
                                     readOnly

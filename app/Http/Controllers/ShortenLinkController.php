@@ -27,8 +27,9 @@ class ShortenLinkController extends Controller
     {
         $perPage = request('perPage', 10);
         $search = request('search');
-        
-        $query = ShortenedLink::where('user_id', Auth::id());
+
+        $query = ShortenedLink::with('domain')
+            ->where('user_id', Auth::id());
         
         if ($search) {
             $query->where('short_code', 'like', "%{$search}%");
@@ -132,7 +133,7 @@ class ShortenLinkController extends Controller
             'custom_alias.regex' => 'Alias can only contain letters, numbers, dashes (-), or underscores (_), no spaces.',
         ]);
 
-        // 👉 kalau user tidak isi custom_alias, generate via AI
+        // kalau user tidak isi custom_alias, generate via AI
         $alias = $request->custom_alias;
         if (!$alias) {
             $aiSuggestion = $groq->suggestSlug($request->original_url);
@@ -264,12 +265,22 @@ class ShortenLinkController extends Controller
             ->with('success', 'Deleted Successfully.');
     }
 
-    public function redirect($code)
+    public function redirect(Request $request, $code)
     {
-        $link = ShortenedLink::where(function ($q) use ($code) {
+        $domainId = $request->get('domain_id');
+
+        $query = ShortenedLink::where(function ($q) use ($code) {
             $q->where('custom_alias', $code)
                 ->orWhere('short_code', $code);
-        })->first();
+        });
+
+        if ($domainId) {
+            $query->where('domain_id', $domainId);
+        } else {
+            $query->whereNull('domain_id'); // fallback kalau pakai default APP_URL
+        }
+
+        $link = $query->first();
 
         if (!$link || ($link->expires_at && $link->expires_at->isPast())) {
             abort(404);
@@ -282,14 +293,14 @@ class ShortenLinkController extends Controller
         }
 
         // Get Location by IP
-        $location = geoip(request()->ip());
+        $location = geoip($request->ip());
 
         // Catat klik ke dalam tabel url_clicks
         UrlClick::create([
             'shortened_link_id' => $link->id,
-            'ip_address'        => request()->ip(),
-            'user_agent'        => request()->userAgent(),
-            'referer'           => request()->headers->get('referer'),
+            'ip_address'        => $request->ip(),
+            'user_agent'        => $request->userAgent(),
+            'referer'           => $request->headers->get('referer'),
             'country'           => $location->country ?? 'Unknown',
         ]);
 

@@ -313,12 +313,12 @@ export default function ShortenedLinkPage({ shortends, domains }) {
                                             <div className="min-w-0">
                                                 {/* Short link */}
                                                 <a
-                                                    href={`${window.location.origin}/s/${link.short_code}`}
+                                                    href={link.full_short_url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="text-sm text-foreground hover:underline block overflow-hidden text-ellipsis whitespace-nowrap"
                                                 >
-                                                    {`${window.location.origin}/s/${link.short_code}`}
+                                                    {link.full_short_url}
                                                 </a>
                                                 {/* Original URL */}
                                                 <a
