@@ -13,6 +13,7 @@ use App\Services\GroqService;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Facades\Hash as Hashpassword;
 
 class ShortenLinkController extends Controller
@@ -29,6 +30,7 @@ class ShortenLinkController extends Controller
         $search = request('search');
 
         $query = ShortenedLink::with('domain')
+            ->withCount('clicks')
             ->where('user_id', Auth::id());
         
         if ($search) {
@@ -293,7 +295,7 @@ class ShortenLinkController extends Controller
         }
 
         // Get Location by IP
-        $location = geoip($request->ip());
+        $location = Location::get($request->ip());
 
         // Catat klik ke dalam tabel url_clicks
         UrlClick::create([
