@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('domain')->unique(); // contoh: mybrand.link
             $table->string('verification_token')->nullable(); // token verifikasi via DNS
             $table->timestamp('verified_at')->nullable();
-            $table->enum('status', ['pending', 'active', 'failed'])->default('pending');
+            $table->enum('status', ['Pending', 'Active', 'Failed'])->default('Pending');
             $table->string('custom_index_url')->nullable(); // redirect jika root domain diakses
             $table->string('custom_404_url')->nullable();   // redirect jika slug tidak ditemukan
             $table->timestamps();

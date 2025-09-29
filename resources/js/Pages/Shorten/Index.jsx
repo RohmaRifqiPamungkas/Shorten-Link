@@ -12,7 +12,7 @@ import SharePopup from "@/Components/Alert/ShareModal";
 import Notification from "@/Components/Notification/Notification";
 import { Icon } from "@iconify/react";
 
-export default function ShortenedLinkPage({ shortends }) {
+export default function ShortenedLinkPage({ shortends, domains }) {
     const { success } = usePage().props;
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
@@ -313,12 +313,12 @@ export default function ShortenedLinkPage({ shortends }) {
                                             <div className="min-w-0">
                                                 {/* Short link */}
                                                 <a
-                                                    href={`${window.location.origin}/s/${link.short_code}`}
+                                                    href={link.full_short_url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="text-sm text-foreground hover:underline block overflow-hidden text-ellipsis whitespace-nowrap"
                                                 >
-                                                    {`${window.location.origin}/s/${link.short_code}`}
+                                                    {link.full_short_url}
                                                 </a>
                                                 {/* Original URL */}
                                                 <a
@@ -455,6 +455,7 @@ export default function ShortenedLinkPage({ shortends }) {
                     processing={processing}
                     post={post}
                     reset={reset}
+                    domains={domains}
                 />
             </div>
         </DashboardLayout>
