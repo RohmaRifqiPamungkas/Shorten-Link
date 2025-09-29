@@ -10,6 +10,7 @@ import Modal from "@/Components/Modal";
 import { Icon } from "@iconify/react";
 import AddDomainButton from "@/Components/Button/AddDomainButton";
 import CreateDomains from "@/Components/Alert/CreateDomains";
+import DeleteModal from "@/Components/Alert/DeleteModal";
 
 export default function DomainPage({ domains }) {
     const { success, error } = usePage().props;
@@ -21,6 +22,8 @@ export default function DomainPage({ domains }) {
         Number(new URLSearchParams(window.location.search).get("perPage")) || 10
     );
 
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [selectedDomain, setSelectedDomain] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
     // form inertia
@@ -106,6 +109,33 @@ export default function DomainPage({ domains }) {
             { page: 1, perPage, search: term },
             { preserveState: true, replace: true }
         );
+    };
+
+    const handleDeleteClick = (domain) => {
+        setSelectedDomain(domain);
+        setDeleteModalOpen(true);
+    };
+
+    const confirmDelete = () => {
+        if (!selectedDomain) return;
+
+        destroy(route("domains.destroy", selectedDomain.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                setDeleteModalOpen(false);
+                setSelectedDomain(null);
+                setNotification({
+                    type: "success",
+                    message: "Domain deleted successfully.",
+                });
+            },
+            onError: () => {
+                setNotification({
+                    type: "error",
+                    message: "Failed to delete domain.",
+                });
+            },
+        });
     };
 
     return (
@@ -219,7 +249,7 @@ export default function DomainPage({ domains }) {
                                         </td>
                                         <td className="px-4 py-4">
                                             <span
-                                                className={`px-3 py-1 rounded-full text-sm font-medium ${d.status === "active"
+                                                className={`px-3 py-1 rounded-full text-sm font-medium ${d.status === "Active"
                                                         ? "bg-green-100 text-green-800"
                                                         : d.status === "failed"
                                                             ? "bg-red-100 text-red-800"
@@ -230,7 +260,7 @@ export default function DomainPage({ domains }) {
                                             </span>
                                         </td>
                                         <td className="px-4 py-4 flex space-x-2 text-lg text-gray-700">
-                                            {d.status === "pending" && (
+                                            {d.status === "Pending" && (
                                                 <Link
                                                     href={route("domains.verify", d.id)}
                                                     method="post"
@@ -241,15 +271,13 @@ export default function DomainPage({ domains }) {
                                                     <Icon icon="mdi:check-circle-outline" width={20} height={20} />
                                                 </Link>
                                             )}
-                                            <Link
-                                                href={route("domains.destroy", d.id)}
-                                                method="delete"
-                                                as="button"
+                                            <button
+                                                onClick={() => handleDeleteClick(d)}
                                                 title="Delete"
                                                 className="hover:text-primary-100"
                                             >
                                                 <Icon icon="gravity-ui:trash-bin" width={20} height={20} />
-                                            </Link>
+                                            </button>
                                         </td>
                                     </tr>
                                 ))
@@ -281,6 +309,14 @@ export default function DomainPage({ domains }) {
                     perPage={perPage}
                     onPageChange={handlePageChange}
                     onPerPageChange={handlePerPageChange}
+                />
+
+                {/* Delete Confirmation Modal */}
+                <DeleteModal
+                    isOpen={deleteModalOpen}
+                    onClose={() => setDeleteModalOpen(false)}
+                    onConfirm={confirmDelete}
+                    processing={processing}
                 />
             </div>
         </DashboardLayout>

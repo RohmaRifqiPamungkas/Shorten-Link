@@ -105,4 +105,18 @@ class DomainController extends Controller
 
         return back()->with('error', 'Verification failed. Make sure DNS is set up correctly.');
     }
+
+    public function destroy($id)
+    {
+        $domain = Domain::where('user_id', Auth::id())->findOrFail($id);
+
+        try {
+            $domain->delete();
+            return redirect()->route('domains.index')
+                ->with('success', 'Domain deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('domains.index')
+                ->with('error', 'Failed to delete domain: ' . $e->getMessage());
+        }
+    }
 }
