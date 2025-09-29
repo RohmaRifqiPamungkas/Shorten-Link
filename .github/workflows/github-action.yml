@@ -24,7 +24,7 @@ jobs:
             REPO="https://${{ secrets.GIT_TOKEN }}@github.com/RohmaRifqiPamungkas/Shorten-Link.git"
             DIR="${{ secrets.VPS_PATH }}"
             CONTAINER="laravel_app"
-            BRANCH="deploy-github"
+            BRANCH="deployment"
             echo "Cek git"
             if ! command -v git &>/dev/null; then
               echo "Install git..."
