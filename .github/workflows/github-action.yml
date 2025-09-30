@@ -26,26 +26,7 @@ jobs:
             CONTAINER="laravel_app"
             BRANCH="deployment"
 
-            echo "=== Pastikan git & docker tersedia ==="
-            if ! command -v git &>/dev/null; then
-              sudo apt-get update && sudo apt-get install -y git
-            fi
-            if ! command -v docker &>/dev/null; then
-              curl -fsSL https://get.docker.com | sh
-              sudo usermod -aG docker $USER
-            fi
-            if ! docker compose version &>/dev/null; then
-              mkdir -p ~/.docker/cli-plugins
-              curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 \
-                -o ~/.docker/cli-plugins/docker-compose
-              chmod +x ~/.docker/cli-plugins/docker-compose
-            fi
-
-            echo "=== Fix permission repo sebelum git pull ==="
-            sudo mkdir -p $DIR
-            sudo chown -R $USER:$USER $DIR
-
-            echo "=== Clone atau pull repo ==="
+            echo "=== Clone / Pull Repo ==="
             if [ ! -d "$DIR/.git" ]; then
               rm -rf $DIR
               git clone --branch $BRANCH $REPO $DIR
@@ -54,11 +35,6 @@ jobs:
               git fetch origin $BRANCH
               git reset --hard origin/$BRANCH
             fi
-
-            echo "=== Debug isi repo ==="
-            ls -lah $DIR | head -n 20
-            [ -f "$DIR/composer.json" ] || { echo "❌ composer.json tidak ada di host"; exit 1; }
-            [ -f "$DIR/docker-compose.yml" ] || { echo "❌ docker-compose.yml tidak ada"; exit 1; }
 
             echo "=== Simpan .env Laravel ==="
             echo "${{ secrets.LARAVEL_ENV }}" > $DIR/.env
@@ -78,15 +54,7 @@ jobs:
             docker compose down || true
             docker compose --env-file .env.deploy up -d --build
 
-            echo "=== Cek isi container ==="
-            sleep 5
-            docker exec $CONTAINER ls -lah /var/www/html || { echo "❌ Gagal akses /var/www/html"; exit 1; }
-            docker exec $CONTAINER test -f /var/www/html/composer.json || { echo "❌ composer.json tidak ada di container!"; exit 1; }
-
-            echo "=== Fix git ownership dalam container ==="
-            docker exec $CONTAINER git config --global --add safe.directory /var/www/html
-
-            echo "=== Pastikan Laravel siap (max 10x percobaan) ==="
+            echo "=== Menunggu Laravel siap ==="
             for i in {1..10}; do
               if docker exec $CONTAINER php artisan --version > /dev/null 2>&1; then
                 echo "✅ Laravel siap pada percobaan $i!"
@@ -98,11 +66,18 @@ jobs:
               [ $i -eq 10 ] && { echo "❌ Laravel tidak siap"; docker logs $CONTAINER; exit 1; }
             done
 
-            echo "=== Jalankan Composer & Artisan ==="
+            echo "=== Install Composer deps ==="
             docker exec $CONTAINER composer install --optimize-autoloader --no-dev
+
+            echo "=== Generate Laravel key & migrate DB ==="
             docker exec $CONTAINER php artisan key:generate
             docker exec $CONTAINER php artisan migrate --force
 
+            echo "=== Install Node.js & Build Asset Vite ==="
+            docker exec $CONTAINER bash -c "curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs"
+            docker exec $CONTAINER npm install
+            docker exec $CONTAINER npm run build
+
             echo "=============================================="
-            echo "✅ Deployment Laravel ke VPS selesai sukses!"
+            echo "✅ Deployment Laravel + Vite build sukses!"
             echo "=============================================="
