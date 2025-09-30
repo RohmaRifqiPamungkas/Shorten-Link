@@ -72,6 +72,7 @@ jobs:
             echo "=== Generate Laravel key & migrate DB ==="
             docker exec $CONTAINER php artisan key:generate
             docker exec $CONTAINER php artisan migrate --force
+            docker exec $CONTAINER php artisan db:seed --force
 
             echo "=== Install Node.js & Build Asset Vite ==="
             docker exec $CONTAINER bash -c "curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs"
