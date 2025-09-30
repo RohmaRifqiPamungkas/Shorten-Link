@@ -1,0 +1,1 @@
+import{j as t}from"./app-BFg2P5Wj.js";import{b as i}from"./index-DMJx3FTh.js";function p({onClick:e,icon:r=t.jsx(i,{size:18}),label:o="Shorten",className:s="",type:n="button"}){return t.jsxs("button",{onClick:e,type:n,className:`bg-secondary hover:bg-primary-100 text-white px-3 py-2 flex items-center gap-1 rounded-lg ${s}`,children:[r," ",o]})}export{p as S};
