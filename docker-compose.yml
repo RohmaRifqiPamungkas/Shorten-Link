@@ -19,6 +19,7 @@ services:
       - phpmyadmin
     networks:
       - laravel
+    restart: always
 
   mysql:
     image: mysql:8
@@ -29,11 +30,13 @@ services:
       MYSQL_USER: ${DB_USERNAME:-laravel}
       MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
     ports:
-      - "3307:3306"
+      - "3307:3306"  
     volumes:
       - ./mysql_data:/var/lib/mysql
     networks:
       - laravel
+    restart: always
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: laravel_phpmyadmin
@@ -48,8 +51,6 @@ services:
       - mysql
     networks:
       - laravel
+
 networks:
   laravel:
-
-volumes:
-  mysql-data:
