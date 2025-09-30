@@ -90,10 +90,26 @@ jobs:
             docker compose down || true
             docker compose --env-file .env.deploy up -d --build
 
-            echo "=== Menunggu Laravel siap ==="
-            until docker exec $CONTAINER php artisan --version > /dev/null 2>&1; do
-              echo "Menunggu Laravel container..."
-              sleep 2
+            echo "=== Debug container status ==="
+            docker ps -a
+            echo "--- Logs awal $CONTAINER ---"
+            docker logs $CONTAINER || true
+
+            echo "=== Menunggu Laravel siap (max 30x percobaan) ==="
+            for i in {1..30}; do
+              if docker exec $CONTAINER php artisan --version > /dev/null 2>&1; then
+                echo "Laravel siap pada percobaan $i!"
+                break
+              else
+                echo "Menunggu Laravel container... percobaan $i"
+                sleep 5
+              fi
+
+              if [ $i -eq 30 ]; then
+                echo "❌ Laravel tidak siap setelah 30 percobaan"
+                docker logs $CONTAINER || true
+                exit 1
+              fi
             done
 
             echo "=== Laravel siap! Jalankan artisan & composer ==="
