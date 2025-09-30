@@ -57,7 +57,10 @@ jobs:
 
             echo "=== Debug isi folder host setelah clone ==="
             ls -lah $DIR
-            ls -lah $DIR/composer.json || echo "❌ composer.json tidak ada di $DIR"
+            if [ ! -f "$DIR/composer.json" ]; then
+              echo "❌ composer.json tidak ada di host ($DIR)"
+              exit 1
+            fi
 
             echo "=== Cek file docker-compose.yml ==="
             if [ ! -f "$DIR/docker-compose.yml" ]; then
@@ -91,12 +94,19 @@ jobs:
             docker logs $CONTAINER || true
 
             echo "=== Debug isi folder dalam container ==="
-            docker exec $CONTAINER ls -lah /var/www/html || true
+            if ! docker exec $CONTAINER ls -lah /var/www/html; then
+              echo "❌ Tidak bisa mengakses folder /var/www/html di container"
+              exit 1
+            fi
+            if ! docker exec $CONTAINER test -f /var/www/html/composer.json; then
+              echo "❌ composer.json tidak ada di dalam container ($CONTAINER:/var/www/html)"
+              exit 1
+            fi
 
             echo "=== Menunggu Laravel siap (max 10x percobaan) ==="
             for i in {1..10}; do
               if docker exec $CONTAINER php artisan --version > /dev/null 2>&1; then
-                echo "Laravel siap pada percobaan $i!"
+                echo "✅ Laravel siap pada percobaan $i!"
                 break
               else
                 echo "Menunggu Laravel container... percobaan $i"
