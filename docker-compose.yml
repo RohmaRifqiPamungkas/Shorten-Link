@@ -5,7 +5,7 @@ services:
       dockerfile: docker/php/Dockerfile
     container_name: laravel_app
     volumes:
-      - ./laravel_app:/var/www/html
+      - ./:/var/www/html
     ports:
       - "${APP_PORT:-8000}:80"
     environment:
