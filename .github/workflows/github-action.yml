@@ -68,7 +68,9 @@ jobs:
 
             echo "=== Menyimpan .env untuk Laravel ==="
             mkdir -p $DIR/${{ secrets.LARAVEL_DIR }}
-            echo "${{ secrets.LARAVEL_ENV }}" > $DIR/${{ secrets.LARAVEL_DIR }}/.env
+            cat <<'EOF' > $DIR/${{ secrets.LARAVEL_DIR }}/.env
+            ${{ secrets.LARAVEL_ENV }}
+            EOF
 
             echo "=== Menyiapkan environment variables untuk Docker Compose ==="
             cat > "$DIR/.env.deploy" <<EOL
@@ -82,6 +84,7 @@ jobs:
 
             echo "=== Masuk direktori $DIR ==="
             cd $DIR
+            ls -lah
 
             echo "=== Restart Docker Compose ==="
             docker compose down || true
