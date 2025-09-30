@@ -95,8 +95,8 @@ jobs:
             echo "--- Logs awal $CONTAINER ---"
             docker logs $CONTAINER || true
 
-            echo "=== Menunggu Laravel siap (max 30x percobaan) ==="
-            for i in {1..30}; do
+            echo "=== Menunggu Laravel siap (max 10x percobaan) ==="
+            for i in {1..10}; do
               if docker exec $CONTAINER php artisan --version > /dev/null 2>&1; then
                 echo "Laravel siap pada percobaan $i!"
                 break
@@ -105,8 +105,8 @@ jobs:
                 sleep 5
               fi
 
-              if [ $i -eq 30 ]; then
-                echo "❌ Laravel tidak siap setelah 30 percobaan"
+              if [ $i -eq 10 ]; then
+                echo "❌ Laravel tidak siap setelah 10 percobaan"
                 docker logs $CONTAINER || true
                 exit 1
               fi
