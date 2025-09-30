@@ -6,8 +6,6 @@ services:
     container_name: laravel_app
     volumes:
       - ./:/var/www/html
-      - ./storage:/var/www/html/storage
-      - ./bootstrap/cache:/var/www/html/bootstrap/cache
     ports:
       - "${APP_PORT:-8000}:80"
     environment:
