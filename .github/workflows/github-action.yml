@@ -3,7 +3,7 @@ name: Deploy Laravel to VPS
 on:
   push:
     branches:
-      - '*'
+      - "*"
 
 jobs:
   deploy:
@@ -22,26 +22,23 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             REPO="https://${{ secrets.GIT_TOKEN }}@github.com/RohmaRifqiPamungkas/Shorten-Link.git"
-            DIR="${{ secrets.VPS_PATH }}"
+            DIR="${{ secrets.VPS_PATH }}"   # <- isi di Secrets = /home/docker/laravel_docker
             CONTAINER="laravel_app"
             BRANCH="deployment"
 
             echo "=== Cek git ==="
             if ! command -v git &>/dev/null; then
-              echo "Install git..."
               sudo apt-get update && sudo apt-get install -y git
             fi
 
             echo "=== Cek docker ==="
             if ! command -v docker &>/dev/null; then
-              echo "Install docker..."
               curl -fsSL https://get.docker.com | sh
               sudo usermod -aG docker $USER
             fi
 
             echo "=== Cek docker compose ==="
             if ! docker compose version &>/dev/null; then
-              echo "Install docker compose plugin..."
               mkdir -p ~/.docker/cli-plugins
               curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 \
                 -o ~/.docker/cli-plugins/docker-compose
@@ -50,21 +47,20 @@ jobs:
 
             echo "=== Clone atau pull repo ==="
             if [ ! -d "$DIR/.git" ]; then
-              echo "Repo belum ada, hapus folder lama jika ada, lalu clone baru..."
               rm -rf $DIR
               git clone --branch $BRANCH $REPO $DIR
             else
-              echo "Repo sudah ada, reset ke branch $BRANCH"
               cd $DIR
               git fetch origin $BRANCH
               git reset --hard origin/$BRANCH
             fi
 
+            echo "=== Debug isi host setelah clone ==="
+            ls -lah $DIR | head -n 20
+            [ -f "$DIR/composer.json" ] || { echo "❌ composer.json tidak ada di host"; exit 1; }
+
             echo "=== Cek file docker-compose.yml ==="
-            if [ ! -f "$DIR/docker-compose.yml" ]; then
-              echo "❌ File docker-compose.yml tidak ditemukan di $DIR"
-              exit 1
-            fi
+            [ -f "$DIR/docker-compose.yml" ] || { echo "❌ docker-compose.yml tidak ada"; exit 1; }
 
             echo "=== Menyimpan .env untuk Laravel ==="
             mkdir -p $DIR/${{ secrets.LARAVEL_DIR }}
@@ -80,17 +76,30 @@ jobs:
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             EOL
 
-            echo "=== Masuk direktori $DIR ==="
-            cd $DIR
-
             echo "=== Restart Docker Compose ==="
+            cd $DIR
             docker compose down || true
             docker compose --env-file .env.deploy up -d --build
 
-            echo "=== Menunggu Laravel siap ==="
-            until docker exec $CONTAINER php artisan --version > /dev/null 2>&1; do
-              echo "Menunggu Laravel container..."
-              sleep 2
+            echo "=== Debug isi container ==="
+            sleep 5
+            docker exec $CONTAINER ls -lah /var/www/html || { echo "❌ Gagal akses /var/www/html"; exit 1; }
+            if ! docker exec $CONTAINER test -f /var/www/html/composer.json; then
+              echo "❌ composer.json tidak ada di container!"
+              echo "🔎 Mount di docker-compose.yml kemungkinan salah."
+              exit 1
+            fi
+
+            echo "=== Menunggu Laravel siap (max 10x percobaan) ==="
+            for i in {1..10}; do
+              if docker exec $CONTAINER php artisan --version > /dev/null 2>&1; then
+                echo "✅ Laravel siap pada percobaan $i!"
+                break
+              else
+                echo "Menunggu Laravel container... percobaan $i"
+                sleep 5
+              fi
+              [ $i -eq 10 ] && { echo "❌ Laravel tidak siap"; docker logs $CONTAINER; exit 1; }
             done
 
             echo "=== Laravel siap! Jalankan artisan & composer ==="

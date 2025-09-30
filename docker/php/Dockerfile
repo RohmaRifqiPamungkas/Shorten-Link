@@ -12,6 +12,12 @@ RUN a2enmod rewrite
 # Salin konfigurasi Apache
 COPY docker/php/apache.conf /etc/apache2/sites-available/000-default.conf
 
+# Salin semua source Laravel ke container
+COPY . /var/www/html
+
+# Atur workdir
+WORKDIR /var/www/html
+
 # salin entrypoint
 COPY docker/php/init.sh /usr/local/bin/init.sh
 RUN chmod +x /usr/local/bin/init.sh
