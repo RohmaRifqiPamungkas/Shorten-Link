@@ -51,11 +51,12 @@ jobs:
             else
               echo "Pull update..."
               cd $DIR
-              git reset --hard HEAD
-              git pull origin $BRANCH
+              git fetch origin $BRANCH
+              git reset --hard origin/$BRANCH
             fi
             echo "Menyimpan .env untuk Laravel"
-            echo "${{ secrets.LARAVEL_ENV }}" > ${{ secrets.VPS_PATH }}/${{ secrets.LARAVEL_DIR }}/.env
+            mkdir -p $DIR/${{ secrets.LARAVEL_DIR }}
+            echo "${{ secrets.LARAVEL_ENV }}" > $DIR/${{ secrets.LARAVEL_DIR }}/.env
             
             echo "Menyiapkan environment variables untuk Docker Compose"
             echo "APP_PORT=${{ secrets.APP_PORT }}" >> "$DIR/.env.deploy"
