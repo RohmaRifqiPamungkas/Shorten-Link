@@ -11,6 +11,7 @@ class Project extends Model
 
     protected $fillable = [
         'user_id',
+        'domain_id',
         'project_name',
         'project_slug',
         'is_active',
@@ -20,6 +21,8 @@ class Project extends Model
     protected $attributes = [
         'is_active' => true,
     ];
+
+    protected $appends = ['full_short_url'];
 
     /**
      * Relasi: Project milik User
@@ -59,5 +62,32 @@ class Project extends Model
     public function clicks()
     {
         return $this->hasMany(ProjectClick::class);
+    }
+
+    /**
+     * Relasi: Project mungkin punya domain khusus
+     */
+    public function domain()
+    {
+        return $this->belongsTo(Domain::class, 'domain_id');
+    }
+
+    /**
+     * Aksesor: Mendapatkan URL pendek lengkap dengan domain
+     */
+    public function getFullShortUrlAttribute()
+    {
+        if ($this->domain) {
+            $domain = rtrim($this->domain->domain, '/');
+
+            // kalau user nyimpen tanpa http(s), tambahkan default http://
+            if (!preg_match('~^https?://~', $domain)) {
+                $domain = 'http://' . $domain;
+            }
+        } else {
+            $domain = config('app.url');
+        }
+
+        return rtrim($domain, '/') . '/m/' . $this->project_slug;
     }
 }

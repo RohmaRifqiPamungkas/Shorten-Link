@@ -42,7 +42,7 @@ class ShortenLinkController extends Controller
             ->appends(request()->query());
 
         $domains = Domain::where('user_id', Auth::id())
-            ->where('status', 'active')
+            ->where('status', 'Active')
             ->get();
 
         return Inertia::render('Shorten/Index', [
@@ -56,50 +56,6 @@ class ShortenLinkController extends Controller
         return Inertia::render('Shorten/Create', [
         ]);
     }
-
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'original_url' => 'required|url',
-    //         'custom_alias' => [
-    //             'nullable',
-    //             'string',
-    //             'regex:/^[A-Za-z0-9\-_]+$/',
-    //         ],
-    //         'expires_at' => 'required|date|after:' . now()->addMinute(),
-    //     ], [
-    //         'custom_alias.regex' => 'Alias can only contain letters, numbers, dashes (-), or underscores (_), no spaces.',
-    //     ]);
-
-    //     $alias = $request->custom_alias ?? Str::random(4);
-
-    //     if ($request->custom_alias) {
-    //         $allAliases = ShortenedLink::pluck('custom_alias')->filter();
-    //         foreach ($allAliases as $existingAlias) {
-    //             similar_text($alias, $existingAlias, $percent);
-    //             $roundedPercent = round($percent); 
-    //             if ($roundedPercent >= 100) {
-    //                 return back()->withErrors([
-    //                     'custom_alias' => "The custom alias you entered is too similar to an existing alias ('{$existingAlias}'). Please choose a more distinct alias (similarity: {$roundedPercent}%)."
-    //                 ])->withInput();
-    //             }
-    //         }
-    //     }
-
-    //     $expiresAt = $request->filled('expires_at')
-    //         ? Carbon::parse($request->expires_at)->endOfDay()
-    //         : null;
-
-    //     $link = ShortenedLink::create([
-    //         'user_id'      => Auth::id(),
-    //         'original_url' => $request->original_url,
-    //         'short_code'   => $alias,
-    //         'custom_alias' => $request->custom_alias,
-    //         'expires_at'   => $expiresAt,
-    //     ]);
-
-    //     return redirect()->route('shorten.index')->with('success', 'Created Successfully.');
-    // }
 
     public function generateSlug(Request $request, GroqService $groq)
     {
