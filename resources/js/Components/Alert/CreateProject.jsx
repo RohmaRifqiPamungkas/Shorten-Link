@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import PrimaryButton from "@/Components/PrimaryButton";
+import AISuggestButton from "../AISuggestButton";
 import Notification from "../Notification/Notification";
 import { useForm } from "@inertiajs/react";
 
-export default function CreateProject({ show, onClose }) {
+export default function CreateProject({ show, onClose, domains = [] }) {
     const [notification, setNotification] = useState(null);
+    const [loadingAI, setLoadingAI] = useState(false);
     const [usePassword, setUsePassword] = useState(false);
+
     const {
         data,
         setData,
@@ -15,18 +18,20 @@ export default function CreateProject({ show, onClose }) {
         reset,
         clearErrors,
     } = useForm({
+        domain_id: "",
         project_name: "",
         project_slug: "",
         password: "",
     });
 
-    // Tidak render modal jika show = false
+    // Tidak render jika tidak show
     if (!show) return null;
 
     const handleClose = () => {
         reset();
         clearErrors();
         setNotification(null);
+        setUsePassword(false);
         onClose();
     };
 
@@ -38,15 +43,16 @@ export default function CreateProject({ show, onClose }) {
             setData("password", "");
         }
 
-        post("/projects", {
+        post(route("projects.store"), {
             onSuccess: () => {
                 setNotification({
                     type: "success",
                     message: "Created Successfully.",
                 });
                 reset();
-                setUsePassword(false);
                 clearErrors();
+                setUsePassword(false);
+                onClose();
             },
             onError: () => {
                 setNotification({
@@ -55,6 +61,57 @@ export default function CreateProject({ show, onClose }) {
                 });
             },
         });
+    };
+
+    console.log("Domains from props:", domains);
+
+
+    const handleAISuggest = async () => {
+        if (!data.project_name) {
+            setNotification({
+                type: "error",
+                message: "Fill in the Project Name first!",
+            });
+            return;
+        }
+
+        try {
+            setLoadingAI(true);
+
+            const res = await fetch("/ai/project-slug", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute("content"),
+                },
+                body: JSON.stringify({ project_name: data.project_name }),
+            });
+
+            const json = await res.json();
+
+            if (json.slug) {
+                setData("project_slug", json.slug);
+                setNotification({
+                    type: "success",
+                    message: "AI successfully generated slug.",
+                });
+            } else {
+                setNotification({
+                    type: "error",
+                    message: "AI did not return slug.",
+                });
+            }
+        } catch (err) {
+            console.error(err);
+            setNotification({
+                type: "error",
+                message: "Failed to generate slug from AI.",
+            });
+        } finally {
+            setLoadingAI(false);
+        }
     };
 
     return (
@@ -90,6 +147,33 @@ export default function CreateProject({ show, onClose }) {
 
                 <div className="mt-4">
                     <form onSubmit={handleSubmit} className="space-y-6">
+
+                        {/* Select Domain */}
+                        <div>
+                            <label className="text-sm text-foreground">
+                                Domain
+                            </label>
+                            <select
+                                name="domain_id"
+                                value={data.domain_id}
+                                onChange={(e) => setData("domain_id", e.target.value)}
+                                className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
+                            >
+                                <option value="">-- Select Domain --</option>
+                                {domains.map((d) => (
+                                    <option key={d.id} value={d.id}>
+                                        {d.domain}
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.domain_id && (
+                                <div className="text-red-500 text-sm mt-1">
+                                    {errors.domain_id}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Project Name */}
                         <div>
                             <label className="text-sm text-foreground">
                                 Name Project
@@ -112,6 +196,7 @@ export default function CreateProject({ show, onClose }) {
                             )}
                         </div>
 
+                        {/* Slug + AI Suggest */}
                         <div className="flex flex-col gap-4 md:flex-row md:gap-0">
                             <div className="w-full md:basis-3/4 md:me-4">
                                 <label className="text-sm text-foreground">
@@ -120,7 +205,12 @@ export default function CreateProject({ show, onClose }) {
                                 <input
                                     type="text"
                                     className="w-full border border-brfourth rounded-lg px-2.5 py-2 mt-1 bg-white text-foreground"
-                                    value={`${window.location.host}/m/`}
+                                    value={
+                                        `${data.domain_id
+                                            ? domains.find((d) => d.id == data.domain_id)?.domain.replace(/\/+$/, "") // hapus trailing /
+                                            : window.location.origin
+                                        }/m/${data.project_slug || ""}`
+                                    }
                                     readOnly
                                 />
                             </div>
@@ -128,17 +218,24 @@ export default function CreateProject({ show, onClose }) {
                                 <label className="text-sm text-foreground">
                                     Alias
                                 </label>
-                                <input
-                                    type="text"
-                                    className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-foreground"
-                                    placeholder="custom-alias"
-                                    id="project_slug"
-                                    name="project_slug"
-                                    value={data.project_slug}
-                                    onChange={(e) =>
-                                        setData("project_slug", e.target.value)
-                                    }
-                                />
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-foreground"
+                                        placeholder="custom-alias"
+                                        id="project_slug"
+                                        name="project_slug"
+                                        value={data.project_slug}
+                                        onChange={(e) =>
+                                            setData("project_slug", e.target.value)
+                                        }
+                                    />
+                                    <AISuggestButton
+                                        onClick={handleAISuggest}
+                                        loading={loadingAI}
+                                        className="mt-1"
+                                    />
+                                </div>
                                 {errors.project_slug && (
                                     <div className="text-red-500 text-sm mt-1">
                                         {errors.project_slug}

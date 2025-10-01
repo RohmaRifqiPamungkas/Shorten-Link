@@ -1,1 +1,0 @@
-import{j as e}from"./app-BO4aS4VV.js";function t({children:s}){return e.jsx("div",{className:"flex min-h-screen flex-col items-center justify-center py-6 sm:justify-center px-10 sm:pt-10 bg-background",children:e.jsx("div",{className:"mt-6 w-full overflow-hidden px-6 py-4 sm:max-w-md rounded-2xl bg-background shadow-primary",children:s})})}export{t as G};

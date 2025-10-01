@@ -46,6 +46,8 @@ use App\Http\Controllers\ShortenLinkController;
 
 Route::post('/ai/slug', [ShortenLinkController::class, 'generateSlug']);
 
+Route::post('/ai/project-slug', [ProjectController::class, 'generateSlug'])->name('projects.ai.slug');
+
 // =====================================
 // Public Routes
 // =====================================

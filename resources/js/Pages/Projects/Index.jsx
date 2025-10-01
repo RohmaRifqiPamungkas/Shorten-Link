@@ -13,7 +13,7 @@ import Notification from "@/Components/Notification/Notification";
 import { Icon } from "@iconify/react";
 import { FiPlus } from "react-icons/fi";
 
-export default function ProjectsDashboard({ auth }) {
+export default function ProjectsDashboard({ auth, domains }) {
     const { projects = { data: [], links: [] }, success } = usePage().props;
     const [searchTerm, setSearchTerm] = useState("");
     const [bulkMode, setBulkMode] = useState(false);
@@ -416,6 +416,7 @@ export default function ProjectsDashboard({ auth }) {
                     show={showPopup}
                     onClose={() => setShowPopup(false)}
                     onSuccess={() => Inertia.reload()}
+                    domains={domains} 
                 />
             </div>
         </DashboardLayout>

@@ -66,19 +66,23 @@ jobs:
               [ $i -eq 10 ] && { echo "❌ Laravel tidak siap"; docker logs $CONTAINER; exit 1; }
             done
 
-            echo "=== Install Composer deps ==="
+            echo "=== Composer install & require ==="
             docker exec $CONTAINER composer install --optimize-autoloader --no-dev
+            docker exec $CONTAINER composer require torann/geoip
 
-            echo "=== Generate Laravel key & migrate DB ==="
+            echo "=== Laravel artisan setup ==="
             docker exec $CONTAINER php artisan key:generate
             docker exec $CONTAINER php artisan migrate --force
             docker exec $CONTAINER php artisan db:seed --force
+            docker exec $CONTAINER php artisan vendor:publish --provider="Torann\\GeoIP\\GeoIPServiceProvider" --tag=config
 
-            echo "=== Install Node.js & Build Asset Vite ==="
+            echo "=== Install Node.js ==="
             docker exec $CONTAINER bash -c "curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs"
-            docker exec $CONTAINER npm install
-            docker exec $CONTAINER npm run build
 
-            echo "=============================================="
-            echo "✅ Deployment Laravel + Vite build sukses!"
-            echo "=============================================="
+            echo "=== NPM install & tambahan dependency ==="
+            docker exec $CONTAINER npm install
+            docker exec $CONTAINER npm install @mui/material @mui/x-charts @emotion/react @emotion/styled
+            docker exec $CONTAINER npm install qrcode.react
+
+            echo "=== Build frontend assets ==="
+            docker exec $CONTAINER npm run build
