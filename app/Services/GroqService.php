@@ -2,10 +2,9 @@
 
 namespace App\Services;
 
-use Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log as alias;
+use Illuminate\Support\Facades\Log;
 
 class GroqService
 {
@@ -17,14 +16,20 @@ class GroqService
         $this->apiKey = env('GROQ_API_KEY');
     }
 
-    public function suggestSlug(string $url): string
+    /**
+     * Generate slug singkat berdasarkan input (bisa URL, nama project, atau teks biasa).
+     */
+    public function suggestSlug(string $input): string
     {
-        $prompt = "Buat 1 slug singkat (maksimal 10 karakter, huruf kecil, tanpa spasi, tanpa simbol selain -), untuk URL berikut: $url. Jawab hanya slug saja, jangan dengan kalimat.";
+        $prompt = "Buat 1 slug singkat (maksimal 10 karakter, huruf kecil, tanpa spasi, tanpa simbol selain -) 
+                   berdasarkan teks berikut: \"$input\". 
+                   Bisa berupa nama project, judul, atau URL. 
+                   Jawab hanya slug saja, tanpa tambahan kalimat.";
 
         $response = Http::withToken($this->apiKey)->post($this->baseUrl, [
             'model' => 'llama-3.1-8b-instant',
             'messages' => [
-                ['role' => 'system', 'content' => 'Kamu adalah AI pembuat slug URL.'],
+                ['role' => 'system', 'content' => 'Kamu adalah AI pembuat slug unik.'],
                 ['role' => 'user', 'content' => $prompt],
             ],
             'max_tokens' => 20,
@@ -32,7 +37,7 @@ class GroqService
         ]);
 
         if ($response->failed()) {
-            alias::error("Groq API Error", $response->json());
+            Log::error("Groq API Error", $response->json());
             return '';
         }
 
@@ -41,6 +46,7 @@ class GroqService
         // Bersihkan hasil: ambil hanya alfanumerik dan dash
         $slug = Str::slug($content, '-');
 
-        return substr($slug, 0, 10); // maksimal 10 karakter
+        // batasi max 10 karakter biar sesuai aturan
+        return substr($slug, 0, 10);
     }
 }

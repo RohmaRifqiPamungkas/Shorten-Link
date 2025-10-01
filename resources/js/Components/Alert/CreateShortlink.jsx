@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import PrimaryButton from "@/Components/PrimaryButton";
 import AISuggestButton from "@/Components/AISuggestButton";
 import Notification from "../Notification/Notification";
@@ -69,7 +68,7 @@ export default function CreateShortlink({ show, onClose, domains = [] }) {
         if (!data.original_url) {
             setNotification({
                 type: "error",
-                message: "Isi Long URL dulu!",
+                message: "Fill in the Long URL first!",
             });
             return;
         }
@@ -77,20 +76,21 @@ export default function CreateShortlink({ show, onClose, domains = [] }) {
         try {
             setLoadingAI(true);
 
-            const res = await axios.post(
-                "/ai/slug",
-                { url: data.original_url },
-                {
-                    headers: {
-                        "X-CSRF-TOKEN": document
-                            .querySelector('meta[name="csrf-token"]')
-                            .getAttribute("content"),
-                    },
-                }
-            );
+            const res = await fetch("/ai/slug", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute("content"),
+                },
+                body: JSON.stringify({ url: data.original_url }),
+            });
 
-            if (res.data?.slug) {
-                setData("custom_alias", res.data.slug);
+            const json = await res.json();
+
+            if (json.slug) {
+                setData("custom_alias", json.slug);
                 setNotification({
                     type: "success",
                     message: "AI successfully generated slug.",
@@ -98,7 +98,7 @@ export default function CreateShortlink({ show, onClose, domains = [] }) {
             } else {
                 setNotification({
                     type: "error",
-                    message: "AI does not return slugs.",
+                    message: "AI did not return slug.",
                 });
             }
         } catch (err) {
@@ -146,7 +146,7 @@ export default function CreateShortlink({ show, onClose, domains = [] }) {
                 <div className="mt-4">
                     <form onSubmit={handleSubmit} className="space-y-6">
 
-                        {/* Pilih Domain */}
+                        {/* Select Domain */}
                         <div>
                             <label className="text-sm text-foreground">Domain</label>
                             <select
@@ -187,7 +187,7 @@ export default function CreateShortlink({ show, onClose, domains = [] }) {
                         {/* Short URL + Alias + AI Suggest */}
                         <div className="flex flex-col gap-4 md:flex-row md:gap-0">
                             <div className="w-full md:basis-3/4 md:me-4">
-                                <label className="text-sm text-foreground">Short URL</label>
+                                <label className="text-sm text-foreground"> URL</label>
                                 <input
                                     type="text"
                                     className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"

@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Link;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Link;
+use App\Models\Domain;
 use App\Models\Project;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use App\Models\ProjectClick;
 use Illuminate\Http\Request;
+use App\Services\GroqService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,11 +32,16 @@ class ProjectController extends Controller
         }
 
         $projects = $query->latest()
-            ->paginate($perPage)
-            ->appends(request()->query());
-
+        ->paginate($perPage)
+        ->appends(request()->query());
+        
+        $domains = Domain::where('user_id', Auth::id())
+            ->where('status', 'Active')
+            ->get();
+            
         return Inertia::render('Projects/Index', [
             'projects' => $projects,
+            'domains' => $domains,
         ]);
     }
 
@@ -47,9 +54,27 @@ class ProjectController extends Controller
     }
 
     /**
+     * Generate Slug project.
+     */
+    public function generateSlug(Request $request, GroqService $groq)
+    {
+        $request->validate([
+            'project_name' => 'required|string|max:255',
+        ]);
+
+        try {
+            $slug = $groq->suggestSlug($request->project_name);
+
+            return response()->json(['slug' => $slug]);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
      * Simpan project baru.
      */
-    public function store(Request $request)
+    public function store(Request $request, GroqService $groq)
     {
         $request->validate([
             'project_name' => 'required|string|max:255',
@@ -59,23 +84,23 @@ class ProjectController extends Controller
                 'max:255',
                 'regex:/^[A-Za-z0-9\-_]+$/',
             ],
+            'domain_id' => 'nullable|exists:domains,id',
         ], [
             'project_slug.regex' => 'Slug can only contain letters, numbers, dashes (-), or underscores (_), and no spaces.',
         ]);
 
         // Jika slug tidak diisi, generate random 4 karakter
-        $slug = $request->project_slug ?: Str::lower(Str::random(4));
+        // $slug = $request->project_slug ?: Str::lower(Str::random(4));
 
-        // Validasi slug levenshtein
-        // $allSlugs = Project::pluck('project_slug');
-        // foreach ($allSlugs as $existingSlug) {
-        //     $distance = levenshtein($slug, $existingSlug);
-        //     if ($distance <= 2) {
-        //         return back()->withErrors([
-        //             'project_slug' => "The project slug you entered is too similar to an existing slug ('{$existingSlug}'). Please choose a more distinct slug (difference: $distance character(s))."
-        //         ])->withInput();
-        //     }
-        // }
+        $slug = $request->project_slug;
+
+        if (!$slug) {
+            $aiSuggestion = $groq->suggestSlug($request->project_name);
+
+            $slug = !empty($aiSuggestion)
+                ? Str::slug($aiSuggestion, '-')
+                : Str::lower(Str::random(4));
+        }
         
         $allSlugs = Project::pluck('project_slug');
         foreach ($allSlugs as $existingSlug) {
@@ -87,15 +112,14 @@ class ProjectController extends Controller
                 ])->withInput();
             }
         }
-        
+
         while (Project::where('project_slug', $slug)->exists()) {
-            $slug = $request->project_slug
-                ? Str::slug($request->project_slug) . '-' . Str::random(4)
-                : Str::lower(Str::random(4));
+            $slug = Str::slug($slug) . '-' . Str::lower(Str::random(4));
         }
 
         Project::create([
             'user_id' => Auth::id(),
+            'domain_id'  => $request->domain_id,
             'project_name' => $request->project_name,
             'project_slug' => $slug,
             'is_active' => true,
