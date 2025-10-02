@@ -10,8 +10,10 @@ use App\Http\Controllers\DomainController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ShortenLinkController;
+use App\Http\Controllers\ProjectPublicController;
 // use App\Http\Controllers\Auth\VerifyEmailController;
 // use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -62,17 +64,17 @@ Route::get('/', function () {
 })->name('login');
 
 // Shorten link publik
-Route::get('/s/{code}', [ShortenLinkController::class, 'redirect'])->name('shorten.redirect');
+Route::get('/s/{code}', RedirectController::class)->name('redirect');
 
 // Show project by slug
-Route::get('/m/{slug}', [ProjectController::class, 'showBySlug'])->name('projects.showBySlug');
+Route::get('/m/{slug}', [ProjectPublicController::class, 'showBySlug'])->name('projects.showBySlug');
 
 // Validasi password short link (public)
 Route::post('/validate-password', [ShortenLinkController::class, 'validatePassword'])
     ->name('shorten.validate');
 
 // Validasi password project (public)
-Route::post('/projects/{slug}/verify-password', [ProjectController::class, 'verifyPassword'])->name('projects.verifyPassword');
+Route::post('/projects/{slug}/verify-password', [ProjectPublicController::class, 'verifyPassword'])->name('projects.verifyPassword');
 
 // =====================================
 // Authenticated Routes (with email verification middleware support)
