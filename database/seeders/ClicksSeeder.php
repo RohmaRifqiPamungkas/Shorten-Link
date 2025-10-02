@@ -20,40 +20,32 @@ class ClicksSeeder extends Seeder
         $links = ShortenedLink::all();
         $projects = Project::all();
 
-        // Generate data 30 hari terakhir
-        foreach (range(0, 29) as $i) {
-            $date = Carbon::now()->subDays($i);
-
-            // Untuk setiap ShortenedLink, buat random klik harian
-            foreach ($links as $link) {
-                $count = rand(10, 50); // jumlah klik random per hari
-                for ($j = 0; $j < $count; $j++) {
-                    DB::table('url_clicks')->insert([
-                        'shortened_link_id' => $link->id,
-                        'ip_address'        => $faker->ipv4,
-                        'user_agent'        => $faker->userAgent,
-                        'referer'           => $faker->url,
-                        'country'           => $faker->country,
-                        'created_at'        => $date->copy()->setTime(rand(0, 23), rand(0, 59), rand(0, 59)),
-                        'updated_at'        => now(),
-                    ]);
-                }
-            }
-
-            // Untuk setiap Project, buat random klik harian
-            foreach ($projects as $project) {
-                $count = rand(5, 30);
-                for ($j = 0; $j < $count; $j++) {
-                    DB::table('project_clicks')->insert([
-                        'project_id'  => $project->id,
-                        'ip_address'  => $faker->ipv4,
-                        'user_agent'  => $faker->userAgent,
-                        'referer'     => $faker->url,
-                        'country'     => $faker->country,
-                        'created_at'  => $date->copy()->setTime(rand(0, 23), rand(0, 59), rand(0, 59)),
-                        'updated_at'  => now(),
-                    ]);
-                }
+        // Buat 10 record saja
+        foreach (range(1, 10) as $i) {
+            if (rand(0, 1) === 0 && $links->count() > 0) {
+                // Insert ke url_clicks
+                $link = $links->random();
+                DB::table('url_clicks')->insert([
+                    'shortened_link_id' => $link->id,
+                    'ip_address'        => $faker->ipv4,
+                    'user_agent'        => $faker->userAgent,
+                    'referer'           => $faker->url,
+                    'country'           => $faker->country,
+                    'created_at'        => now()->subDays(rand(0, 29))->setTime(rand(0, 23), rand(0, 59), rand(0, 59)),
+                    'updated_at'        => now(),
+                ]);
+            } elseif ($projects->count() > 0) {
+                // Insert ke project_clicks
+                $project = $projects->random();
+                DB::table('project_clicks')->insert([
+                    'project_id'  => $project->id,
+                    'ip_address'  => $faker->ipv4,
+                    'user_agent'  => $faker->userAgent,
+                    'referer'     => $faker->url,
+                    'country'     => $faker->country,
+                    'created_at'  => now()->subDays(rand(0, 29))->setTime(rand(0, 23), rand(0, 59), rand(0, 59)),
+                    'updated_at'  => now(),
+                ]);
             }
         }
     }

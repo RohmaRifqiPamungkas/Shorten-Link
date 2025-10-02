@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Hash;
 use Inertia\Inertia;
 use App\Models\Domain;
-use App\Models\UrlClick;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ShortenedLink;
@@ -13,8 +12,6 @@ use App\Services\GroqService;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use Stevebauman\Location\Facades\Location;
-use Illuminate\Support\Facades\Hash as Hashpassword;
 
 class ShortenLinkController extends Controller
 {
@@ -221,48 +218,6 @@ class ShortenLinkController extends Controller
         return redirect()
             ->route('shorten.index')
             ->with('success', 'Deleted Successfully.');
-    }
-
-    public function redirect(Request $request, $code)
-    {
-        $domainId = $request->get('domain_id');
-
-        $query = ShortenedLink::where(function ($q) use ($code) {
-            $q->where('custom_alias', $code)
-                ->orWhere('short_code', $code);
-        });
-
-        if ($domainId) {
-            $query->where('domain_id', $domainId);
-        } else {
-            $query->whereNull('domain_id'); // fallback kalau pakai default APP_URL
-        }
-
-        $link = $query->first();
-
-        if (!$link || ($link->expires_at && $link->expires_at->isPast())) {
-            abort(404);
-        }
-
-        if ($link->password) {
-            return Inertia::render('PasswordForm', [
-                'short_code' => $code,
-            ]);
-        }
-
-        // Get Location by IP
-        $location = Location::get($request->ip());
-
-        // Catat klik ke dalam tabel url_clicks
-        UrlClick::create([
-            'shortened_link_id' => $link->id,
-            'ip_address'        => $request->ip(),
-            'user_agent'        => $request->userAgent(),
-            'referer'           => $request->headers->get('referer'),
-            'country'           => $location->country ?? 'Unknown',
-        ]);
-
-        return redirect()->away($link->original_url);
     }
 
     public function validatePassword(Request $request)
