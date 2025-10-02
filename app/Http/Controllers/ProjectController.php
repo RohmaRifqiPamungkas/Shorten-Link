@@ -136,8 +136,13 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($id);
 
+        $domains = Domain::where('user_id', Auth::id())
+            ->where('status', 'Active')
+            ->get();
+
         return Inertia::render('Projects/Edit', [
             'project' => $project,
+            'domains' => $domains,
         ]);
     }
 
@@ -177,10 +182,11 @@ class ProjectController extends Controller
             }
         }
 
-        $project->update([
+        $updateData = [
             'project_name' => $request->project_name,
             'project_slug' => $slug,
-        ]);
+            'domain_id'    => $request->domain_id, 
+        ];
 
         // Password Handling
         if ($project->password) {

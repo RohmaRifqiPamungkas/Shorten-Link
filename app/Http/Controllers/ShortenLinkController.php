@@ -130,10 +130,17 @@ class ShortenLinkController extends Controller
 
     public function edit($id)
     {
-        $link = ShortenedLink::where('user_id', Auth::id())->findOrFail($id);
+        $link = ShortenedLink::with('domain')
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
+        $domains = Domain::where('user_id', Auth::id())
+            ->where('status', 'Active')
+            ->get();
 
         return Inertia::render('Shorten/Edit', [
             'link' => $link,
+            'domains' => $domains,
         ]);
     }
 
@@ -177,12 +184,13 @@ class ShortenLinkController extends Controller
             ? Carbon::parse($request->expires_at)->endOfDay()
             : null;
 
-        $link->update([
+        $updateData = [
             'original_url' => $request->original_url,
             'custom_alias' => $alias,
             'short_code'   => $alias ?? $link->short_code,
             'expires_at'   => $expiresAt,
-        ]);
+            'domain_id'    => $request->domain_id,
+        ];
 
         if ($link->password) {
             if ($request->filled('new_password')) {

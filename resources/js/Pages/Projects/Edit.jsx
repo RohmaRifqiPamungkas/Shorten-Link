@@ -9,10 +9,11 @@ import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
 import Notification from "@/Components/Notification/Notification";
 
-const EditUrlPage = ({ auth, project }) => {
+const EditUrlPage = ({ auth, project, domains }) => {
     const { data, setData, patch, processing, errors } = useForm({
         project_name: project.project_name || "",
         project_slug: project.project_slug || "",
+        domain_id: project.domain_id || "",
         current_password: "",
         new_password: "",
     });
@@ -103,7 +104,11 @@ const EditUrlPage = ({ auth, project }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        {`${window.location.origin}/m/${project.project_slug}`}
+                        {`${project.domain_id
+                            ? `https://${domains.find((d) => d.id == project.domain_id)?.domain}`
+                            : window.location.origin
+                            }/s/${project.project_slug}`}
+
                     </a>
                 </span>
                 <div className="flex gap-2 md:ml-4">
@@ -181,15 +186,35 @@ const EditUrlPage = ({ auth, project }) => {
                         )}
                     </div>
 
-                    <div className="flex flex-col md:flex-row gap-4 md:gap-0  ">
+                    {/* Domain Picker */}
+                    <div>
+                        <label className="text-sm text-foreground">Domain</label>
+                        <select
+                            className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
+                            value={data.domain_id || ""}
+                            onChange={(e) => setData("domain_id", e.target.value)}
+                        >
+                            <option value="">Default ({window.location.origin})</option>
+                            {domains.map((d) => (
+                                <option key={d.id} value={d.id}>
+                                    {d.domain}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="flex flex-col md:flex-row gap-4 md:gap-0">
                         <div className="basis-3/4 md:me-4">
-                            <label className="text-sm text-foreground">
-                               URL
-                            </label>
+                            <label className="text-sm text-foreground">URL</label>
                             <input
                                 type="text"
                                 className="w-full border border-brfourth rounded-lg px-3 py-2 mt-1 bg-white text-gray-700"
-                                value={`${window.location.origin}/m/`}
+                                value={
+                                    `${data.domain_id
+                                        ? `https://${domains.find((d) => d.id == data.domain_id)?.domain}`
+                                        : window.location.origin
+                                    }/m/${data.project_slug || ""}`
+                                }
                                 readOnly
                             />
                         </div>
