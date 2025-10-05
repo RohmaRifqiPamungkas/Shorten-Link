@@ -103,6 +103,10 @@ npm install qrcode.react
 
 composer require torann/geoip
 
+npm install ethers
+
+composer require kornrunner/ethereum-util
+composer require kornrunner/keccak
 
 # For production build:
 npm run build
