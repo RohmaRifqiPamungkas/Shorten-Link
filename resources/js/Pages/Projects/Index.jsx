@@ -46,9 +46,8 @@ export default function ProjectsDashboard({ auth, domains }) {
     };
 
     const handleCopy = (project) => {
-        const fullUrl = `${window.location.host}/m/${project.project_slug}`;
         navigator.clipboard
-            .writeText(fullUrl)
+            .writeText(project.full_short_url)
             .then(() => {
                 setNotification({
                     type: "success",
@@ -64,8 +63,7 @@ export default function ProjectsDashboard({ auth, domains }) {
     };
 
     const handleShareClick = (project) => {
-        const fullUrl = `${window.location.host}/m/${project.project_slug}`;
-        setSelectedShareUrl(fullUrl);
+        setSelectedShareUrl(project.full_short_url);
         setShareModalOpen(true);
     };
 

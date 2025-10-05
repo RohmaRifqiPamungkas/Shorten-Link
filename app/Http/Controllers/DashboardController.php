@@ -24,6 +24,7 @@ class DashboardController extends Controller
         $totalClicks = UrlClick::whereHas('shortenedLink', fn($q) => $q->where('user_id', $userId))->count();
 
         $topLinks = ShortenedLink::where('user_id', $userId)
+            ->with(['domain'])
             ->withCount('clicks')
             ->orderByDesc('clicks_count')
             ->take(5)
@@ -45,6 +46,7 @@ class DashboardController extends Controller
 
         // Top projects by jumlah klik
         $topProjects = Project::where('user_id', $userId)
+            ->with(['domain'])
             ->withCount('clicks')
             ->orderByDesc('clicks_count')
             ->take(5)
