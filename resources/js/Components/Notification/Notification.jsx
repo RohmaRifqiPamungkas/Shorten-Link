@@ -1,36 +1,115 @@
-
+import React, { useState } from "react";
+import Web3 from "web3";
 import { Icon } from "@iconify/react";
-import { useEffect, useState } from "react";
+import ToastAlert from "@/Components/Notification/ToastAlert"; // pastikan path ini sesuai struktur project kamu
 
-export default function Notification({ type, message, onClose }) {
-  const [fadeOut, setFadeOut] = useState(false);
+export default function Web3LoginButton() {
+  const [toast, setToast] = useState({ message: "", type: "success" });
+  const [connecting, setConnecting] = useState(false);
 
-  useEffect(() => {
-    const timer1 = setTimeout(() => setFadeOut(true), 2500);
-    const timer2 = setTimeout(() => onClose(), 3000);
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
-  }, [onClose]);
+  const showToast = (message, type = "success") => {
+    setToast({ message, type });
+    setTimeout(() => setToast({ message: "", type }), 4000);
+  };
 
-  const isSuccess = type === "success";
-  const bgColor = isSuccess ? "bg-green-100" : "bg-red-100";
-  const textColor = isSuccess ? "text-green-800" : "text-red-800";
-  const borderColor = isSuccess ? "border-green-300" : "border-red-300";
-  const iconColor = isSuccess ? "text-green-600" : "text-red-600";
-  const icon = isSuccess
-    ? "mdi:check-circle"
-    : "mdi:alert-circle-outline";
+  const connectMetaMask = async () => {
+    setConnecting(true);
+    showToast("🔗 Connecting to MetaMask...", "success");
+
+    try {
+      if (typeof window.ethereum === "undefined") {
+        throw new Error("MetaMask is not installed. Install it at metamask.io");
+      }
+
+      const web3 = new Web3(window.ethereum);
+
+      // Step 1: Request account access
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      const address = accounts[0].toLowerCase();
+      showToast(`Connected: ${address.substring(0, 6)}...${address.substring(38)}`);
+
+      // Step 2: Ambil CSRF token dari meta Laravel
+      const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        ?.getAttribute("content");
+
+      // Step 3: Request nonce dari backend
+      const nonceResponse = await fetch("/metamask-get-nonce", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ address }),
+      });
+
+      const nonceData = await nonceResponse.json();
+      if (!nonceResponse.ok) throw new Error(nonceData.error || "Failed to get nonce");
+
+      const nonce = nonceData.nonce;
+      showToast("🪙 Please sign message in MetaMask...");
+
+      // Step 4: Tanda tangani nonce
+      const signature = await web3.eth.personal.sign(nonce, address, "");
+      showToast("✅ Message signed, verifying...");
+
+      // Step 5: Kirim hasil ke backend untuk verifikasi
+      const authResponse = await fetch("/metamask-auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ address, signature }),
+      });
+
+      const authData = await authResponse.json();
+      if (!authResponse.ok) throw new Error(authData.error || "Verification failed");
+
+      if (authData.success) {
+        showToast("✅ Authentication successful! Redirecting...");
+        setTimeout(() => {
+          window.location.href = "/dashboard";
+        }, 1200);
+      } else {
+        throw new Error(authData.error || "Authentication failed");
+      }
+    } catch (error) {
+      console.error("MetaMask login error:", error);
+      showToast(error.message || "Error connecting MetaMask", "error");
+    } finally {
+      setConnecting(false);
+    }
+  };
 
   return (
-    <div
-      className={`flex items-center gap-2 px-4 py-3 mb-4 rounded-md border ${bgColor} ${borderColor} ${textColor} transition-opacity duration-500 ${
-        fadeOut ? "opacity-0" : "opacity-100"
-      }`}
-    >
-      <Icon icon={icon} className={`${iconColor} w-5 h-5`} />
-      <span className="text-sm font-medium">{message}</span>
+    <div className="w-full flex flex-col items-center text-center">
+      {/* Tombol Login */}
+      <button
+        onClick={connectMetaMask}
+        disabled={connecting}
+        className={`flex items-center justify-center gap-2 px-5 py-3 mt-3 rounded-md font-semibold transition-all duration-150 w-full
+                    ${connecting
+            ? "bg-gray-300 text-gray-700 cursor-not-allowed"
+            : "bg-gradient-to-r from-orange-500 to-yellow-500 text-white hover:brightness-110 shadow-md hover:shadow-lg"
+          }`}
+      >
+        <Icon icon="logos:metamask-icon" width="22" />
+        {connecting ? "Connecting..." : "Login with MetaMask"}
+      </button>
+
+      {/* Notifikasi Toast */}
+      {toast.message && (
+        <ToastAlert
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast({ message: "", type: "success" })}
+        />
+      )}
     </div>
   );
 }

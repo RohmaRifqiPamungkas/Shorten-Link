@@ -13,8 +13,9 @@
         "kornrunner/keccak": "^1.1",
         "kornrunner/secp256k1": "^0.3.0",
         "laravel/framework": "^12.0",
-        "laravel/sanctum": "^4.0",
+        "laravel/sanctum": "^4.2",
         "laravel/tinker": "^2.10.1",
+        "simplito/bn-php": "^1.1",
         "simplito/elliptic-php": "^1.0",
         "stevebauman/location": "^7.6",
         "tightenco/ziggy": "^2.0"

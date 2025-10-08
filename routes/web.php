@@ -13,32 +13,34 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ShortenLinkController;
+use App\Http\Controllers\Auth\MetaMaskController;
 use App\Http\Controllers\Auth\Web3AuthController;
 use App\Http\Controllers\ProjectPublicController;
-// use App\Http\Controllers\Auth\VerifyEmailController;
-// use Symfony\Component\HttpKernel\Exception\HttpException;
 
-Route::post('/web3/nonce', [Web3AuthController::class, 'nonce']);
-Route::post('/web3/verify', [Web3AuthController::class, 'verify']);
+// =====================================
+// Public Routes
+// =====================================
+Route::middleware('guest')->group(function () {
+    // Route::post('/web3/nonce', [Web3AuthController::class, 'nonce'])->name('web3.nonce');
+    // Route::post('/web3/verify', [Web3AuthController::class, 'verify'])->name('web3.verify');
+
+    Route::post('/metamask-get-nonce', [MetaMaskController::class, 'getNonce'])->name('metamask.get-nonce');
+    Route::post('/metamask-auth', [MetaMaskController::class, 'authenticate'])->name('metamask.auth');
+    
+    // Halaman awal → Login (Inertia SPA)
+    Route::get('/', function () {
+        if (Auth::check()) {
+            return redirect()->route('dashboard.index');
+        }
+        return Inertia::render('Auth/Login');
+    })->name('login');
+});
 
 // =====================================
 // AI Sugestions Routes
 // =====================================
 Route::post('/ai/slug', [ShortenLinkController::class, 'generateSlug']);
 Route::post('/ai/project-slug', [ProjectController::class, 'generateSlug'])->name('projects.ai.slug');
-
-// =====================================
-// Public Routes
-// =====================================
-
-// Halaman awal → Login
-Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect()->route('dashboard.index');
-    }
-
-    return Inertia::render('Auth/Login');
-})->name('login');
 
 // Shorten link publik
 Route::get('/s/{code}', RedirectController::class)->name('redirect');
@@ -56,7 +58,7 @@ Route::post('/projects/{slug}/verify-password', [ProjectPublicController::class,
 // =====================================
 // Authenticated Routes (with email verification middleware support)
 // =====================================
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
 
     // Email Verification Routes
     // Route::get('/email/verify', function () {
@@ -87,7 +89,6 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/', [ProfileController::class, 'update'])->name('update');
         Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
     });
-
 
     // ==========================
     // Projects & Links
@@ -122,7 +123,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('{project}/categories/{category}/links', [LinkController::class, 'indexByCategory'])->name('categories.links.index');
     });
 
-
     // ==========================
     // Shorten Links
     // ==========================
@@ -135,6 +135,9 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}', [ShortenLinkController::class, 'destroy'])->name('destroy');
     });
 
+    // ==========================
+    // Domains
+    // ==========================
     Route::prefix('domains')->name('domains.')->group(function () {
         Route::get('/', [DomainController::class, 'index'])->name('index');
         Route::post('/', [DomainController::class, 'store'])->name('store');
