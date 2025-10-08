@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Web3 from "web3";
 import { Icon } from "@iconify/react";
-import ToastAlert from "@/Components/Notification/ToastAlert"; // pastikan path ini sesuai struktur project kamu
+import ToastAlert from "@/Components/Notification/ToastAlert";
 
 export default function Web3LoginButton() {
     const [toast, setToast] = useState({ message: "", type: "success" });

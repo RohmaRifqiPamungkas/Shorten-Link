@@ -31,12 +31,6 @@ export default function ResetPassword({ token, email }) {
         <GuestLayout>
             <Head title="Reset Password" />
 
-            <div className="flex justify-center">
-                <Link href="/">
-                    <ApplicationLogo className="h-20 w-20" />
-                </Link>
-            </div>
-
             <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
