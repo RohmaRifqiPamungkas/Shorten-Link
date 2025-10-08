@@ -3,6 +3,7 @@ import Checkbox from "@/Components/Checkbox";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
+import Web3LoginButton from "@/Components/Web3/Web3LoginButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
@@ -114,11 +115,29 @@ export default function Login({ status, canResetPassword }) {
                     )}
                 </div>
 
-                <div className="mt-4 flex items-center ">
+                {/* <div className="mt-4 flex items-center ">
 
                     <PrimaryButton className="" disabled={processing}>
                         LOGIN
                     </PrimaryButton>
+                </div> */}
+                <div className="mt-4 flex flex-col items-center space-y-3">
+                    <PrimaryButton disabled={processing}>
+                        LOGIN
+                    </PrimaryButton>
+
+                    <div className="relative my-2 w-full">
+                        <div className="absolute inset-0 flex items-center">
+                            <span className="w-full border-t border-gray-300"></span>
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                            <span className="bg-white px-2 text-gray-500">
+                                or
+                            </span>
+                        </div>
+                    </div>
+
+                    <Web3LoginButton />
                 </div>
                 <p className="text-center text-sm text-gray-600 mt-6">
                     Don’t have account?{" "}

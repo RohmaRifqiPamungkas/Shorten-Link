@@ -47,6 +47,9 @@ export default function DashboardPage({
         ? clicksByCountry.filter(c => c.country === selectedCountry)
         : clicksByCountry;
 
+    const getBaseDomain = (domain) => {
+        return (domain?.name ?? window.location.origin).replace(/\/$/, "");
+    };
 
     return (
         <DashboardLayout>
@@ -203,30 +206,33 @@ export default function DashboardPage({
                     <h2 className="text-lg font-semibold mb-4">Top 5 Links</h2>
                     {topLinks?.length > 0 ? (
                         <ul className="divide-y divide-gray-200">
-                            {topLinks.map((link) => (
-                                <li key={link.id} className="py-3 flex justify-between items-center">
-                                    <div className="flex items-center gap-3 overflow-hidden">
-                                        <img
-                                            src={`https://www.google.com/s2/favicons?sz=64&domain=${new URL(
-                                                link.original_url
-                                            ).hostname}`}
-                                            alt="favicon"
-                                            className="w-6 h-6 rounded-full"
-                                        />
-                                        <a
-                                            href={`${window.location.origin}/s/${link.short_code}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="truncate max-w-[300px] text-primary-100 hover:underline text-sm"
-                                        >
-                                            {window.location.origin}/s/{link.short_code}
-                                        </a>
-                                    </div>
-                                    <span className="text-sm font-medium text-gray-700">
-                                        {link.clicks_count} clicks
-                                    </span>
-                                </li>
-                            ))}
+                            {topLinks.map((link) => {
+                                const baseDomain = getBaseDomain(link.domain);
+                                const shortUrl = `${baseDomain}/s/${link.short_code}`;
+
+                                return (
+                                    <li key={link.id} className="py-3 flex justify-between items-center">
+                                        <div className="flex items-center gap-3 overflow-hidden">
+                                            <img
+                                                src={`https://www.google.com/s2/favicons?sz=64&domain=${new URL(link.original_url).hostname}`}
+                                                alt="favicon"
+                                                className="w-6 h-6 rounded-full"
+                                            />
+                                            <a
+                                                href={link.full_short_url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="truncate max-w-[300px] text-primary-100 hover:underline text-sm"
+                                            >
+                                                {link.full_short_url}
+                                            </a>
+                                        </div>
+                                        <span className="text-sm font-medium text-gray-700">
+                                            {link.clicks_count} clicks
+                                        </span>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     ) : (
                         <p className="text-gray-500 text-sm">No links available</p>
@@ -238,24 +244,29 @@ export default function DashboardPage({
                     <h2 className="text-lg font-semibold mb-4">Top 5 Projects</h2>
                     {topProjects?.length > 0 ? (
                         <ul className="divide-y divide-gray-200">
-                            {topProjects.map((proj) => (
-                                <li key={proj.id} className="py-3 flex justify-between items-center">
-                                    <div className="flex items-center gap-3 overflow-hidden">
-                                        <Icon icon="mdi:folder-outline" className="w-6 h-6 text-primary-100" />
-                                        <a
-                                            href={`${window.location.origin}/m/${proj.project_slug}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="truncate max-w-[300px] text-primary-100 hover:underline text-sm"
-                                        >
-                                            {proj.project_name}
-                                        </a>
-                                    </div>
-                                    <span className="text-sm font-medium text-gray-700">
-                                        {proj.clicks_count} clicks
-                                    </span>
-                                </li>
-                            ))}
+                            {topProjects.map((proj) => {
+                                const baseDomain = getBaseDomain(proj.domain);
+                                const projectUrl = `${baseDomain}/m/${proj.project_slug}`;
+
+                                return (
+                                    <li key={proj.id} className="py-3 flex justify-between items-center">
+                                        <div className="flex items-center gap-3 overflow-hidden">
+                                            <Icon icon="mdi:folder-outline" className="w-6 h-6 text-primary-100" />
+                                            <a
+                                                href={proj.full_short_url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="truncate max-w-[300px] text-primary-100 hover:underline text-sm"
+                                            >
+                                                {proj.project_name}
+                                            </a>
+                                        </div>
+                                        <span className="text-sm font-medium text-gray-700">
+                                            {proj.clicks_count} clicks
+                                        </span>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     ) : (
                         <p className="text-gray-500 text-sm">No projects available</p>

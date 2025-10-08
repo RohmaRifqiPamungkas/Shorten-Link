@@ -135,9 +135,8 @@ export default function ShortenedLinkPage({ shortends, domains }) {
     };
 
     const handleCopy = (link) => {
-        const fullUrl = `${window.location.origin}/s/${link.short_code}`;
         navigator.clipboard
-            .writeText(fullUrl)
+            .writeText(link.full_short_url)
             .then(() => {
                 setNotification({
                     type: "success",
@@ -153,8 +152,7 @@ export default function ShortenedLinkPage({ shortends, domains }) {
     };
 
     const handleShareClick = (link) => {
-        const fullUrl = `${window.location.origin}/s/${link.short_code}`;
-        setSelectedShareUrl(fullUrl);
+        setSelectedShareUrl(link.full_short_url);
         setShareModalOpen(true);
     };
 
