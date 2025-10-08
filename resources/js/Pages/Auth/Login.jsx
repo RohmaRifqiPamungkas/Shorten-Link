@@ -7,7 +7,6 @@ import Web3LoginButton from "@/Components/Web3/Web3LoginButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import ApplicationLogo from "@/Components/ApplicationLogo";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function Login({ status, canResetPassword }) {
@@ -36,12 +35,6 @@ export default function Login({ status, canResetPassword }) {
                     {status}
                 </div>
             )}
-
-            <div className="flex justify-center">
-                <Link href="/">
-                    <ApplicationLogo className="h-20 w-20 " />
-                </Link>
-            </div>
 
             <form onSubmit={submit}>
                 <div>
@@ -90,7 +83,6 @@ export default function Login({ status, canResetPassword }) {
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-
                 <div className="mt-4 flex items-center justify-between">
                     <label className="flex items-center">
                         <Checkbox
@@ -116,11 +108,11 @@ export default function Login({ status, canResetPassword }) {
                 </div>
 
                 {/* <div className="mt-4 flex items-center ">
-
                     <PrimaryButton className="" disabled={processing}>
                         LOGIN
                     </PrimaryButton>
                 </div> */}
+
                 <div className="mt-4 flex flex-col items-center space-y-3">
                     <PrimaryButton disabled={processing}>
                         LOGIN
@@ -150,6 +142,6 @@ export default function Login({ status, canResetPassword }) {
                 </p>
 
             </form>
-        </GuestLayout>
+        </GuestLayout >
     );
 }

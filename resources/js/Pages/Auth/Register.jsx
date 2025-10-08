@@ -31,12 +31,6 @@ export default function Register() {
         <GuestLayout>
             <Head title="Register" />
 
-            <div className="flex justify-center">
-                <Link href="/">
-                    <ApplicationLogo className="h-20 w-20 " />
-                </Link>
-            </div>
-
             <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="name" value="Name" />
