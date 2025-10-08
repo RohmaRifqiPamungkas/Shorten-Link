@@ -13,41 +13,18 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ShortenLinkController;
+use App\Http\Controllers\Auth\Web3AuthController;
 use App\Http\Controllers\ProjectPublicController;
 // use App\Http\Controllers\Auth\VerifyEmailController;
 // use Symfony\Component\HttpKernel\Exception\HttpException;
 
+Route::post('/web3/nonce', [Web3AuthController::class, 'nonce']);
+Route::post('/web3/verify', [Web3AuthController::class, 'verify']);
+
 // =====================================
-// Test Errors Routes
+// AI Sugestions Routes
 // =====================================
-
-// Route::get('/test-error/{code}', function ($code) {
-//     switch ($code) {
-//         case 401:
-//             abort(401);
-//         case 402:
-//             throw new HttpException(402);
-//         case 403:
-//             abort(403, 'Access denied.');
-//         case 419:
-//             abort(419);
-//         case 429:
-//             abort(429);
-//         case 500:
-//             abort(500);
-//         case 503:
-//             abort(503);
-//         default:
-//             abort(404);
-//     }
-// });
-
-// Route::get('/db-error', function () {
-//     \DB::table('tabel_yang_tidak_ada')->get(); // trigger SQL error
-// });
-
 Route::post('/ai/slug', [ShortenLinkController::class, 'generateSlug']);
-
 Route::post('/ai/project-slug', [ProjectController::class, 'generateSlug'])->name('projects.ai.slug');
 
 // =====================================
