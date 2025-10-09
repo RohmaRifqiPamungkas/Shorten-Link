@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Checkbox from "@/Components/Checkbox";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
@@ -17,6 +17,21 @@ export default function Login({ status, canResetPassword }) {
     });
 
     const [showPassword, setShowPassword] = useState(false);
+    const [greeting, setGreeting] = useState("");
+
+    useEffect(() => {
+        const hour = new Date().getHours();
+
+        if (hour >= 4 && hour < 11) {
+            setGreeting("Good morning 🌅");
+        } else if (hour >= 11 && hour < 15) {
+            setGreeting("Good afternoon ☀️");
+        } else if (hour >= 15 && hour < 18) {
+            setGreeting("Good evening 🌇");
+        } else {
+            setGreeting("Good night 🌙");
+        }
+    }, []);
 
     const submit = (e) => {
         e.preventDefault();
@@ -29,6 +44,15 @@ export default function Login({ status, canResetPassword }) {
     return (
         <GuestLayout>
             <Head title="Log in" />
+
+            <div className="mb-6 text-center">
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                    {greeting}
+                </h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Please log in to continue to your dashboard.
+                </p>
+            </div>
 
             {status && (
                 <div className="mb-4 text-sm font-medium text-green-600">
