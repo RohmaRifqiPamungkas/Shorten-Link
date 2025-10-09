@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -18,6 +18,21 @@ export default function Register() {
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [greeting, setGreeting] = useState("");
+
+    useEffect(() => {
+        const hour = new Date().getHours();
+
+        if (hour >= 4 && hour < 11) {
+            setGreeting("Good morning 🌅");
+        } else if (hour >= 11 && hour < 15) {
+            setGreeting("Good afternoon ☀️");
+        } else if (hour >= 15 && hour < 18) {
+            setGreeting("Good evening 🌇");
+        } else {
+            setGreeting("Good night 🌙");
+        }
+    }, []);
 
     const submit = (e) => {
         e.preventDefault();
@@ -30,6 +45,15 @@ export default function Register() {
     return (
         <GuestLayout>
             <Head title="Register" />
+
+            <div className="mb-6 text-center">
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                    {greeting}
+                </h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Please register to continue to your dashboard.
+                </p>
+            </div>
 
             <form onSubmit={submit}>
                 <div>

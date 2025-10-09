@@ -28,10 +28,14 @@ export default {
   				DEFAULT: 'hsl(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
   			},
-  			secondary: {
-  				DEFAULT: 'hsl(var(--secondary))',
-  				foreground: 'hsl(var(--secondary-foreground))'
-  			},
+			secondary: {
+			'25': '#FFF7E5',
+			'50': '#FFE9B5',
+			'75': '#FFD166',
+			'100': '#FF9F1C',
+			DEFAULT: '#FF9F1C',
+			foreground: '#ffffff'
+			},
   			tertiary: '#F0F8FF',
   			foreground: 'hsl(var(--foreground))',
   			background: 'hsl(var(--background))',
