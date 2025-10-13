@@ -3,7 +3,7 @@ import { useForm, Head } from "@inertiajs/react";
 import { Inertia } from '@inertiajs/inertia';
 import { Icon } from "@iconify/react";
 import DashboardLayout from "@/Components/DashboardLayout/DashboardLayout";
-import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButton from "@/Components/Button/PrimaryButton";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
 import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
@@ -44,7 +44,7 @@ const EditUrlPage = ({ auth, link, domains }) => {
     };
 
     const handleShareClick = (link) => {
-          const fullUrl = `${window.location.origin}/s/${link.custom_alias}`;
+        const fullUrl = `${window.location.origin}/s/${link.custom_alias}`;
         setSelectedShareUrl(fullUrl);
         setShareModalOpen(true);
     };
@@ -55,23 +55,23 @@ const EditUrlPage = ({ auth, link, domains }) => {
     };
 
     const handleConfirmDelete = () => {
-    if (selectedLinkToDelete) {
-        Inertia.post(
-            `/shorten/${selectedLinkToDelete.id}`,
-            { _method: "DELETE" },
-            {
-                onSuccess: () => {
-                    Inertia.visit("/shorten", {
-                        replace: true,
-                        preserveScroll: true,
-                    });
-                },
-            }
-        );
-    }
+        if (selectedLinkToDelete) {
+            Inertia.post(
+                `/shorten/${selectedLinkToDelete.id}`,
+                { _method: "DELETE" },
+                {
+                    onSuccess: () => {
+                        Inertia.visit("/shorten", {
+                            replace: true,
+                            preserveScroll: true,
+                        });
+                    },
+                }
+            );
+        }
 
-    setDeleteModalOpen(false);
-};
+        setDeleteModalOpen(false);
+    };
 
 
     const onSubmit = (e) => {
@@ -82,7 +82,7 @@ const EditUrlPage = ({ auth, link, domains }) => {
     return (
         <DashboardLayout user={auth.user}>
             <Breadcrumb />
-              <Head title="   Edit Link" />
+            <Head title="   Edit Link" />
             <h2 className="text-xl font-semibold text-blue-900 mt-4 mb-4">
                 Edit URL
             </h2>
@@ -98,8 +98,8 @@ const EditUrlPage = ({ auth, link, domains }) => {
                         rel="noopener noreferrer"
                     >
                         {`${data.domain_id
-                                ? `https://${domains.find((d) => d.id == data.domain_id)?.domain}`
-                                : window.location.origin
+                            ? `https://${domains.find((d) => d.id == data.domain_id)?.domain}`
+                            : window.location.origin
                             }/s/${data.custom_alias}`}
                     </a>
                 </span>

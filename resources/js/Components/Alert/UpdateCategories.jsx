@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButton from "@/Components/Button/PrimaryButton";
 import Notification from "../Notification/Notification";
 import { useForm, router } from "@inertiajs/react";
 

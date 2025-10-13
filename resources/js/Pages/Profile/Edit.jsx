@@ -2,7 +2,7 @@ import React from "react";
 import DashboardLayout from "@/Components/DashboardLayout/DashboardLayout";
 import { Head } from "@inertiajs/react";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
-import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButton from "@/Components/Button/PrimaryButton";
 import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm";
 import UpdatePasswordForm from "./Partials/UpdatePasswordForm";
 import DeleteUserForm from "./Partials/DeleteUserForm";

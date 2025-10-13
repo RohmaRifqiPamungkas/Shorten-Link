@@ -10,6 +10,7 @@ import CreateShortlink from "@/Components/Alert/CreateShortlink";
 import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
 import Notification from "@/Components/Notification/Notification";
+import ToastAlert from "@/Components/Notification/ToastAlert";
 import { Icon } from "@iconify/react";
 
 export default function ShortenedLinkPage({ shortends, domains }) {
@@ -236,8 +237,16 @@ export default function ShortenedLinkPage({ shortends, domains }) {
                     </div>
                 </div>
 
-                {notification && (
+                {/* {notification && (
                     <Notification
+                        type={notification.type}
+                        message={notification.message}
+                        onClose={() => setNotification(null)}
+                    />
+                )} */}
+
+                {notification && (
+                    <ToastAlert
                         type={notification.type}
                         message={notification.message}
                         onClose={() => setNotification(null)}
@@ -324,7 +333,7 @@ export default function ShortenedLinkPage({ shortends, domains }) {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="text-sm text-foreground break-all hover:underline block"
-                                                    title={link.original_url} 
+                                                    title={link.original_url}
                                                 >
                                                     {link.original_url.length > 60
                                                         ? `${link.original_url.slice(0, 60)}...`

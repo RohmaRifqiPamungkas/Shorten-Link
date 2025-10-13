@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButton from "@/Components/Button/PrimaryButton";
 import AISuggestButton from "@/Components/AISuggestButton";
 import Notification from "../Notification/Notification";
+import ToastAlert from "../Notification/ToastAlert";
 import { useForm } from "@inertiajs/react";
 
 export default function CreateShortlink({ show, onClose, domains = [] }) {
@@ -135,8 +136,17 @@ export default function CreateShortlink({ show, onClose, domains = [] }) {
                 </div>
 
                 {/* Notifikasi */}
-                {notification && (
+                {/* {notification && (
                     <Notification
+                        type={notification.type}
+                        message={notification.message}
+                        onClose={() => setNotification(null)}
+                    />
+                )} */}
+
+                {/* Notifikasi */}
+                {notification && (
+                    <ToastAlert
                         type={notification.type}
                         message={notification.message}
                         onClose={() => setNotification(null)}

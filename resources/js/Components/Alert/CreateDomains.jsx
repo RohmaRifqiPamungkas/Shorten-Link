@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButton from "@/Components/Button/PrimaryButton";
 import Notification from "@/Components/Notification/Notification";
 import { useForm } from "@inertiajs/react";
 import { TbWorldWww } from "react-icons/tb";
