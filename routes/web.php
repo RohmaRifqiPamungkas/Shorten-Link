@@ -18,6 +18,13 @@ use App\Http\Controllers\Auth\Web3AuthController;
 use App\Http\Controllers\ProjectPublicController;
 
 // =====================================
+// Landing Page Routes
+// =====================================
+// Route::get('/', function () {
+//     return Inertia::render('LandingPage');
+// })->name('landing');
+
+// =====================================
 // Public Routes
 // =====================================
 Route::middleware('guest')->group(function () {
@@ -32,8 +39,8 @@ Route::middleware('guest')->group(function () {
         if (Auth::check()) {
             return redirect()->route('dashboard.index');
         }
-        return Inertia::render('Auth/Login');
-    })->name('login');
+        return Inertia::render('LandingPage');
+    })->name('landing');
 });
 
 // =====================================

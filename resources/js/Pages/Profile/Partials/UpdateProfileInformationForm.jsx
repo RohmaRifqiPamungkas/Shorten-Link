@@ -1,5 +1,5 @@
 import { useForm, usePage, Link } from "@inertiajs/react";
-import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButton from "@/Components/Button/PrimaryButton";
 
 export default function UpdateProfileInformation({
     mustVerifyEmail,

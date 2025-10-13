@@ -6,11 +6,13 @@ import SearchBar from "@/Components/Searchbar/Search";
 import Pagination from "@/Components/Pagination/Pagination";
 import BulkActions from "@/Components/BulkAction/BulkAction";
 import Notification from "@/Components/Notification/Notification";
+import ToastAlert from "@/Components/Notification/ToastAlert";
 import Modal from "@/Components/Modal";
 import { Icon } from "@iconify/react";
 import AddDomainButton from "@/Components/Button/AddDomainButton";
 import CreateDomains from "@/Components/Alert/CreateDomains";
 import DeleteModal from "@/Components/Alert/DeleteModal";
+import GlareHover from "@/Components/Effects/GlareHover";
 
 export default function DomainPage({ domains }) {
     const { success, error } = usePage().props;
@@ -168,6 +170,14 @@ export default function DomainPage({ domains }) {
                     </div>
                 </div>
 
+                {/* {notification && (
+                    <Notification
+                        type={notification.type}
+                        message={notification.message}
+                        onClose={() => setNotification(null)}
+                    />
+                )} */}
+
                 {notification && (
                     <Notification
                         type={notification.type}
@@ -180,7 +190,7 @@ export default function DomainPage({ domains }) {
                 <CreateDomains show={showModal} onClose={() => setShowModal(false)} />
 
                 {/* Table */}
-                <div className="overflow-x-auto bg-white shadow rounded-2xl">
+                <GlareHover glareColor="#015196" glareOpacity={0.35} borderColor="rgba(255, 255, 255, 0)" className="p-5 bg-white/95 rounded-2xl backdrop-blur-sm">
                     <table className="min-w-full text-left border-collapse text-sm md:text-[16px]">
                         <thead>
                             <tr className="border-b border-muted hover:bg-gray-50">
@@ -293,7 +303,7 @@ export default function DomainPage({ domains }) {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </GlareHover>
 
                 {/* Pagination */}
                 <Pagination

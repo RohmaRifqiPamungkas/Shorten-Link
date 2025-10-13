@@ -3,7 +3,7 @@ import { useForm, Head } from "@inertiajs/react";
 import { Icon } from "@iconify/react";
 import { Inertia } from '@inertiajs/inertia';
 import DashboardLayout from "@/Components/DashboardLayout/DashboardLayout";
-import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButton from "@/Components/Button/PrimaryButton";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
 import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";

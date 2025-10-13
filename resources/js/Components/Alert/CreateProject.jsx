@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButton from "@/Components/Button/PrimaryButton";
 import AISuggestButton from "../AISuggestButton";
 import Notification from "../Notification/Notification";
 import { useForm } from "@inertiajs/react";

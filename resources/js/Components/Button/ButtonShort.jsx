@@ -6,14 +6,22 @@ export default function ShortenButton({
   label = "Shorten",
   className = "",
   type = "button",
+  disabled = false,
 }) {
   return (
     <button
       onClick={onClick}
       type={type}
-      className={`bg-secondary hover:bg-primary-100 text-white px-3 py-2 flex items-center gap-1 rounded-lg ${className}`}
+      disabled={disabled}
+      className={`flex items-center gap-1 justify-center px-4 py-2 rounded-md font-semibold text-sm transition-all duration-150 w-full
+        ${disabled
+          ? "bg-gray-300 text-gray-700 cursor-not-allowed"
+          : "bg-gradient-to-r from-orange-500 to-yellow-500 text-white hover:brightness-110 shadow-md hover:shadow-lg"
+        }
+        ${className}`}
     >
-      {icon} {label}
+      {icon}
+      {label}
     </button>
   );
 }

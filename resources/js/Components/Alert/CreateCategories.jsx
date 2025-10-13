@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButton from "@/Components/Button/PrimaryButton";
 import Notification from "../Notification/Notification";
 import { useForm } from "@inertiajs/react";
 
@@ -53,7 +53,7 @@ export default function CreateCategories({ show, onClose, project }) {
         } else {
             setPreviewImage(null);
         }
-    };    
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();

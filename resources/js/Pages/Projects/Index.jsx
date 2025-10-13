@@ -10,6 +10,8 @@ import CreateProject from "@/Components/Alert/CreateProject";
 import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
 import Notification from "@/Components/Notification/Notification";
+import SpotlightCard from "@/Components/Card/SpotlightCard";
+import GlareHover from "@/Components/Effects/GlareHover";
 import { Icon } from "@iconify/react";
 import { FiPlus } from "react-icons/fi";
 
@@ -224,7 +226,7 @@ export default function ProjectsDashboard({ auth, domains }) {
                     />
                 )}
 
-                <div className="overflow-x-auto bg-white shadow rounded-2xl">
+                <GlareHover glareColor="#015196" glareOpacity={0.35} borderColor="rgba(255, 255, 255, 0)" className="p-5 bg-white/95 rounded-2xl backdrop-blur-sm">
                     <table className="min-w-full text-left border-collapse text-sm  md:text-[16px]">
                         <thead>
                             <tr className="border-b border-muted">
@@ -376,7 +378,7 @@ export default function ProjectsDashboard({ auth, domains }) {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </GlareHover>
 
                 {/* Pagination */}
                 <Pagination

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import DashboardLayout from "@/Components/DashboardLayout/DashboardLayout";
-import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButton from "@/Components/Button/PrimaryButton";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
 import { Head, useForm, Link } from "@inertiajs/react";
 import DeleteModal from "@/Components/Alert/DeleteModal";
@@ -230,7 +230,7 @@ const CreateLink = ({ project, selectedCategoryId }) => {
                                             )
                                         }
                                         required
-                                        
+
                                         className="w-full px-3 py-2 border-brfourth rounded-md focus:outline-none"
                                     />
                                 </div>

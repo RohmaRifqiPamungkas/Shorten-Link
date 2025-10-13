@@ -33,6 +33,7 @@ export default {
 			'50': '#FFE9B5',
 			'75': '#FFD166',
 			'100': '#FF9F1C',
+			gold: '#FFD700',
 			DEFAULT: '#FF9F1C',
 			foreground: '#ffffff'
 			},
@@ -89,10 +90,21 @@ export default {
 				'0%': { opacity: '1', transform: 'translateX(0)' },
 				'100%': { opacity: '0', transform: 'translateX(20px)' },
 			},
+			shine: {
+          		'0%': { backgroundPosition: '200% 0' },
+          		'100%': { backgroundPosition: '-200% 0' },
+        	},
+        	glint: {
+				'0%': { transform: 'translateX(-100%) skewX(-15deg)', opacity: '0' },
+				'30%': { opacity: '1' },
+				'100%': { transform: 'translateX(200%) skewX(-15deg)', opacity: '0' },
+			},
 		},
 		animation: {
 		fadeIn: 'fadeIn 0.3s ease-out forwards',
 		fadeOut: 'fadeOut 0.3s ease-in forwards',
+		shine: 'shine 3s linear infinite',
+        glint: 'glint 3s ease-in-out infinite',
 		},
   	}
   },

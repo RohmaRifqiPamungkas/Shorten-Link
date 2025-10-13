@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DashboardLayout from "@/Components/DashboardLayout/DashboardLayout";
 import { Head, usePage } from "@inertiajs/react";
 import Notification from "@/Components/Notification/Notification";
+import SpotlightCard from "@/Components/Card/SpotlightCard";
 import { Icon } from "@iconify/react";
 import {
     BarChart,
@@ -69,8 +70,12 @@ export default function DashboardPage({
                 )}
 
                 {/* Summary Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                    <div className="bg-white p-5 rounded-2xl shadow flex items-center gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <SpotlightCard
+                        spotlightColor="rgba(1,81,150,0.5)"
+                        borderColor="rgba(1,81,150,0.15)"
+                        className="p-5 rounded-2xl flex items-center gap-4 bg-white/90 backdrop-blur-sm"
+                    >
                         <div className="p-3 bg-primary-25 rounded-xl text-primary-100 text-2xl">
                             <Icon icon="mdi:link" />
                         </div>
@@ -78,8 +83,13 @@ export default function DashboardPage({
                             <p className="text-gray-600 text-sm">Total Links</p>
                             <p className="text-xl font-bold">{totalLinks}</p>
                         </div>
-                    </div>
-                    <div className="bg-white p-5 rounded-2xl shadow flex items-center gap-4">
+                    </SpotlightCard>
+
+                    <SpotlightCard
+                        spotlightColor="rgba(34,197,94,0.4)"
+                        borderColor="rgba(34,197,94,0.2)"
+                        className="p-5 rounded-2xl flex items-center gap-4 bg-white/90 backdrop-blur-sm"
+                    >
                         <div className="p-3 bg-green-100 rounded-xl text-green-600 text-2xl">
                             <Icon icon="mdi:cursor-default-click" />
                         </div>
@@ -87,8 +97,13 @@ export default function DashboardPage({
                             <p className="text-gray-600 text-sm">Total Clicks</p>
                             <p className="text-xl font-bold">{totalClicks}</p>
                         </div>
-                    </div>
-                    <div className="bg-white p-5 rounded-2xl shadow flex items-center gap-4">
+                    </SpotlightCard>
+
+                    <SpotlightCard
+                        spotlightColor="rgba(1,81,150,0.4)"
+                        borderColor="rgba(1,81,150,0.2)"
+                        className="p-5 rounded-2xl flex items-center gap-4 bg-white/90 backdrop-blur-sm"
+                    >
                         <div className="p-3 bg-primary-25 rounded-xl text-primary-100 text-2xl">
                             <Icon icon="mdi:folder" />
                         </div>
@@ -96,8 +111,13 @@ export default function DashboardPage({
                             <p className="text-gray-600 text-sm">Total Projects</p>
                             <p className="text-xl font-bold">{totalProjects}</p>
                         </div>
-                    </div>
-                    <div className="bg-white p-5 rounded-2xl shadow flex items-center gap-4">
+                    </SpotlightCard>
+
+                    <SpotlightCard
+                        spotlightColor="rgba(255,165,0,0.4)"
+                        borderColor="rgba(255,165,0,0.2)"
+                        className="p-5 rounded-2xl flex items-center gap-4 bg-white/90 backdrop-blur-sm"
+                    >
                         <div className="p-3 bg-yellow-100 rounded-xl text-yellow-600 text-2xl">
                             <Icon icon="mdi:tag-multiple" />
                         </div>
@@ -105,13 +125,13 @@ export default function DashboardPage({
                             <p className="text-gray-600 text-sm">Total Categories</p>
                             <p className="text-xl font-bold">{totalCategories}</p>
                         </div>
-                    </div>
+                    </SpotlightCard>
                 </div>
 
                 {/* Charts Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     {/* Chart Shorten */}
-                    <div className="bg-white p-5 rounded-2xl shadow">
+                    <SpotlightCard spotlightColor="rgba(1,81,150,0.25)" borderColor="rgba(1,81,150,0.1)" className="p-5 bg-white/95 rounded-2xl backdrop-blur-sm">
                         <h2 className="text-lg font-semibold mb-4">Clicks per Day (Shorten URLs)</h2>
                         {shortenMonths.length > 0 ? (
                             <BarChart
@@ -128,10 +148,10 @@ export default function DashboardPage({
                         ) : (
                             <p className="text-gray-500 text-sm">No data available</p>
                         )}
-                    </div>
+                    </SpotlightCard>
 
                     {/* Chart Projects */}
-                    <div className="bg-white p-5 rounded-2xl shadow">
+                    <SpotlightCard spotlightColor="rgba(255,200,50,0.4)" borderColor="rgba(255,200,50,0.15)" className="p-5 bg-white/95 rounded-2xl backdrop-blur-sm">
                         <h2 className="text-lg font-semibold mb-4">Clicks per Day (Projects)</h2>
                         {projectMonths.length > 0 ? (
                             <BarChart
@@ -164,11 +184,11 @@ export default function DashboardPage({
                         ) : (
                             <p className="text-gray-500 text-sm">No data available</p>
                         )}
-                    </div>
+                    </SpotlightCard>
                 </div>
 
                 {/* By Country Section */}
-                <div className="bg-white p-5 rounded-2xl shadow mb-6">
+                <SpotlightCard spotlightColor="rgba(34,197,94,0.25)" borderColor="rgba(34,197,94,0.1)" className="p-5 bg-white/95 rounded-2xl backdrop-blur-sm mb-6">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-lg font-semibold">Clicks by Country</h2>
                         <select
@@ -199,10 +219,10 @@ export default function DashboardPage({
                     ) : (
                         <p className="text-gray-500 text-sm">No data available</p>
                     )}
-                </div>
+                </SpotlightCard>
 
                 {/* Top Links */}
-                <div className="bg-white p-5 rounded-2xl shadow mb-6">
+                <SpotlightCard spotlightColor="rgba(1,81,150,0.25)" borderColor="rgba(1,81,150,0.1)" className="p-5 bg-white/95 rounded-2xl backdrop-blur-sm mb-6">
                     <h2 className="text-lg font-semibold mb-4">Top 5 Links</h2>
                     {topLinks?.length > 0 ? (
                         <ul className="divide-y divide-gray-200">
@@ -237,10 +257,10 @@ export default function DashboardPage({
                     ) : (
                         <p className="text-gray-500 text-sm">No links available</p>
                     )}
-                </div>
+                </SpotlightCard>
 
                 {/* Top Projects */}
-                <div className="bg-white p-5 rounded-2xl shadow">
+                <SpotlightCard spotlightColor="rgba(1,81,150,0.25)" borderColor="rgba(1,81,150,0.1)" className="p-5 bg-white/95 rounded-2xl backdrop-blur-sm mb-6">
                     <h2 className="text-lg font-semibold mb-4">Top 5 Projects</h2>
                     {topProjects?.length > 0 ? (
                         <ul className="divide-y divide-gray-200">
@@ -271,7 +291,7 @@ export default function DashboardPage({
                     ) : (
                         <p className="text-gray-500 text-sm">No projects available</p>
                     )}
-                </div>
+                </SpotlightCard>
             </div>
         </DashboardLayout>
     );
