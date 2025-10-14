@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "@/Components/Navbar/Navbar";
 import HeroSection from "@/Components/Landing/HeroSection";
+import FeaturesSection from "@/Components/Sections/FeaturesSection";
 
 export default function LandingPage() {
     return (
@@ -10,6 +11,9 @@ export default function LandingPage() {
 
             {/* Hero Section */}
             <HeroSection />
+
+            {/* Features Section */}
+            <FeaturesSection />
         </div>
     );
 }
