@@ -2,6 +2,8 @@ import React from "react";
 import RippleGrid from "@/Components/Background/RippleGrid";
 import ButtonShort from "@/Components/Button/ButtonShort";
 import ShinyText from "@/Components/Effects/ShinyText";
+import PrimaryButton from "@/Components/Button/PrimaryButton";
+import TransparentButton from "@/Components/Button/TransparentButton";
 
 export default function HeroSection() {
     return (
@@ -38,12 +40,12 @@ export default function HeroSection() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4">
-                        <ButtonShort className="px-8 py-3 text-base font-semibold rounded-full shadow-md hover:shadow-lg bg-[#015196] hover:bg-[#0A6BEA] text-white transition">
+                        <PrimaryButton className="px-8 py-3 text-base font-semibold rounded-full shadow-md hover:shadow-lg bg-[#015196] hover:bg-[#0A6BEA] text-white transition">
                             Get started free
-                        </ButtonShort>
-                        <ButtonShort className="px-8 py-3 text-base font-semibold rounded-full shadow-md border border-gray-300 bg-white hover:bg-gray-50 transition">
-                            Talk to Sales
-                        </ButtonShort>
+                        </PrimaryButton>
+                        <TransparentButton className="px-8 py-3 text-base font-semibold rounded-full shadow-md border border-gray-300 bg-white hover:bg-gray-50 transition">
+                            Learn more
+                        </TransparentButton>
                     </div>
 
                     <div className="flex items-center gap-2 mt-6 text-sm text-gray-500">
