@@ -4,6 +4,7 @@ import ButtonShort from "@/Components/Button/ButtonShort";
 import ShinyText from "@/Components/Effects/ShinyText";
 import PrimaryButton from "@/Components/Button/PrimaryButton";
 import TransparentButton from "@/Components/Button/TransparentButton";
+import GlassBadge from "@/Components/Badge/GlassBadge";
 
 export default function HeroSection() {
     return (
@@ -23,9 +24,9 @@ export default function HeroSection() {
             <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 {/* Left: Copywriting */}
                 <div>
-                    <span className="inline-block px-6 py-2 rounded-full border border-gray-300 text-sm font-medium text-[#004AAD] bg-white/10 backdrop-blur-md shadow-lg shadow-[#004AAD]/10 mb-8 transition-all duration-300 hover:scale-105">
+                    <GlassBadge>
                         ✨ AI-powered Shortening
-                    </span>
+                    </GlassBadge>
                     <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6 space-y-1">
                         <div>The intuitive</div>
                         <ShinyText
