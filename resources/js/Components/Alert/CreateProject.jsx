@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PrimaryButton from "@/Components/Button/PrimaryButton";
 import AISuggestButton from "../AISuggestButton";
-import Notification from "../Notification/Notification";
+import ToastAlert from "../Notification/ToastAlert";
 import { useForm } from "@inertiajs/react";
 
 export default function CreateProject({ show, onClose, domains = [] }) {
@@ -138,7 +138,7 @@ export default function CreateProject({ show, onClose, domains = [] }) {
 
                 {/* Notifikasi */}
                 {notification && (
-                    <Notification
+                    <ToastAlert
                         type={notification.type}
                         message={notification.message}
                         onClose={() => setNotification(null)}

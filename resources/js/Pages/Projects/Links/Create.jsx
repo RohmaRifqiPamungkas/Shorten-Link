@@ -4,10 +4,11 @@ import { Icon } from "@iconify/react";
 import DashboardLayout from "@/Components/DashboardLayout/DashboardLayout";
 import PrimaryButton from "@/Components/Button/PrimaryButton";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
+import GlareHover from "@/Components/Effects/GlareHover";
 import { Head, useForm, Link } from "@inertiajs/react";
 import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
-import Notification from "@/Components/Notification/Notification";
+import ToastAlert from "@/Components/Notification/ToastAlert";
 
 const CreateLink = ({ project, selectedCategoryId }) => {
     const { data, setData, post, processing, errors } = useForm({
@@ -165,14 +166,14 @@ const CreateLink = ({ project, selectedCategoryId }) => {
             </div>
 
             {notification && (
-                <Notification
+                <ToastAlert
                     type={notification.type}
                     message={notification.message}
                     onClose={() => setNotification(null)}
                 />
             )}
 
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl md:max-w-full p-10 relative">
+            <GlareHover glareColor="#015196" glareOpacity={0.35} borderColor="rgba(255, 255, 255, 0)" className="p-5 bg-white/95 rounded-2xl backdrop-blur-sm">
                 <div className="mt-4">
                     <form onSubmit={submit} className=" space-y-5 ">
                         <input
@@ -280,23 +281,24 @@ const CreateLink = ({ project, selectedCategoryId }) => {
                             {processing ? "Submit..." : "Submit"}
                         </PrimaryButton>
                     </form>
-
-                    {isDeleteModalOpen && (
-                        <DeleteModal
-                            isOpen={isDeleteModalOpen}
-                            onClose={() => setDeleteModalOpen(false)}
-                            onConfirm={handleConfirmDelete}
-                        />
-                    )}
-
-                    {isShareModalOpen && (
-                        <SharePopup
-                            url={selectedShareUrl}
-                            onClose={() => setShareModalOpen(false)}
-                        />
-                    )}
                 </div>
-            </div>
+            </GlareHover>
+
+            {isDeleteModalOpen && (
+                <DeleteModal
+                    isOpen={isDeleteModalOpen}
+                    onClose={() => setDeleteModalOpen(false)}
+                    onConfirm={handleConfirmDelete}
+                />
+            )}
+
+            {isShareModalOpen && (
+                <SharePopup
+                    url={selectedShareUrl}
+                    onClose={() => setShareModalOpen(false)}
+                />
+            )}
+            
         </DashboardLayout>
     );
 };

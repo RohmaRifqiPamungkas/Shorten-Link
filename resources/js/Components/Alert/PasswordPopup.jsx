@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Icon } from "@iconify/react";
-import Notification from "@/Components/Notification/Notification";
+import ToastAlert from "@/Components/Notification/ToastAlert";
 import { router } from "@inertiajs/react";
 
 export default function PasswordPopup({ shortCode }) {
@@ -51,7 +51,7 @@ export default function PasswordPopup({ shortCode }) {
                     />
 
                     {error && (
-                        <Notification
+                        <ToastAlert
                             type="error"
                             message={error}
                             onClose={() => setError(null)}

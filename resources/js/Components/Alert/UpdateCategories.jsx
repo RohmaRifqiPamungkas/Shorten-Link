@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PrimaryButton from "@/Components/Button/PrimaryButton";
-import Notification from "../Notification/Notification";
+import ToastAlert from "@/Components/Notification/ToastAlert";
 import { useForm, router } from "@inertiajs/react";
 
 export default function UpdateCategories({ show, onClose, project, category }) {
@@ -93,7 +93,7 @@ export default function UpdateCategories({ show, onClose, project, category }) {
                 </div>
 
                 {notification && (
-                    <Notification
+                    <ToastAlert
                         type={notification.type}
                         message={notification.message}
                         onClose={() => setNotification(null)}

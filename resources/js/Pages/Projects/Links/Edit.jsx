@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import DashboardLayout from "@/Components/DashboardLayout/DashboardLayout";
 import PrimaryButton from "@/Components/Button/PrimaryButton";
+import GlareHover from "@/Components/Effects/GlareHover";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
 import { Head, useForm, Link } from "@inertiajs/react";
 import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
-import Notification from "@/Components/Notification/Notification";
+import ToastAlert from "@/Components/Notification/ToastAlert";
 
 const EditLink = ({ project, link, categories }) => {
     const { data, setData, patch, processing, errors } = useForm({
@@ -163,14 +164,14 @@ const EditLink = ({ project, link, categories }) => {
             </div>
 
             {notification && (
-                <Notification
+                <ToastAlert
                     type={notification.type}
                     message={notification.message}
                     onClose={() => setNotification(null)}
                 />
             )}
 
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl md:max-w-full p-10 relative">
+            <GlareHover glareColor="#015196" glareOpacity={0.35} borderColor="rgba(255, 255, 255, 0)" className="p-5 bg-white/95 rounded-2xl backdrop-blur-sm">
                 <div className="mt-4">
                     <form onSubmit={submit} className=" space-y-5 ">
                         <input
@@ -287,7 +288,7 @@ const EditLink = ({ project, link, categories }) => {
                         />
                     )}
                 </div>
-            </div>
+            </GlareHover>
         </DashboardLayout>
     );
 };

@@ -3,13 +3,13 @@ import DashboardLayout from "@/Components/DashboardLayout/DashboardLayout";
 import { Head, usePage, useForm, Link } from "@inertiajs/react";
 import { Inertia } from "@inertiajs/inertia";
 import SearchBar from "@/Components/Searchbar/Search";
+import GlareHover from "@/Components/Effects/GlareHover";
 import Pagination from "@/Components/Pagination/Pagination";
 import BulkActions from "@/Components/BulkAction/BulkAction";
 import ShortenButton from "@/Components/Button/ButtonShort";
 import CreateShortlink from "@/Components/Alert/CreateShortlink";
 import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
-import Notification from "@/Components/Notification/Notification";
 import ToastAlert from "@/Components/Notification/ToastAlert";
 import { Icon } from "@iconify/react";
 
@@ -254,7 +254,7 @@ export default function ShortenedLinkPage({ shortends, domains }) {
                 )}
 
                 {/* Table */}
-                <div className="overflow-x-auto bg-white shadow rounded-2xl">
+                <GlareHover glareColor="#015196" glareOpacity={0.35} borderColor="rgba(255, 255, 255, 0)" className="p-5 bg-white/95 rounded-2xl backdrop-blur-sm">
                     <table className="min-w-full text-left border-collapse text-sm  md:text-[16px]">
                         <thead>
                             <tr className="border-b border-muted hover:bg-gray-50">
@@ -418,7 +418,7 @@ export default function ShortenedLinkPage({ shortends, domains }) {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </GlareHover>
 
                 {/* Pagination */}
                 <Pagination
