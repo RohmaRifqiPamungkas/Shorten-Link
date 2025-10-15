@@ -8,7 +8,7 @@ import BulkActions from "@/Components/BulkAction/BulkAction";
 import ShortenButton from "@/Components/Button/ButtonShort";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
 import DeleteModal from "@/Components/Alert/DeleteModal";
-import Notification from "@/Components/Notification/Notification";
+import ToastAlert from "@/Components/Notification/ToastAlert";
 import { Icon } from "@iconify/react";
 import { FiPlus } from "react-icons/fi";
 
@@ -183,7 +183,7 @@ export default function Links({
                 </div>
 
                 {notification && (
-                    <Notification
+                    <ToastAlert
                         {...notification}
                         onClose={() => setNotification(null)}
                     />

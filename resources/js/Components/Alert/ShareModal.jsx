@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Icon } from "@iconify/react";
-import Notification from "@/Components/Notification/Notification";
+import ToastAlert from "@/Components/Notification/ToastAlert";
 import { QRCodeCanvas } from "qrcode.react";
 
 export default function SharePopup({ url, onClose }) {
@@ -97,7 +97,7 @@ export default function SharePopup({ url, onClose }) {
 
                     {/* Notifikasi */}
                     {showNotif && (
-                        <Notification
+                        <ToastAlert
                             type="success"
                             message="Link copied to clipboard!"
                             onClose={() => setShowNotif(false)}

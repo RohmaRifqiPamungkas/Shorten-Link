@@ -7,7 +7,7 @@ import PrimaryButton from "@/Components/Button/PrimaryButton";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
 import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
-import Notification from "@/Components/Notification/Notification";
+import ToastAlert from "@/Components/Notification/ToastAlert";
 
 const EditUrlPage = ({ auth, link, domains }) => {
     const { data, setData, patch, processing, errors } = useForm({
@@ -147,7 +147,7 @@ const EditUrlPage = ({ auth, link, domains }) => {
             </div>
 
             {notification && (
-                <Notification
+                <ToastAlert
                     type={notification.type}
                     message={notification.message}
                     onClose={() => setNotification(null)}

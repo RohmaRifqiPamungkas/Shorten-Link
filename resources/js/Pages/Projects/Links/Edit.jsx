@@ -6,7 +6,7 @@ import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
 import { Head, useForm, Link } from "@inertiajs/react";
 import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
-import Notification from "@/Components/Notification/Notification";
+import ToastAlert from "@/Components/Notification/ToastAlert";
 
 const EditLink = ({ project, link, categories }) => {
     const { data, setData, patch, processing, errors } = useForm({
@@ -163,7 +163,7 @@ const EditLink = ({ project, link, categories }) => {
             </div>
 
             {notification && (
-                <Notification
+                <ToastAlert
                     type={notification.type}
                     message={notification.message}
                     onClose={() => setNotification(null)}

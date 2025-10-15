@@ -9,7 +9,6 @@ import ShortenButton from "@/Components/Button/ButtonShort";
 import CreateShortlink from "@/Components/Alert/CreateShortlink";
 import DeleteModal from "@/Components/Alert/DeleteModal";
 import SharePopup from "@/Components/Alert/ShareModal";
-import Notification from "@/Components/Notification/Notification";
 import ToastAlert from "@/Components/Notification/ToastAlert";
 import { Icon } from "@iconify/react";
 

@@ -9,7 +9,7 @@ import ShortenButton from "@/Components/Button/ButtonShort";
 import CreateCategories from "@/Components/Alert/CreateCategories";
 import UpdateCategories from "@/Components/Alert/UpdateCategories";
 import DeleteModal from "@/Components/Alert/DeleteModal";
-import Notification from "@/Components/Notification/Notification";
+import ToastAlert from "@/Components/Notification/ToastAlert";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb";
 import { Icon } from "@iconify/react";
 import { FiPlus } from "react-icons/fi";
@@ -181,7 +181,7 @@ export default function Categories({ auth, project = {} }) {
                 </div>
 
                 {notification && (
-                    <Notification
+                    <ToastAlert
                         type={notification.type}
                         message={notification.message}
                         onClose={() => setNotification(null)}

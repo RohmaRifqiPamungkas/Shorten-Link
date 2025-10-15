@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import PrimaryButton from "@/Components/Button/PrimaryButton";
-import Notification from "../Notification/Notification";
+import ToastAlert from "../Notification/ToastAlert";
 import { useForm } from "@inertiajs/react";
 
 export default function CreateCategories({ show, onClose, project }) {
@@ -116,7 +116,7 @@ export default function CreateCategories({ show, onClose, project }) {
 
                 {/* Notifikasi */}
                 {notification && (
-                    <Notification
+                    <ToastAlert
                         type={notification.type}
                         message={notification.message}
                         onClose={() => setNotification(null)}
