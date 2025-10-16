@@ -10,10 +10,11 @@ const Navbar = () => {
             <div className="flex items-center justify-between backdrop-blur-2xl bg-white/10 border border-white/20 rounded-full px-10 py-3.5 shadow-[0_0_30px_rgba(1,81,150,0.15)] transition-all duration-300">
                 {/* Logo */}
                 <div className="flex items-center gap-2">
-                    <Icon icon="mdi:link-variant" className="text-secondary-gold text-2xl" />
-                    <span className="text-secondary-gold font-semibold text-lg tracking-tight">
-                        Shorten-Link
-                    </span>
+                    <img
+                        src="/images/Tautly.png"
+                        alt="Logo"
+                        className="w-32 h-auto"
+                    />
                 </div>
 
                 {/* Links */}

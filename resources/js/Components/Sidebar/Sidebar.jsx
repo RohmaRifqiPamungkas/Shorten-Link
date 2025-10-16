@@ -48,7 +48,7 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
     return (
         <aside
             className={`
-    fixed top-0 left-0 z-10 h-screen min-h-screen bg-white border-r shadow-fourth
+    fixed top-0 left-0 z-10 h-screen min-h-screen bg-white border-r
     flex flex-col
     transition-all duration-300 ease-in-out
     ${isExpanded ? "w-72" : "w-20"}
@@ -71,9 +71,9 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
                 {isExpanded ? (
                     <div className="flex justify-center w-full">
                         <img
-                            src="/images/Logo.png"
+                            src="/images/Tautly.png"
                             alt="Logo"
-                            className="w-32 h-auto"
+                            className="w-24 h-auto"
                         />
                     </div>
                 ) : null}

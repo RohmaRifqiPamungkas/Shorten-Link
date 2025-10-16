@@ -5,9 +5,7 @@ import { Inertia } from "@inertiajs/inertia";
 import SearchBar from "@/Components/Searchbar/Search";
 import Pagination from "@/Components/Pagination/Pagination";
 import BulkActions from "@/Components/BulkAction/BulkAction";
-import Notification from "@/Components/Notification/Notification";
 import ToastAlert from "@/Components/Notification/ToastAlert";
-import Modal from "@/Components/Modal";
 import { Icon } from "@iconify/react";
 import AddDomainButton from "@/Components/Button/AddDomainButton";
 import CreateDomains from "@/Components/Alert/CreateDomains";
@@ -179,7 +177,7 @@ export default function DomainPage({ domains }) {
                 )} */}
 
                 {notification && (
-                    <Notification
+                    <ToastAlert
                         type={notification.type}
                         message={notification.message}
                         onClose={() => setNotification(null)}

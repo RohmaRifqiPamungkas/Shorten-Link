@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import PrimaryButton from "@/Components/Button/PrimaryButton";
-import ToastAlert from "../Notification/ToastAlert";
+import ToastAlert from "@/Components/Notification/ToastAlert";
 import { useForm } from "@inertiajs/react";
+import { FiTag } from "react-icons/fi";
 
 export default function CreateCategories({ show, onClose, project }) {
     const [notification, setNotification] = useState(null);
@@ -95,14 +96,11 @@ export default function CreateCategories({ show, onClose, project }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-5">
             <div className="bg-white rounded-2xl shadow-xl w-full  max-w-sm md:max-w-2xl p-5 md:p-10 relative">
-                <div className="flex justify-between">
-                    <div className="flex flex-row">
-                        <img
-                            src="/images/Hyperlink.png"
-                            style={{ width: "24px", height: "24px" }}
-                            alt="hyperlink"
-                        />
-                        <h2 className="text-sm md:text-xl ms-4 font-semibold text-primary-100 mb-4">
+                {/* Header */}
+                <div className="flex justify-between items-center border-b border-gray-200 pb-3">
+                    <div className="flex items-center">
+                        <FiTag className="text-primary-100 w-6 h-6" />
+                        <h2 className="ml-3 text-base md:text-lg font-semibold text-primary-100">
                             Categories Link
                         </h2>
                     </div>
