@@ -1,6 +1,3 @@
-
-
-
 import Sidebar from '@/Components/Sidebar/Sidebar';
 import Footer from '@/Components/Footer/Footer';
 import { useState } from 'react';
@@ -10,7 +7,7 @@ const DashboardLayout = ({ children }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen flex-col md:flex-row">
+    <div className="flex min-h-screen flex-col md:flex-row bg-tertiary">
       {/* Sidebar */}
       <Sidebar isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
 
@@ -24,21 +21,21 @@ const DashboardLayout = ({ children }) => {
 
       {/* Area Konten Utama */}
       <div className={`flex-1 flex flex-col overflow-hidden ${isMobileOpen ? 'md:ml-64' : ''}`}>
-        {/* Header */}
-        <div className="bg-white p-4 shadow md:hidden flex justify-between">
+        {/* Header (Mobile Only) */}
+        <div className="bg-white p-4 shadow md:hidden flex justify-between items-center">
           <button onClick={() => setIsMobileOpen(true)}>
             <FaBars size={20} />
           </button>
-         
         </div>
 
         {/* Konten Utama */}
         <main className="flex-1 px-6 py-6 bg-tertiary min-w-0 overflow-y-auto z-20 relative">
           {children}
         </main>
-         <Footer className="w-full bg-white shadow-md md:static md:mt-auto" />
-      </div>
 
+        {/* Footer */}
+        <Footer />
+      </div>
     </div>
   );
 };

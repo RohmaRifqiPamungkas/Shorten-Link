@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 use App\Models\ShortenedLink;
 use App\Models\UrlClick;
 use App\Models\Project;
 use App\Models\Category;
 use App\Models\ProjectClick;
-use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
+use App\Models\Domain;
 
 class DashboardController extends Controller
 {
@@ -66,6 +67,13 @@ class DashboardController extends Controller
             ->orderByDesc('total')
             ->get();
 
+        // === Domain Stats ===
+        $domainStats = [
+            'active'  => Domain::where('user_id', $userId)->where('status', 'Active')->count(),
+            'pending' => Domain::where('user_id', $userId)->where('status', 'Pending')->count(),
+            'failed'  => Domain::where('user_id', $userId)->where('status', 'failed')->count(),
+        ];
+
         return Inertia::render('Dashboard/Index', [
             // Shorten URL
             'totalLinks'           => $totalLinks,
@@ -81,6 +89,9 @@ class DashboardController extends Controller
 
             // By Country (Shorten Link)
             'clicksByCountry'      => $clicksByCountry,
+
+            // Domain Stats for Dashboard
+            'domainStats'           => $domainStats,
         ]);
     }
 }
