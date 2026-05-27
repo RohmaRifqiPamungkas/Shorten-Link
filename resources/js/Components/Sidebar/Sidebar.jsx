@@ -9,8 +9,11 @@ import { TbWorldWww } from "react-icons/tb";
 
 export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
     const [isExpanded, setIsExpanded] = useState(true);
-    const { url } = usePage();
-    const { auth } = usePage().props;
+    const {
+        url,
+        props: { auth },
+    } = usePage();
+
     const handleLogout = () => {
         router.post(
             "/logout",
@@ -45,122 +48,106 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
         },
     ];
 
+    const sidebarWidthClass = isExpanded ? "w-72 md:w-72" : "w-72 md:w-16";
+
     return (
         <aside
             className={`
-    fixed top-0 left-0 z-10 h-screen min-h-screen bg-white border-r
-    flex flex-col
-    transition-all duration-300 ease-in-out
-    ${isExpanded ? "w-72" : "w-20"}
-    ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-    md:sticky
-  `}
+                fixed left-0 top-0 z-50 flex h-dvh min-h-dvh flex-col border-r border-gray-100 bg-white shadow-sm transition-all duration-300 ease-in-out md:z-30 md:sticky md:translate-x-0 md:shadow-none
+                ${sidebarWidthClass}
+                ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+            `}
         >
-            {/* close hp*/}
             {isMobileOpen && (
                 <button
                     onClick={() => setIsMobileOpen(false)}
-                    className="absolute top-4 right-4 z-50 p-2 rounded-full bg-gray-100 md:hidden"
+                    aria-label="Close sidebar"
+                    className="absolute right-4 top-4 z-50 inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition hover:bg-gray-200 md:hidden"
                 >
-                    ✕
+                    <span className="text-lg leading-none">✕</span>
                 </button>
             )}
 
-            {/* ini header bang */}
-            <div className="relative flex items-center p-4 border-b h-16">
-                {isExpanded ? (
-                    <div className="flex justify-center w-full">
+            <div
+                className={`relative flex h-16 items-center border-b border-gray-100 ${isExpanded ? "px-4" : "justify-center px-2 md:px-2"}`}
+            >
+                {isExpanded && (
+                    <div className="flex w-full items-center justify-center">
                         <img
                             src="/images/Tautly.png"
                             alt="Logo"
-                            className="w-24 h-auto"
+                            className="h-auto w-24 max-w-full"
                         />
                     </div>
-                ) : null}
+                )}
 
-                {/* hambergerrrnya kakk */}
                 <button
                     onClick={() => setIsExpanded(!isExpanded)}
-                    className={`
-      md:block hidden text-gray-600 hover:text-primary transition
-      ${isExpanded ? "absolute right-6" : "mx-auto"}
-    `}
+                    aria-label={isExpanded ? "Collapse sidebar" : "Expand sidebar"}
+                    className={`hidden h-10 w-10 items-center justify-center rounded-full text-gray-600 transition hover:bg-primary-25 hover:text-primary-100 md:inline-flex ${isExpanded ? "absolute right-4" : "absolute left-1/2 -translate-x-1/2"}`}
                 >
-                    <FaBars />
+                    <FaBars className="text-base" />
                 </button>
             </div>
 
-            {/* menu nih */}
-            <nav className="flex-grow mt-4">
-                <div
-                    className={`mb-4 flex-col items-center ${isExpanded ? "px-6" : " justify-center px-3"
-                        }`}
-                >
-                    {!isExpanded && <hr className="my-1 border-transparent " />}
+            <nav className={`flex-1 overflow-y-auto overflow-x-hidden ${isExpanded ? "px-3 py-4" : "px-2 py-3"}`}>
+                <div className="space-y-3">
                     {isExpanded && (
-                        <h2 className="text-sm md:text-lg font-semibold text-gray-600 mb-2 px-6">
-                            MENU
-                        </h2>
+                        <p className="px-3 text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
+                            Menu
+                        </p>
                     )}
-                    {menuItems.map((item) => {
-                        const isActive = url.startsWith(item.href);
-                        return (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className={`
-                  relative group flex items-center gap-4 py-2  ${isExpanded ? "px-6" : "justify-center"
-                                    } my-1 rounded-lg transition-all
-                  overflow-hidden
-                  ${isActive
-                                        ? "bg-primary-25 text-foreground"
-                                        : "text-foreground hover:bg-primary-25 hover:text-primary-100"
-                                    }
-                `}
-                            >
-                                <span
+
+                    <div className={`space-y-1 ${isExpanded ? "" : "flex flex-col items-stretch"}`}>
+                        {menuItems.map((item) => {
+                            const isActive = url.startsWith(item.href);
+
+                            return (
+                                <Link
+                                    key={item.name}
+                                    href={item.href}
                                     className={`
-                    absolute right-0 top-0 bottom-0 w-1 bg-primary-100 rounded-r-full transition-transform transform
-                    ${isActive
-                                            ? "scale-y-100"
-                                            : "scale-y-0 group-hover:scale-y-100"
+                                        group relative flex min-h-12 items-center overflow-hidden rounded-xl transition-all duration-200
+                                        ${isExpanded ? "gap-4 px-4" : "justify-center px-2"}
+                                        ${isActive
+                                            ? "bg-primary-25 text-foreground"
+                                            : "text-foreground hover:bg-primary-25 hover:text-primary-100"
                                         }
-                  `}
-                                />
-                                <span className="text-xl z-10 relative ">
-                                    {item.icon}
-                                </span>
-                                {isExpanded && (
-                                    <span className="z-10 relative text-sm md:text-[16px] font-medium">
-                                        {item.name}
+                                    `}
+                                >
+                                    <span
+                                        className={`
+                                            absolute right-0 top-0 bottom-0 w-1 rounded-r-full bg-primary-100 transition-transform duration-200
+                                            ${isActive ? "scale-y-100" : "scale-y-0 group-hover:scale-y-100"}
+                                        `}
+                                    />
+                                    <span className="relative z-10 text-xl">
+                                        {item.icon}
                                     </span>
-                                )}
-                            </Link>
-                        );
-                    })}
+                                    {isExpanded && (
+                                        <span className="relative z-10 min-w-0 truncate text-sm font-medium md:text-[15px]">
+                                            {item.name}
+                                        </span>
+                                    )}
+                                </Link>
+                            );
+                        })}
+                    </div>
                 </div>
             </nav>
 
-            {/* footer logout*/}
-            <div
-                className={`
-    mt-auto flex items-center gap-3 px-6 
-    ${isExpanded ? "justify-between py-3.5" : "justify-center py-4"}
-    bg-tertiary
-  `}
-            >
+            <div className={`mt-auto border-t border-gray-100 bg-tertiary ${isExpanded ? "px-3 py-4" : "px-2 py-3"}`}>
                 {isExpanded ? (
-                    <>
-                        {/* Profil */}
+                    <div className="flex items-center justify-between gap-3 px-1">
                         <Link
                             href="/profile"
-                            className="flex items-center gap-3 px-6 cursor-pointer hover:opacity-80 transition"
+                            className="flex min-w-0 flex-1 items-center gap-3 rounded-xl px-3 py-2 transition hover:bg-white/70 hover:opacity-90"
                         >
-                            <div className="w-9 h-9 rounded-full bg-primary-100 text-white flex items-center justify-center font-semibold text-sm uppercase">
-                                {auth?.user?.name?.charAt(0)}
+                            <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-primary-100 text-sm font-semibold uppercase text-white">
+                                {auth?.user?.name?.charAt(0) || "U"}
                             </div>
-                            <div className="leading-tight">
-                                <p className="text-sm md:text-[16px] font-medium">
+                            <div className="min-w-0 leading-tight">
+                                <p className="truncate text-sm font-medium md:text-[15px]">
                                     {auth?.user?.name}
                                 </p>
                                 <p className="text-xs text-orange-600">User</p>
@@ -169,37 +156,27 @@ export default function Sidebar({ isMobileOpen, setIsMobileOpen }) {
 
                         <button
                             onClick={handleLogout}
-                            className={`
-          relative group flex items-center gap-4 py-2 px-3 rounded-lg transition-all
-          overflow-hidden text-foreground hover:text-primary-100 hover:bg-primary-25 hover:text-primary
-        `}
+                            aria-label="Logout"
+                            className="group relative inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl text-foreground transition hover:bg-primary-25 hover:text-primary-100"
                         >
                             <span
-                                className={`
-            absolute right-0 top-0 bottom-0 w-1 bg-primary-100 hover:text-primary-100 rounded-r-full transition-transform transform
-            scale-y-0 group-hover:scale-y-100
-          `}
+                                className="absolute right-0 top-0 bottom-0 w-1 scale-y-0 rounded-r-full bg-primary-100 transition-transform group-hover:scale-y-100"
                             />
-                            <span className="text-lg z-10 relative hover:text-primary-100">
+                            <span className="relative z-10 text-lg transition group-hover:text-primary-100">
                                 <FiLogOut />
                             </span>
                         </button>
-                    </>
+                    </div>
                 ) : (
                     <button
                         onClick={handleLogout}
-                        className={`
-        relative group flex items-center justify-center py-2.5 px-6 rounded-lg transition-all
-        overflow-hidden text-foreground hover:text-primary-100 hover:bg-primary-25 hover:text-primary
-      `}
+                        aria-label="Logout"
+                        className="group relative mx-auto inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl text-foreground transition hover:bg-primary-25 hover:text-primary-100"
                     >
                         <span
-                            className={`
-          absolute right-0 top-0 bottom-0 w-1 bg-primary-100 rounded-r-full transition-transform transform
-          scale-y-0 group-hover:scale-y-100
-        `}
+                            className="absolute right-0 top-0 bottom-0 w-1 scale-y-0 rounded-r-full bg-primary-100 transition-transform group-hover:scale-y-100"
                         />
-                        <span className="text-lg z-10 relative hover:text-primary-100 px-6">
+                        <span className="relative z-10 text-lg transition group-hover:text-primary-100">
                             <FiLogOut />
                         </span>
                     </button>
