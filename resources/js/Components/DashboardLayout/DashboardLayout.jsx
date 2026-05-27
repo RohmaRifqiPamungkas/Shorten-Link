@@ -1,7 +1,7 @@
 import Sidebar from '@/Components/Sidebar/Sidebar';
 import Footer from '@/Components/Footer/Footer';
+import DashboardNavbar from '@/Components/Navbar/DashboardNavbar';
 import { useState } from 'react';
-import { FaBars } from 'react-icons/fa';
 
 const DashboardLayout = ({ children }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -20,17 +20,13 @@ const DashboardLayout = ({ children }) => {
       )}
 
       {/* Area Konten Utama */}
-      <div className={`flex-1 flex flex-col overflow-hidden ${isMobileOpen ? 'md:ml-64' : ''}`}>
-        {/* Header (Mobile Only) */}
-        <div className="bg-white p-4 shadow md:hidden flex justify-between items-center">
-          <button onClick={() => setIsMobileOpen(true)}>
-            <FaBars size={20} />
-          </button>
-        </div>
+      <div className={`flex-1 flex min-w-0 flex-col overflow-hidden ${isMobileOpen ? 'md:ml-64' : ''}`}>
+        <main className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden bg-tertiary">
+          <DashboardNavbar onMenuClick={() => setIsMobileOpen(true)} />
 
-        {/* Konten Utama */}
-        <main className="flex-1 px-6 py-6 bg-tertiary min-w-0 overflow-y-auto z-20 relative">
-          {children}
+          <div className="px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+            {children}
+          </div>
         </main>
 
         {/* Footer */}

@@ -1,51 +1,67 @@
 import { Icon } from "@iconify/react";
 
+const socialLinks = [
+    { icon: "mdi:github", href: "#", label: "GitHub" },
+    { icon: "mdi:twitter", href: "#", label: "Twitter" },
+    { icon: "mdi:linkedin", href: "#", label: "LinkedIn" },
+    { icon: "mdi:instagram", href: "#", label: "Instagram" },
+];
+
+const footerLinks = [
+    { label: "Privacy", href: "#" },
+    { label: "Terms", href: "#" },
+    { label: "Help", href: "#" },
+];
+
 export default function Footer() {
     return (
-        <footer className="relative pb-6 w-full px-6">
-            {/* Top divider line */}
-            <div className="h-px bg-gradient-to-r from-transparent via-primary-50 to-transparent mb-4 w-full"></div>
+        <footer className="border-t border-gray-100 bg-white px-4 sm:px-6 lg:px-8">
+            <div className="flex h-14 items-center justify-between gap-4">
 
-            {/* Footer container */}
-            <div
-                className="w-full grid grid-cols-1 md:grid-cols-12 items-center 
-                   bg-primary-100/100 backdrop-blur-md border border-primary-25 
-                   text-white rounded-2xl px-6 py-4 shadow-lg shadow-primary/20"
-            >
-                {/* Left: Logo */}
-                <div className="col-span-4 flex items-center justify-center md:justify-start gap-2 mb-3 md:mb-0">
-                    <div className="w-8 h-8 flex items-center justify-center rounded-full bg-primary-100 text-white font-bold shadow-inner shadow-primary-50/20">
-                        T
-                    </div>
-                    <span className="font-semibold text-sm tracking-wide text-white/90">
-                        Tautly
+                {/* Left: brand */}
+                <div className="flex items-center gap-2.5 flex-none">
+                    {/* <img
+                        src="/images/Tautly.png"
+                        alt="Tautly"
+                        className="h-5 w-auto object-contain opacity-80"
+                    /> */}
+                    <span className="hidden text-xs text-gray-400 sm:inline">
+                        © {new Date().getFullYear()} Tautly
                     </span>
                 </div>
 
-                {/* Center: Copyright */}
-                <div className="col-span-4 flex justify-center">
-                    <p className="text-sm text-gray-300 text-center">
-                        Copyright ©2025{" "}
-                        <span className="text-white font-medium">Tautly</span>. All rights reserved.
-                    </p>
+                {/* Center: nav links */}
+                <div className="flex items-center gap-4">
+                    {footerLinks.map((link) => (
+                        <a
+                            key={link.label}
+                            href={link.href}
+                            className="text-xs text-gray-400 transition hover:text-gray-700"
+                        >
+                            {link.label}
+                        </a>
+                    ))}
                 </div>
 
-                {/* Right: Social Icons */}
-                <div className="col-span-4 flex justify-center md:justify-end items-center gap-4">
-                    <a href="#" className="text-white hover:text-secondary-100 transition-colors">
-                        <Icon icon="mdi:facebook" className="w-5 h-5" />
-                    </a>
-                    <a href="#" className="text-white hover:text-secondary-100 transition-colors">
-                        <Icon icon="mdi:twitter" className="w-5 h-5" />
-                    </a>
-                    <a href="#" className="text-white hover:text-secondary-100 transition-colors">
-                        <Icon icon="mdi:linkedin" className="w-5 h-5" />
-                    </a>
-                    <a href="#" className="text-white hover:text-secondary-100 transition-colors">
-                        <Icon icon="mdi:instagram" className="w-5 h-5" />
-                    </a>
+                {/* Right: social icons */}
+                <div className="flex items-center gap-1 flex-none">
+                    {socialLinks.map((social) => (
+                        <a
+                            key={social.label}
+                            href={social.href}
+                            aria-label={social.label}
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
+                        >
+                            <Icon icon={social.icon} width={15} height={15} />
+                        </a>
+                    ))}
                 </div>
             </div>
+
+            {/* Mobile copyright */}
+            <p className="pb-3 text-center text-xs text-gray-400 sm:hidden">
+                © {new Date().getFullYear()} Tautly. All rights reserved.
+            </p>
         </footer>
     );
 }

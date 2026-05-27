@@ -184,7 +184,7 @@ export default function ProjectsDashboard({ auth, domains }) {
         <DashboardLayout user={auth.user}>
             <Head title="Management Link" />
 
-            <div className="py-5">
+            <div className="space-y-6">
                 <h1 className="text-xl md:text-2xl font-semibold text-primary-100">
                     Management Link
                 </h1>
@@ -416,7 +416,7 @@ export default function ProjectsDashboard({ auth, domains }) {
                     show={showPopup}
                     onClose={() => setShowPopup(false)}
                     onSuccess={() => Inertia.reload()}
-                    domains={domains} 
+                    domains={domains}
                 />
             </div>
         </DashboardLayout>
