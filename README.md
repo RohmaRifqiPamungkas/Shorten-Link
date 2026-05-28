@@ -30,13 +30,46 @@
 
 ---
 
+## 🚀 Deployment
+
+### Deploy to Render (Free Tier Available)
+
+**Quick Start:** [QUICK_START_RENDER.md](./QUICK_START_RENDER.md) - 5 menit
+
+**Full Guide:** [DEPLOY_RENDER.md](./DEPLOY_RENDER.md) - Lengkap dengan troubleshooting
+
+**Checklist:** [RENDER_CHECKLIST.md](./RENDER_CHECKLIST.md) - Step-by-step checklist
+
+**Database Setup:** [DATABASE_SETUP.md](./DATABASE_SETUP.md) - Planetscale vs Supabase
+
+**Features:**
+- ✅ Full stack deployment (Backend + Frontend)
+- ✅ Auto-deploy dari GitHub via GitHub Actions
+- ✅ Free tier with spin-down (testing/demo)
+- ✅ Starter tier $7/mo (production-ready)
+- ✅ Database gratis: Planetscale (5GB MySQL) atau Supabase (500MB PostgreSQL)
+
+**Quick Commands:**
+```bash
+# 1. Generate APP_KEY
+php artisan key:generate --show
+
+# 2. Setup database di Planetscale / Supabase
+# 3. Create web service di Render.com
+# 4. Set environment variables
+# 5. Deploy!
+```
+
+---
+
 ## Tech Stack
 
-- **Backend:** Laravel 10+
-- **Frontend:** React + Inertia.js
-- **Database:** MySQL / MariaDB
+- **Backend:** Laravel 12+
+- **Frontend:** React 18 + Inertia.js
+- **Database:** MySQL (Planetscale) / PostgreSQL (Supabase)
 - **Styling:** TailwindCSS
 - **Authentication:** Laravel Breeze (Sanctum)
+- **Deployment:** Render + GitHub Actions
 
 ---
 
